@@ -19,24 +19,23 @@
 
   <body class="text-center mt50">
   
-    <form class="form-signin">
-      <!--<img class="mb-4" src="../../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">-->
+    <form class="form-signin" action="/login" method="POST">
+    
+      	<input type="text" name="username" maxlength="30" class="form-control br50 mt10" placeholder="Usuario" required autofocus>
       
-      <input type="text" maxlength="30" class="form-control br50 mt10" placeholder="Usuario" required autofocus>
-      
-      <input type="password" maxlength="30" class="form-control br50 mt10 mb40" placeholder="Password" required>
+      	<input type="password" name="password" maxlength="30" class="form-control br50 mt10 mb40" placeholder="Password" required>
       
       
-      <button class="btn btn-lg btn-outline-primary btn-block br50 mt20 mb10" type="submit">ENTRAR</button>
-      <a class="text-muted" href="/register">Registrarse</a>
+      	<button class="btn btn-lg btn-outline-primary btn-block br50 mt20 mb10" type="submit">ENTRAR</button>
+      	<a class="text-muted" href="/register">Registrarse</a>
 
-      <!--<p class="mt-5 mb-3 text-muted">&copy; 2018-2019 CLS-CTF</p>-->
+      	<!--<p class="mt-5 mb-3 text-muted">&copy; 2018-2019 CLS-CTF</p>-->
 
-      <footer class="mastfoot mt-3">
-        <div class="inner">
-          <p class="text-muted mfooter">© 2018-2019 P3t4-CTF</p>
-        </div>
-      </footer>
+      	<footer class="mastfoot mt-3">
+        	<div class="inner">
+          		<p class="text-muted mfooter">© 2018-2019 P3t4-CTF</p>
+        	</div>
+      	</footer>
       
     </form>
 
