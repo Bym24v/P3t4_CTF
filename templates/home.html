@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="@Bym24v">
+	<title>P3t4 - CTF</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+
+	<style>
+	.bd-placeholder-img {
+		font-size: 1.125rem;
+		text-anchor: middle;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	@media (min-width: 768px) {
+		.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+		}
+	}
+	</style>
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/home.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+  		
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    		
+            <a class="navbar-brand" href="#">P3t4 CTF</a>
+			
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+    		
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+      			
+				<ul class="navbar-nav mr-auto">
+        			
+                    <li class="nav-item active">
+          				<a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+        			</li>
+
+        			<li class="nav-item">
+          				<a class="nav-link" href="/login">Login</a>
+                    </li>
+                    
+      			</ul>
+
+				<!--<form class="form-inline mt-2 mt-md-0">
+					<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+				</form>-->
+    		</div>
+  		</nav>
+
+	</header>
+
+    <main role="main">
+
+        <!-- Marketing messaging and featurettes
+        ================================================== -->
+        <!-- Wrap the rest of the page in another container to center all the content. -->
+
+        <div class="container CTF mt-5">
+
+            <!-- Header -->
+            <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+                <h1 class="display-4">Reversing Day - 2019</h1>
+                <p class="lead">Quickly build an effective pricing table for your potential customers with this Bootstrap example.</p>
+            </div>
+
+            <hr class="mdivider">
+
+            <!-- Timer -->
+            <div class="row mt-5" style="font-size: 50px;">
+                <div id="dias" class="d-none d-sm-block col-sm-3 col-lg-3 col-xl-3 text-center mseparator">0d</div>
+                <div id="horas" class="d-none d-sm-block col-sm-3 col-lg-3 col-xl-3 text-center mseparator">0h</div>
+                <div id="minutos" class="d-none d-sm-block col-sm-3 col-lg-3 col-xl-3 text-center mseparator">0m</div>
+                <div id="segundos" class="d-none d-sm-block col-sm-3 col-lg-3 col-xl-3 text-center">0s</div>
+            </div>
+            
+            <hr class="mdivider d-none d-sm-block">
+
+            <!-- Three columns of text below the carousel -->
+            <h3 class="mt-5 mb-5">Top 3 Usuarios</h3>
+            <div class="row">
+                <div class="col-lg-4">
+                    <!--<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>-->
+                    <img src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" width="140" height="140" style="border-radius: 100px;">
+                    <h2 class="mt-3">Pepe</h2>
+                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+                    <p><a class="btn btn-secondary" href="#" role="button">Ver Perfil &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+
+                <div class="col-lg-4">
+                    <img src="http://erfurt.tanzen4.de/skins/bs3/images/icons/mm.png" width="140" height="140" style="border-radius: 100px;">
+                    <h2 class="mt-3">Paco</h2>
+                    <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+                    <p><a class="btn btn-secondary" href="#" role="button">Ver Perfil &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+
+                <div class="col-lg-4">
+                    <img src="http://erfurt.tanzen4.de/skins/bs3/images/icons/mm.png" width="140" height="140" style="border-radius: 100px;">
+                    <h2 class="mt-3">Jose</h2>
+                    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                    <p><a class="btn btn-secondary" href="#" role="button">Ver Perfil &raquo;</a></p>
+                </div><!-- /.col-lg-4 -->
+
+            </div><!-- /.row -->
+
+
+            <hr class="featurette-divider">
+
+            <!-- /END THE FEATURETTES -->
+
+        </div><!-- /.container -->
+
+
+        <!-- FOOTER -->
+        <footer class="container">
+            <p class="float-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2018-2019 P3t4-CTF</p><!--<a href="#"> Privacy</a> &middot; <a href="#">Terms</a></p>-->
+        </footer>
+
+    </main>
+
+    <script>
+
+        var dias = document.getElementById('dias')
+        var horas = document.getElementById('horas')
+        var minutos = document.getElementById('minutos')
+        var segundos = document.getElementById('segundos')
+
+        var countDownDate = new Date("Mar 25, 2019 00:00:00").getTime();
+        
+        var conutDownFunction = setInterval(function(){
+
+            var now = new Date().getTime();
+
+            var distance = countDownDate - now;
+            //console.log(distance)
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // check valid value
+            if (days < 0){
+                days = 0;
+            }
+
+            if (hours < 0){
+                hours = 0;
+            }
+
+            if (minutes < 0){
+                minutes = 0;
+            }
+
+            if (seconds < 0){
+                seconds = 0;
+            }
+            
+            dias.innerHTML = days + "d";
+            horas.innerHTML = hours + "h";
+            minutos.innerHTML = minutes + "m";
+            segundos.innerHTML = seconds + "s";
+        })
+
+    </script>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

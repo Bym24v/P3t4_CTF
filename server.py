@@ -10,11 +10,11 @@ p3t4ControllerUsers = P3t4ControllerUsers()
 
 @app.route('/')
 def home():
-    return render_template("home.tpl")
+    return render_template("home.html")
     
 @app.route('/login')
 def service_login():
-    return render_template("login.tpl")
+    return render_template("login.html")
 
 @app.route('/login', methods=['POST'])
 def service_login_post():
@@ -38,7 +38,15 @@ def service_login_post():
 
 @app.route('/register')
 def service_register():
-    return render_template("register.tpl")
+    return render_template("register.html")
+
+@app.route('/logout')
+def service_logout():
+
+    if request.method == 'GET':
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+        return resp
 
 @app.route('/register', methods=['POST'])
 def service_register_post():
@@ -64,7 +72,7 @@ def service_register_post():
         
         return redirect('/login')
 
-    return render_template("register.tpl")
+    return render_template("register.html")
 
 @app.route('/challenges')
 def service_chanllenges():
@@ -76,33 +84,62 @@ def service_chanllenges():
         
         
         if p3t4ControllerUsers.CheckToken(token):
-            return render_template('challenges.tpl')
+            return render_template('challenges.html')
         else:
-            return redirect('/login')
+            return redirect('/')
     
     
 
 
 @app.route('/users')
 def service_usuarios():
-    return render_template("users.tpl")
+
+    if request.method == 'GET':
+        #resp = make_response(redirect('/challenges'))
+        #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+        token = request.cookies.get('token')
+        
+        
+        if p3t4ControllerUsers.CheckToken(token):
+            return render_template('users.html')
+        else:
+            return redirect('/')
 
 @app.route('/profile/<name>')
 def service_dashboard(name):
-    return render_template("profile.tpl")
+    if request.method == 'GET':
+        #resp = make_response(redirect('/challenges'))
+        #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+        token = request.cookies.get('token')
+        
+        
+        if p3t4ControllerUsers.CheckToken(token):
+            return render_template('profile.html')
+        else:
+            return redirect('/')
 
 @app.route('/challenge/<name>')
 def service_challenge(name):
-    return render_template("challenge.tpl")
+
+    if request.method == 'GET':
+        #resp = make_response(redirect('/challenges'))
+        #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+        token = request.cookies.get('token')
+        
+        
+        if p3t4ControllerUsers.CheckToken(token):
+            return render_template('challenge.html')
+        else:
+            return redirect('/')
 
 
 @app.route('/upload/challenge')
 def service_subchallenge():
-    return render_template("subChallenge.tpl")
+    return render_template("subChallenge.html")
 
 #@error(404)
 #def error404(error):
-#    return template("view/errors/404.tpl")
+#    return template("view/errors/404.html")
 #
 #@error(500)
 #def error404(error):

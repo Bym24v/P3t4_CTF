@@ -134,10 +134,11 @@ ul{
 
 }
 
-.line{
-
-}
-
 .topUsers{
   margin-top: 25px;
+}
+
+.check{
+  position: absolute;
+  right: 15px;
 }
