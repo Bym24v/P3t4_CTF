@@ -19,9 +19,17 @@
   </head>
 
   <body>
+
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-12 col-md-12 mr-0" href="/">P3t4 - CTF<span> beta</span></a>
-      <span>Score: 0</span>
+      <a class="navbar-brand col-sm-12 col-md-12 mr-0" href="/">P3t4 - CTF</a>
+      
+	  {% if data %}
+
+        <div class="score"><span data-feather="award"></span> {{data.puntos}}</div>
+      
+      {% endif %}
+	  
+	  <span>Score: 0</span>
     </nav>
 
     <div class="container-fluid">
@@ -44,10 +52,21 @@
 							<a class="nav-link text-muted" href="/users">
 							<span data-feather="users"></span>Usuarios</a>
 						</li>
-
+						
+						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+							<span>Menu Usuario</span>
+							<a class="d-flex align-items-center text-muted" href="/public/challenge">
+								<span data-feather="plus-circle"></span>
+							</a>
+						</h6>
+						
 						<li class="nav-item">
-							<a class="nav-link text-muted" href="/profile/paco">
-							<span data-feather="user"></span>Perfil</a>
+
+							{% if data %}
+								<a class="nav-link text-muted" href="/profile/{{data.name}}">
+								<span data-feather="user"></span>Perfil</a>
+							{% endif %}
+							
 						</li>
 
 						<li class="nav-item">

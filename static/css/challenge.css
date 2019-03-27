@@ -6,3 +6,10 @@
 .table-sm td{
     padding: .75rem;
 }
+
+.score{
+
+    position: absolute;
+    right: 35px;
+    color: wheat;
+}

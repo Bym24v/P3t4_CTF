@@ -39,7 +39,7 @@ class P3t4ControllerUsers:
 
         if code == "28" and len(code) <= 10:
 
-            if len(name) <= 30 and len(email) <= 50:
+            if len(name) <= 30 and len(email) <= 50 and len(password) <= 50:
             
                 try:
                     
@@ -52,8 +52,9 @@ class P3t4ControllerUsers:
                             "token": token,
                             "avatar": "",
                             "activate": False,
-                            "twitter": "Bym24v_cls",
-                            "telegram": "Bym24v"
+                            "twitter": "",
+                            "telegram": "",
+                            "puntos": 0
                         }
                     )
 
@@ -108,7 +109,15 @@ class P3t4ControllerUsers:
         
         try:
             result = mongo.db.users.find_one_or_404({'name': name})
-            print result
             return True
         except:
             return False
+    
+
+    def FindAllUsers(self):
+
+        try:
+            result = mongo.db.users.find()
+            return result
+        except:
+            print "Error"

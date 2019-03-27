@@ -21,116 +21,132 @@
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-12 col-md-12 mr-0" href="/">P3t4 - CTF</a>
+	  {% if data %}
+
+        <div class="score"><span data-feather="award"></span> {{data.puntos}}</div>
+      
+      {% endif %}
     </nav>
 
     <div class="container-fluid">
 
-      <div class="row">
+      	<div class="row">
 
-		<!-- sidebar -->
-        <nav class="col-md-2 d-none d-md-block sidebar" style="width: 200px;">
-        	
 			<!-- sidebar -->
-          	<div class="sidebar-sticky sideColor">
-            	<ul class="nav flex-column">
-              
-					<li class="nav-item">
-						<a class="nav-link text-muted" href="/challenges">
-						<span data-feather="coffee"></span>Challenges</a>
-					</li>
+			<nav class="col-md-2 d-none d-md-block sidebar" style="width: 200px;">
+				
+				<!-- sidebar -->
+				<div class="sidebar-sticky sideColor">
+					<ul class="nav flex-column">
+				
+						<li class="nav-item">
+							<a class="nav-link text-muted" href="/challenges">
+							<span data-feather="coffee"></span>Challenges</a>
+						</li>
 
-					<li class="nav-item">
-						<a class="nav-link text-muted" href="/users">
-						<span data-feather="users"></span>Usuarios</a>
-					</li>
+						<li class="nav-item">
+							<a class="nav-link text-muted" href="/users">
+							<span data-feather="users"></span>Usuarios</a>
+						</li>
 
-					<li class="nav-item">
-						<a class="nav-link active" href="/profile/{{data.name}}">
-						<span data-feather="user"></span>Perfil</a>
-					</li>
+						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+							<span>Menu Usuario</span>
+							<a class="d-flex align-items-center text-muted" href="/public/challenge">
+								<span data-feather="plus-circle"></span>
+							</a>
+						</h6>
 
-					<li class="nav-item">
-						<a class="nav-link text-muted" href="/logout">
-						<span data-feather="log-out"></span>Salir</a>
-					</li>
-              
-            	</ul>
-          </div> <!-- end sidebar -->
+						<li class="nav-item">
 
-        </nav>
+							{% if data %}
+								<a class="nav-link active" href="/profile/{{data.name}}">
+								<span data-feather="user"></span>Perfil</a>
+							{% endif %}
+							
+						</li>
 
-        <main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
+						<li class="nav-item">
+							<a class="nav-link text-muted" href="/logout">
+							<span data-feather="log-out"></span>Salir</a>
+						</li>
+				
+					</ul>
+				</div> <!-- end sidebar -->
 
-          	<!--<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">-->
+        	</nav>
+
+        	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
             
-        	<!-- rows -->
-            <div class="row col-lg-12">
+				<!-- rows -->
+				<div class="row col-lg-12">
 
-            	<div class="py-5 col-md-12 text-center">
-					<!-- img -->
-            		<img class="d-block mx-auto mb-4" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" alt="" width="72" height="72" style="border-radius: 50px;">
-                	
-					<h2>Perfil de Usuario</h2>
-                	<p class="lead">Aquí podrás cambiar los datos de usuario.</p>
-              	</div>
+					<div class="py-5 col-md-12 text-center">
+						<!-- img -->
+						<img class="d-block mx-auto mb-4" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" alt="" width="72" height="72" style="border-radius: 50px;">
+						
+						<h2>Perfil de Usuario</h2>
+						<p class="lead">Aquí podrás cambiar los datos de usuario.</p>
+					</div>
+				
+					<!-- Main -->
+					<div class="row col-md-12">
+					
+						<div class="col-md-12">
 
-              	<div class="row col-md-12">
-                
-                	<div class="col-md-12">
-
-                  		<h4 class="mb-4">Datos de usuario</h4>
-                  		
-						<form class="needs-validation" novalidate>
-                    
-                    		<div class="mb-3">
-                      			<label for="username">Usuario</label>
-                        		<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{data.name}}" required>
-								<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
-                      		</div>
-                    		
-							<div class="mb-3">
-								<label for="email">Correo</label>
-								<input type="email" class="form-control" id="email" maxlength="50" placeholder="you@example.com" value="{{data.email}}" required>
-								<div class="invalid-feedback">Correo requerido.</div>
-							</div>
-
-							<!--<div class="mb-3">
-								<label for="pass">Contraseña</label>
-								<input type="password" class="form-control" id="pass" maxlength="50" placeholder="password" required>
-								<div class="invalid-feedback">Contraseña requerida.</div>
-							</div>-->
-
-							<div class="mb-3">
-								<label for="address">Twitter <span class="text-muted">(Optional)</span></label>
-								<input type="text" class="form-control" id="address" maxlength="10" placeholder="Bym24v" value="{{data.twitter}}">
-							</div>
-
-							<div class="mb-3">
-								<label for="address2">Telegram <span class="text-muted">(Optional)</span></label>
-								<input type="text" class="form-control" id="address2" maxlength="10" placeholder="Bym24v" value="{{data.telegram}}">
-							</div>
-
-                    		<hr class="mb-4 mt-4 mb-3">
-
-							<div class="row">
-
-								<div class="col-lg-6">
-									<button class="btn btn-primary btn-lg btn-block" type="submit">Cambiar Contraseña</button>
-								</div>
-
-								<div class="col-lg-6">
-									<button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+							<h4 class="mb-4">Datos de usuario</h4>
+							
+							<form class="needs-validation" novalidate>
+						
+								<div class="mb-3">
+									<label for="username">Usuario</label>
+									<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{data.name}}" required>
+									<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
+									<!--<small id="username" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 								</div>
 								
-							</div>
-                    		
-                  		</form>
-              		</div>
-            	</div>
-          	</div>
+								<div class="mb-3">
+									<label for="email">Correo</label>
+									<input type="email" class="form-control" id="email" maxlength="50" placeholder="email@email.com" value="{{data.email}}" required>
+									<div class="invalid-feedback">Correo requerido.</div>
+								</div>
 
-        </main>
-      </div>
+								<!--<div class="mb-3">
+									<label for="pass">Contraseña</label>
+									<input type="password" class="form-control" id="pass" maxlength="50" placeholder="password" required>
+									<div class="invalid-feedback">Contraseña requerida.</div>
+								</div>-->
+
+								<div class="mb-3">
+									<label for="address">Twitter <span class="text-muted">(Optional)</span></label>
+									<input type="text" class="form-control" id="address" maxlength="10" value="{{data.twitter}}">
+								</div>
+
+								<div class="mb-3">
+									<label for="address2">Telegram <span class="text-muted">(Optional)</span></label>
+									<input type="text" class="form-control" id="address2" maxlength="10" value="{{data.telegram}}">
+								</div>
+
+								<hr class="mb-4 mt-4 mb-3">
+
+								<div class="row">
+
+									<div class="col-lg-6">
+										<button class="btn btn-primary btn-lg btn-block" type="submit">Cambiar Contraseña</button>
+									</div>
+
+									<div class="col-lg-6">
+										<button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+									</div>
+									
+								</div>
+								
+							</form>
+						</div>
+					</div> <!-- end main -->
+          		</div>
+
+       		 </main>
+      	</div>
     </div>
 
     <!-- Bootstrap core JavaScript
