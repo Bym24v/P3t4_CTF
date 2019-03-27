@@ -36,7 +36,8 @@ class P3t4ControllerUsers:
         parseID = hashlib.sha256(name).hexdigest()
         parsePassword = hashlib.sha512(password).hexdigest()
 
-        if code == "28":
+
+        if code == "28" and len(code) <= 10:
 
             if len(name) <= 30 and len(email) <= 50:
             
@@ -70,6 +71,7 @@ class P3t4ControllerUsers:
             print "[+] Error Register code require"
             return "code"
     
+
     def CheckToken(self, token):
 
         try:
@@ -77,11 +79,36 @@ class P3t4ControllerUsers:
             print "[+] Token Found!"
             return True
         except:
-            False
+            return False
+    
+    def CheckTokenReturnData(self, token):
+    
+        try:
+            result = mongo.db.users.find_one_or_404({"token": token})
+            return result
+        except:
+            return "none"
+
+    def CheckTokenByName(self, name, token):
+    
+        try:
+            result = mongo.db.users.find_one_or_404({"name": name})
+            
+            if result['token'] == token:
+                print "[+] Token ByName Found!"
+                return True
+        except:
+            return False
 
         
     def GetProfile(self):
         pass
     
-    def FindUserName(self):
-        pass
+    def FindUserName(self, name):
+        
+        try:
+            result = mongo.db.users.find_one_or_404({'name': name})
+            print result
+            return True
+        except:
+            return False

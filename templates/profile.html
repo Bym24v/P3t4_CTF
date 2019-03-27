@@ -45,7 +45,7 @@
 					</li>
 
 					<li class="nav-item">
-						<a class="nav-link active" href="/profile/234342424234">
+						<a class="nav-link active" href="/profile/{{data.name}}">
 						<span data-feather="user"></span>Perfil</a>
 					</li>
 
@@ -71,50 +71,59 @@
             		<img class="d-block mx-auto mb-4" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" alt="" width="72" height="72" style="border-radius: 50px;">
                 	
 					<h2>Perfil de Usuario</h2>
-                	<p class="lead">Aqui podras cambiar los datos de usuario.</p>
+                	<p class="lead">Aquí podrás cambiar los datos de usuario.</p>
               	</div>
 
               	<div class="row col-md-12">
                 
                 	<div class="col-md-12">
 
-                  		<h4 class="mb-3">Datos de usuario</h4>
+                  		<h4 class="mb-4">Datos de usuario</h4>
                   		
 						<form class="needs-validation" novalidate>
                     
                     		<div class="mb-3">
                       			<label for="username">Usuario</label>
-                        		<input type="text" class="form-control" id="username" placeholder="Username" value="" required>
-                        	
+                        		<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{data.name}}" required>
 								<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
                       		</div>
                     		
 							<div class="mb-3">
 								<label for="email">Correo</label>
-								<input type="email" class="form-control" id="email" placeholder="you@example.com" value="paco@paco.com" required>
+								<input type="email" class="form-control" id="email" maxlength="50" placeholder="you@example.com" value="{{data.email}}" required>
 								<div class="invalid-feedback">Correo requerido.</div>
 							</div>
 
-							<div class="mb-3">
+							<!--<div class="mb-3">
 								<label for="pass">Contraseña</label>
-								<input type="password" class="form-control" id="pass" value="1234567876543" required>
-								<div class="invalid-feedback">
-									Contraseña requerida.
-								</div>
-							</div>
+								<input type="password" class="form-control" id="pass" maxlength="50" placeholder="password" required>
+								<div class="invalid-feedback">Contraseña requerida.</div>
+							</div>-->
 
 							<div class="mb-3">
 								<label for="address">Twitter <span class="text-muted">(Optional)</span></label>
-								<input type="text" class="form-control" id="address" placeholder="Bym24v">
+								<input type="text" class="form-control" id="address" maxlength="10" placeholder="Bym24v" value="{{data.twitter}}">
 							</div>
 
 							<div class="mb-3">
 								<label for="address2">Telegram <span class="text-muted">(Optional)</span></label>
-								<input type="text" class="form-control" id="address2" placeholder="Bym24v">
+								<input type="text" class="form-control" id="address2" maxlength="10" placeholder="Bym24v" value="{{data.telegram}}">
 							</div>
 
-                    		<hr class="mb-4">
-                    		<button class="btn btn-primary btn-lg btn-block" type="submit">GUARDAR</button>
+                    		<hr class="mb-4 mt-4 mb-3">
+
+							<div class="row">
+
+								<div class="col-lg-6">
+									<button class="btn btn-primary btn-lg btn-block" type="submit">Cambiar Contraseña</button>
+								</div>
+
+								<div class="col-lg-6">
+									<button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+								</div>
+								
+							</div>
+                    		
                   		</form>
               		</div>
             	</div>

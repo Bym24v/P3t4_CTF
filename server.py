@@ -86,12 +86,11 @@ def service_chanllenges():
         
         
         if p3t4ControllerUsers.CheckToken(token):
-            return render_template('challenges.html')
+
+            data = p3t4ControllerUsers.CheckTokenReturnData(token)
+            return render_template('challenges.html', data=data)
         else:
             return redirect('/')
-    
-    
-
 
 @app.route('/users')
 def service_usuarios():
@@ -102,22 +101,39 @@ def service_usuarios():
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
-            return render_template('users.html')
+
+            data = p3t4ControllerUsers.CheckTokenReturnData(token)
+            return render_template('users.html', data=data)
         else:
-            return redirect('/')
+            resp = make_response(redirect('/'))
+            resp.set_cookie('token', '', path='/', expires=0)
+            return resp
 
 @app.route('/profile/<name>')
 def service_dashboard(name):
     if request.method == 'GET':
-        #resp = make_response(redirect('/challenges'))
-        #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
-        token = request.cookies.get('token')
-        
-        
-        if p3t4ControllerUsers.CheckToken(token):
-            return render_template('profile.html')
-        else:
-            return redirect('/')
+
+
+        if request.method == 'GET':
+
+            if p3t4ControllerUsers.FindUserName(name):
+
+                #resp = make_response(redirect('/challenges'))
+                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+                token = request.cookies.get('token')
+                
+                if p3t4ControllerUsers.CheckTokenByName(name, token):
+                    data = p3t4ControllerUsers.CheckTokenReturnData(token)
+                    return render_template('profile.html', data=data)
+                else:
+                    resp = make_response(redirect('/'))
+                    resp.set_cookie('token', '', path='/', expires=0)
+                    return resp
+
+            else:
+                resp2 = make_response(redirect('/'))
+                resp2.set_cookie('token', '', path='/', expires=0)
+                return resp2
 
 @app.route('/challenge/<name>')
 def service_challenge(name):
