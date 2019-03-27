@@ -1,12 +1,24 @@
 from flask import Flask, render_template, request, redirect, flash, make_response
+from werkzeug.utils import secure_filename
+import hashlib, datetime, os
+
+# root upload folder
+UPLOAD_FOLDER = os.getcwd() + '\\public-challenges'
+ALLOWED_EXTENSIONS = set(['zip'])
+
+# app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "secret_key_paco"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-import hashlib, datetime
 
 # Modules P3t4
 from modules.P3t4Users.ControllerUsersDB import P3t4ControllerUsers
 p3t4ControllerUsers = P3t4ControllerUsers()
+
+# Modules P3t4
+from modules.P3t4Challenges.ControllerChallengesDb import P3t4ControllerChallenges
+p3t4ControllerChallenges = P3t4ControllerChallenges()
 
 @app.route('/')
 def home():
@@ -103,8 +115,9 @@ def service_challenge(name):
         if p3t4ControllerUsers.CheckToken(token):
 
             # return data user name
-            data = p3t4ControllerUsers.CheckTokenReturnData(token)
-            return render_template('challenge.html', data=data)
+            dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
+            dataUsers = p3t4ControllerUsers.FindAllUsers()
+            return render_template('challenge.html', dataUsers=dataUsers, dataUser=dataUser)
         else:
             return redirect('/')
 
@@ -152,7 +165,7 @@ def service_dashboard(name):
             return resp2
 
 
-@app.route('/public/challenge')
+@app.route('/public/challenge', methods=['GET', 'POST'])
 def service_subchallenge():
 
     if request.method == 'GET':
@@ -166,6 +179,58 @@ def service_subchallenge():
             resp = make_response(redirect('/'))
             resp.set_cookie('token', '', path='/', expires=0)
             return resp
+
+    if request.method == "POST":
+
+        if 'file' not in request.files:
+            #flash('No file part')
+            return redirect('/public/challenge')
+        
+        file = request.files['file']
+
+        if file.filename == '':
+            #flash('No selected file')
+            return redirect('/public/challenge')
+        
+        titulo = request.form['titulo']
+        puntos = request.form['puntos']
+        flag = request.form['flag']
+        descripcion = request.form['descripcion']
+        
+        if titulo == '':
+            #flash('No selected file')
+            return redirect('/public/challenge')
+        
+        if puntos == '':
+            #flash('No selected file')
+            return redirect('/public/challenge')
+        
+        if flag == '':
+            #flash('No selected file')
+            return redirect('/public/challenge')
+        
+        if descripcion == '':
+            #flash('No selected file')
+            return redirect('/public/challenge')
+
+        token = request.cookies.get('token')
+
+        if p3t4ControllerUsers.CheckToken(token):
+            pass
+        else:
+            return redirect('/')
+
+        #if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        user = p3t4ControllerUsers.CheckTokenReturnData(token)
+
+        if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, puntos, flag, file.filename, descripcion):
+            return redirect('/challenges')
+        else:
+            return redirect('/public/challenge')
+            
 
 #@error(404)
 #def error404(error):
