@@ -58,7 +58,9 @@ def service_register_post():
         email = request.form['email']
         code = request.form['code']
 
-        result = p3t4ControllerUsers.RegisterUser(name, password, email, code)
+        parseName = name.lower()
+
+        result = p3t4ControllerUsers.RegisterUser(parseName, password, email, code)
 
         if result == "error":
             flash("Error al registar el usuario.", "error")
@@ -98,7 +100,6 @@ def service_usuarios():
         #resp = make_response(redirect('/challenges'))
         #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
         token = request.cookies.get('token')
-        
         
         if p3t4ControllerUsers.CheckToken(token):
             return render_template('users.html')

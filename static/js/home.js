@@ -1,31 +1,41 @@
-var typed = new Typed('#typed', {
-    stringsElement: '#typed-strings',
-    typeSpeed: 35,
-    backSpeed: 25,
-    backDelay: 650,
-    //startDelay: 1000,
-    loop: false,
+var dias = document.getElementById('dias')
+var horas = document.getElementById('horas')
+var minutos = document.getElementById('minutos')
+var segundos = document.getElementById('segundos')
 
-    onComplete: function(self) { 
-      /*console.log('onCmplete ' + self) 
-      var btn = document.getElementById("btnEntrar")
+var countDownDate = new Date("Mar 28, 2019 00:00:00").getTime();
 
-        btn.setAttribute("class", "btn btn-lg btn-primary")
-        console.log(btn.getAttribute("class"))*/
-    }
+var conutDownFunction = setInterval(function(){
 
-  });
+	var now = new Date().getTime();
 
+	var distance = countDownDate - now;
+	//console.log(distance)
 
+	var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-/*var promise = document.getElementById('mvideo').play();
+	// check valid value
+	if (days < 0){
+		days = 0;
+	}
 
-    if (promise !== undefined) {
-        promise.then(_ => {
-        // Autoplay started!
-        }).catch(error => {
-        // Autoplay was prevented.
-        // Show a "Play" button so that user can start playback.
-    });
-}*/
+	if (hours < 0){
+		hours = 0;
+	}
 
+	if (minutes < 0){
+		minutes = 0;
+	}
+
+	if (seconds < 0){
+		seconds = 0;
+	}
+	
+	dias.innerHTML = days + "d";
+	horas.innerHTML = hours + "h";
+	minutos.innerHTML = minutes + "m";
+	segundos.innerHTML = seconds + "s";
+})
