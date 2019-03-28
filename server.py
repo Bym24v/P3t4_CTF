@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash, make_response
 from werkzeug.utils import secure_filename
-import hashlib, datetime, os
+import hashlib, datetime, os, time
 
 # root upload folder
 UPLOAD_FOLDER = os.getcwd() + '\\public-challenges'
@@ -95,33 +95,59 @@ def service_chanllenges():
         #resp = make_response(redirect('/challenges'))
         #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
         token = request.cookies.get('token')
-        
-        result = p3t4ControllerChallenges.GetAllChallenges()
-        
-        for value in result:
-            print value
 
         if p3t4ControllerUsers.CheckToken(token):
 
-            data = p3t4ControllerUsers.CheckTokenReturnData(token)
-            return render_template('challenges.html', data=data)
+            dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
+            dataChallenges = p3t4ControllerChallenges.GetAllChallenges()
+            return render_template('challenges.html', dataChallenges=dataChallenges, dataUser=dataUser)
         else:
             return redirect('/')
 
-@app.route('/challenge/<name>')
-def service_challenge(name):
+@app.route('/challenge/<challengeID>', methods=['GET', 'POST'])
+def service_challenge(challengeID):
+
+    token = request.cookies.get('token')
 
     if request.method == 'GET':
         #resp = make_response(redirect('/challenges'))
         #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
-        token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
 
             # return data user name
             dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
-            dataUsers = p3t4ControllerUsers.FindAllUsers()
-            return render_template('challenge.html', dataUsers=dataUsers, dataUser=dataUser)
+            dataAllUsers = p3t4ControllerUsers.FindAllUsersSort()
+            dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+            return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
+        else:
+            return redirect('/')
+    
+    if request.method == 'POST':
+       
+        flag = request.form['flag']
+
+        if p3t4ControllerUsers.CheckToken(token):
+            
+            username = p3t4ControllerUsers.FindUserByToken(token)
+
+            if p3t4ControllerChallenges.CheckFlag(username, challengeID, flag):
+                
+                dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
+                dataAllUsers = p3t4ControllerUsers.FindAllUsersSort()
+                dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+                #flash("Flag correcta, buen trabajo", "success")
+                return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
+            
+                #resp = make_response(render_template('challenges.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge))
+                #return resp
+            else:
+                dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
+                dataAllUsers = p3t4ControllerUsers.FindAllUsersSort()
+                dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+                #flash("Flag incorrecta, siguen intentandolo", "danger")
+                return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
+                
         else:
             return redirect('/')
 
@@ -136,7 +162,7 @@ def service_usuarios():
         if p3t4ControllerUsers.CheckToken(token):
 
             dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
-            data = p3t4ControllerUsers.FindAllUsers()
+            data = p3t4ControllerUsers.FindAllUsersSort()
 
             return render_template('users.html', data=data, dataName=dataName)
         else:
@@ -229,11 +255,17 @@ def service_subchallenge():
 
         #if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        # datetime
+        hora = time.strftime("%H-%M-%S")
+        fecha = time.strftime("%d-%m-%y")
+        
+        nameDate = fecha + "-" + hora + "_" + filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], nameDate))
 
         user = p3t4ControllerUsers.CheckTokenReturnData(token)
 
-        if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, puntos, flag, file.filename, descripcion):
+        if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, fecha, puntos, flag, nameDate, descripcion):
             flash("Publicado con exito, a la espera de que un administrador lo valide.", "success")
             return redirect('/public/challenge')
         else:

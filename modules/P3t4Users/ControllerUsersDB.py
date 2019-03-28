@@ -110,10 +110,6 @@ class P3t4ControllerUsers:
         except:
             return False
 
-        
-    def GetProfile(self):
-        pass
-    
     def FindUserName(self, name):
         
         try:
@@ -123,10 +119,18 @@ class P3t4ControllerUsers:
             return False
     
 
-    def FindAllUsers(self):
+    def FindAllUsersSort(self):
 
         try:
             result = mongo.db.users.find().sort('puntos', -1)
             return result
         except:
             print "Error"
+
+    def FindUserByToken(self, token):
+
+        try:
+            result = mongo.db.users.find_one_or_404({'token': token})
+            return result['name']
+        except:
+            return "Error"
