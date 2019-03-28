@@ -38,7 +38,7 @@ def service_login_post():
         
         name = request.form['username']
         password = request.form['password']
-        
+
         token = hashlib.sha512(name + password).hexdigest()
 
         if p3t4ControllerUsers.LoginUser(name, password):
@@ -96,7 +96,11 @@ def service_chanllenges():
         #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
         token = request.cookies.get('token')
         
+        result = p3t4ControllerChallenges.GetAllChallenges()
         
+        for value in result:
+            print value
+
         if p3t4ControllerUsers.CheckToken(token):
 
             data = p3t4ControllerUsers.CheckTokenReturnData(token)
@@ -164,7 +168,6 @@ def service_dashboard(name):
             resp2.set_cookie('token', '', path='/', expires=0)
             return resp2
 
-
 @app.route('/public/challenge', methods=['GET', 'POST'])
 def service_subchallenge():
 
@@ -183,13 +186,17 @@ def service_subchallenge():
     if request.method == "POST":
 
         if 'file' not in request.files:
-            #flash('No file part')
+            flash('Archivo no valido.', "danger")
             return redirect('/public/challenge')
         
         file = request.files['file']
 
+        if file.content_type != "application/x-zip-compressed":
+            flash('Archivo no valido.', "danger")
+            return redirect('/public/challenge')
+
         if file.filename == '':
-            #flash('No selected file')
+            flash('Archivo no valido.', "danger")
             return redirect('/public/challenge')
         
         titulo = request.form['titulo']
@@ -197,20 +204,20 @@ def service_subchallenge():
         flag = request.form['flag']
         descripcion = request.form['descripcion']
         
-        if titulo == '':
-            #flash('No selected file')
+        if titulo == '' or len(titulo) > 30:
+            flash("Titulo no valido.", "danger")
             return redirect('/public/challenge')
         
-        if puntos == '':
-            #flash('No selected file')
+        if puntos == '' or len(puntos) > 2:
+            flash("Puntos no validos.", "danger")
             return redirect('/public/challenge')
         
-        if flag == '':
-            #flash('No selected file')
+        if flag == '' or len(flag) > 50:
+            flash("Flag no valida", "danger")
             return redirect('/public/challenge')
         
-        if descripcion == '':
-            #flash('No selected file')
+        if descripcion == '' or len(descripcion) > 150:
+            flash("Descipcion no valida.", "danger")
             return redirect('/public/challenge')
 
         token = request.cookies.get('token')
@@ -227,8 +234,10 @@ def service_subchallenge():
         user = p3t4ControllerUsers.CheckTokenReturnData(token)
 
         if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, puntos, flag, file.filename, descripcion):
-            return redirect('/challenges')
+            flash("Publicado con exito, a la espera de que un administrador lo valide.", "success")
+            return redirect('/public/challenge')
         else:
+            flash("No se a podido publicar, ponte en contacto con un administrador.", "danger")
             return redirect('/public/challenge')
             
 

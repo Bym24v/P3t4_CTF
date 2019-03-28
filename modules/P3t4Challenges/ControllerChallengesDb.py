@@ -11,7 +11,7 @@ class P3t4ControllerChallenges:
     def GetAllChallenges(self):
         
         try:
-            result = mongo.db.challenges.find()
+            result = mongo.db.challenges.find().sort("puntos", -1)
             return result
         except:
             return "error"
@@ -19,12 +19,15 @@ class P3t4ControllerChallenges:
     def SaveChallenge(self, creador, titulo, puntos, flag, nameZip, resumen):
         
         try:
+
+            parsePuntos = int(puntos, 10) * 10
+
             result = mongo.db.challenges.insert({
 
-                "_id": hashlib.sha256(creador).hexdigest(),
+                "_id": hashlib.sha256(titulo).hexdigest(),
                 "creador": creador,
                 "titulo": titulo,
-                "puntos": puntos,
+                "puntos": parsePuntos,
                 "flag": flag,
                 "zip": nameZip,
                 "descripcion": resumen,

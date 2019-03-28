@@ -16,19 +16,28 @@ class P3t4ControllerUsers:
     def LoginUser(self, name, password):
         
         try:
+
+            if len(name) > 30:
+                print "[+] Name require length"
+                return False
+        
+            if len(password) > 50:
+                print "[+] Password require length"
+                return False
+
             result = mongo.db.users.find_one_or_404({"name": name})
             parsePassword = hashlib.sha512(password).hexdigest()
             
-            if result == None:
-                return False
-
             if parsePassword == result['password']:
-                print "[+] User Found!"
+                print "[+] User Password Match!"
                 return True
+            else:
+                print "[+] Password no Match!"
+                return False
         except:
+            print "[+] Password no Match!"
             return False
         
-        return False
 
     def RegisterUser(self, name, password, email, code):
         
@@ -117,7 +126,7 @@ class P3t4ControllerUsers:
     def FindAllUsers(self):
 
         try:
-            result = mongo.db.users.find()
+            result = mongo.db.users.find().sort('puntos', -1)
             return result
         except:
             print "Error"
