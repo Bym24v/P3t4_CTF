@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, make_response, send_file
+from flask import Flask, render_template, request, redirect, flash, make_response, send_file, jsonify
 from werkzeug.utils import secure_filename
 import hashlib, datetime, os, time
 
@@ -22,7 +22,10 @@ p3t4ControllerChallenges = P3t4ControllerChallenges()
 
 @app.route('/')
 def home():
-    return render_template("home.html")
+
+    data = p3t4ControllerUsers.FindTopTresUsers()
+
+    return render_template("home.html", data=data)
     
 @app.route('/login')
 def service_login():
@@ -185,7 +188,7 @@ def service_dashboard(name):
                 data = p3t4ControllerUsers.CheckTokenReturnData(token)
                 return render_template('profile.html', data=data)
             else:
-                resp = make_response(redirect('/'))
+                resp = make_response(redirect('/login'))
                 resp.set_cookie('token', '', path='/', expires=0)
                 return resp
 
@@ -194,6 +197,105 @@ def service_dashboard(name):
             resp2.set_cookie('token', '', path='/', expires=0)
             return resp2
 
+@app.route('/admin')
+def service_admin():
+
+    if request.method == 'GET':
+        
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+            if p3t4ControllerUsers.CheckToken(token):
+
+                dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
+                data = p3t4ControllerUsers.FindAllUsersSort()
+                return render_template('admin.html', data=data, dataName=dataName)
+            else:
+                resp = make_response(redirect('/'))
+                resp.set_cookie('token', '', path='/', expires=0)
+                return resp
+        else:
+            resp = make_response(redirect('/'))
+            resp.set_cookie('token', '', path='/', expires=0)
+            return resp
+
+@app.route('/admin/edit/<name>')
+def service_editUser(name):
+    
+    if request.method == 'GET':
+        
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+            
+            if p3t4ControllerUsers.CheckToken(token):
+
+                dataName = p3t4ControllerUsers.FindUserNameReturnData(name)
+                #resp = make_response(redirect('/challenges'))
+                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+
+                return jsonify(dataName)
+            else:
+                return "error"
+        else:
+            return "Admin Require"
+    
+    if request.method == 'POST':
+
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+
+            if p3t4ControllerUsers.CheckToken(token):
+
+                dataName = p3t4ControllerUsers.FindUserNameReturnData(name)
+                #resp = make_response(redirect('/challenges'))
+                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+
+                return jsonify(dataName)
+            else:
+                return "error"
+        else:
+            return "Admin Require"
+
+@app.route('/admin/delete/<name>', methods=['GET', 'POST'])
+def service_deleteUser(name):
+    
+    if request.method == 'GET':
+        
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+
+            if p3t4ControllerUsers.CheckToken(token):
+                dataName = p3t4ControllerUsers.FindUserNameReturnData(name)
+                #resp = make_response(redirect('/challenges'))
+                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+
+                return jsonify(dataName)
+            else:
+                "error"
+        else:
+            return "Admin Require"
+    
+    if request.method == 'POST':
+    
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+
+            if p3t4ControllerUsers.CheckToken(token):
+
+                dataName = p3t4ControllerUsers.FindUserNameReturnData(name)
+                #resp = make_response(redirect('/challenges'))
+                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+                result = p3t4ControllerUsers.FindUserByNameAndDelete(name)
+                return result
+            else:
+                return "error"
+        else:
+            return "Admin Require"
+    
 @app.route('/public/challenge', methods=['GET', 'POST'])
 def service_subchallenge():
 
@@ -242,7 +344,7 @@ def service_subchallenge():
             flash("Flag no valida", "danger")
             return redirect('/public/challenge')
         
-        if descripcion == '' or len(descripcion) > 150:
+        if descripcion == '' or len(descripcion) > 60:
             flash("Descipcion no valida.", "danger")
             return redirect('/public/challenge')
 

@@ -70,6 +70,17 @@
 						</li>
 
 						<li class="nav-item">
+
+							{% if data.admin %}
+
+								<a class="nav-link text-muted" href="/admin">
+								<span data-feather="database"></span>Admin</a>
+							
+							{% endif %}
+								
+						</li>
+
+						<li class="nav-item">
 							<a class="nav-link text-muted" href="/logout">
 							<span data-feather="log-out"></span>Salir</a>
 						</li>
@@ -80,109 +91,111 @@
 
         	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
           		
-            	<!-- rows -->
-				<form class="col-lg-12" method="post" enctype="multipart/form-data">
+				{% if data.activate %}
+				  
+					<!-- rows -->
+					<form class="col-lg-12" method="post" enctype="multipart/form-data">
 
-					<div class="row">
+						<div class="row">
 
-						{% with messages  = get_flashed_messages(with_categories=true) %}
-			
-							{% if messages  %}
+							{% with messages  = get_flashed_messages(with_categories=true) %}
+				
+								{% if messages  %}
 
-								{%- for category, message in messages  %}
-									
-									<div class="col-lg-12">
+									{%- for category, message in messages  %}
+										
+										<div class="col-lg-12">
 
-										<div id="myAlert" class="alert alert-{{category}} alert-dismissible fade show mt-5" role="alert">
-											{{ message }}
-											<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
+											<div id="myAlert" class="alert alert-{{category}} alert-dismissible fade show mt-5" role="alert">
+												{{ message }}
+												<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+										
 										</div>
-									
-									</div>
-									
-								{% endfor -%}
+										
+									{% endfor -%}
 
-							{% endif %}
+								{% endif %}
 
-						{% endwith %}
+							{% endwith %}
 
-					</div>
-
-					<div class="row">
-
-						<div class="col-lg-12">
-							<div class="py-5 col-md-12 text-center">
-								<h2>Sube tu propio reto</h2>
-								<p class="lead">Se popular dentro de la plataforma, lee la FAQ para saber como tienes que publicar tu reto.</p>
-							</div>
 						</div>
 
-					</div>
+						<div class="row">
 
-					<div class="row">
-
-						<!-- send file -->
-						<div class="col-lg-12 mt-4">
-							
-							<h3 class="text-muted">Titulo</h3>
-							<div class="input-group mb-3">
-								<input type="text" maxlength="30" name="titulo" class="form-control" placeholder="Titulo" required>
-								<div class="invalid-feedback">Titulo requerido.</div>
-							</div>
-					
-							<h3 class="text-muted mt-3">Archivo</h3>
-							<div class="custom-file">
-								<input type="file" name="file" class="custom-file-input" id="validatedCustomFile" required>
-								<label class="custom-file-label" for="validatedCustomFile">None</label>
-								<div class="invalid-feedback">Archivo requerido.</div>
-							</div>
-							
-							<h3 class="text-muted mt-3">Puntos</h3>
-							<div class="form-group">
-								<select class="custom-select" name="puntos" required>
-									<option value="">None</option>
-									<option value="1">10</option>
-									<option value="2">20</option>
-									<option value="3">30</option>
-									<option value="4">40</option>
-									<option value="5">50</option>
-									<option value="6">60</option>
-									<option value="7">70</option>
-									<option value="8">80</option>
-									<option value="9">90</option>
-									<option value="10">100</option>
-								</select>
-								<div class="invalid-feedback">Puntos requerido.</div>
-							</div>
-
-							<h3 class="text-muted mt-3">Flag</h3>
-							<div class="input-group mb-3">
-								<input type="text" maxlength="50" name="flag" class="form-control" placeholder="P3{ challenge_flag }" required>
-								<div class="invalid-feedback">Flag requerido.</div>
-							</div>
-
-							<h3 class="text-muted mt-3">Descripción</h3>
-							<div class="input-group">
-								<textarea maxlength="150" name="descripcion" class="form-control" required></textarea>
-								<div class="invalid-feedback">Descriptión requerido.</div>
+							<div class="col-lg-12">
+								<div class="py-5 col-md-12 text-center">
+									<h2>Sube tu propio reto</h2>
+									<p class="lead">Se popular dentro de la plataforma, lee la FAQ para saber como tienes que publicar tu reto.</p>
+								</div>
 							</div>
 
 						</div>
-					</div>
 
-					<hr class="mb-4 mt-4 mb-3">
+						<div class="row">
 
-					<div class="row mb-5">
+							<!-- send file -->
+							<div class="col-lg-12 mt-4">
+								
+								<h3 class="text-muted">Titulo</h3>
+								<div class="input-group mb-3">
+									<input type="text" maxlength="30" name="titulo" class="form-control" placeholder="Titulo" required>
+									<div class="invalid-feedback">Titulo requerido.</div>
+								</div>
+						
+								<h3 class="text-muted mt-3">Archivo</h3>
+								<div class="custom-file">
+									<input type="file" name="file" class="custom-file-input" id="validatedCustomFile" required>
+									<label class="custom-file-label" for="validatedCustomFile">None</label>
+									<div class="invalid-feedback">Archivo requerido.</div>
+								</div>
+								
+								<h3 class="text-muted mt-3">Puntos</h3>
+								<div class="form-group">
+									<select class="custom-select" name="puntos" required>
+										<option value="">None</option>
+										<option value="1">10</option>
+										<option value="2">20</option>
+										<option value="3">30</option>
+										<option value="4">40</option>
+										<option value="5">50</option>
+										<option value="6">60</option>
+										<option value="7">70</option>
+										<option value="8">80</option>
+										<option value="9">90</option>
+										<option value="10">100</option>
+									</select>
+									<div class="invalid-feedback">Puntos requerido.</div>
+								</div>
 
-						<div class="col-lg-12">
-							<button class="btn btn-primary btn-lg btn-block mt-3" type="submit">ENVIAR</button>
+								<h3 class="text-muted mt-3">Flag</h3>
+								<div class="input-group mb-3">
+									<input type="text" maxlength="50" name="flag" class="form-control" placeholder="P3{ challenge_flag }" required>
+									<div class="invalid-feedback">Flag requerido.</div>
+								</div>
+
+								<h3 class="text-muted mt-3">Descripción</h3>
+								<div class="input-group">
+									<textarea maxlength="60" name="descripcion" class="form-control" required></textarea>
+									<div class="invalid-feedback">Descriptión requerido.</div>
+								</div>
+
+							</div>
 						</div>
-					</div>
 
-				</form>
+						<hr class="mb-4 mt-4 mb-3">
 
+						<div class="row mb-5">
+
+							<div class="col-lg-12">
+								<button class="btn btn-primary btn-lg btn-block mt-3" type="submit">ENVIAR</button>
+							</div>
+						</div>
+
+					</form>
+				{% endif %}
         	</main> <!-- end main -->
      	</div>
 

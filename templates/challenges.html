@@ -64,6 +64,17 @@
 						</li>
 
 						<li class="nav-item">
+
+							{% if dataUser.admin %}
+
+								<a class="nav-link text-muted" href="/admin">
+								<span data-feather="database"></span>Admin</a>
+							
+							{% endif %}
+								
+						</li>
+
+						<li class="nav-item">
 							<a class="nav-link text-muted" href="/logout">
 							<span data-feather="log-out"></span>Salir</a>
 						</li>
@@ -77,75 +88,76 @@
             
 				<div class="row col-lg-12 mt-3">
 
-				
-					{% for challenge in dataChallenges %}
-					
-						{% if challenge.validado %}
+					{% if dataUser.activate %}
 
-							<div class="col-sm-6 col-md-6 col-lg-6">
-				
-								<div class="card mt-3">
+						{% for challenge in dataChallenges %}
 						
-									<div class="progress mprogress">
-										<div class="progress-bar bg-{{challenge.challenge_type}}" role="progressbar" style="width: {{challenge.puntos}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-									</div>
+							{% if challenge.validado %}
 
-									<div class="card-body">
-										<h5 class="card-title">{{challenge.titulo}}</h5>
-										<p class="card-text"><span data-feather="user"></span> <a class="text-muted" href="/profile/{{challenge.creador}}">{{challenge.creador}}</a></p>
-										<p><span data-feather="award"></span> {{challenge.puntos}} pts</p>
-										<p><span data-feather="clock"></span> {{challenge.fecha}}</p>
-										<p><span data-feather="check-circle"></span> {{challenge.completado_users|length}}</p>
-									
-										<!--<h6 class="topUsers">Top 5 Usuarios</h6>-->
-										<!--<ul>
-							
-											<li class="liAvatar">
-												<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
-											</li>
-
-											<li class="liAvatar">
-												<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
-											</li>
-
-											<li class="liAvatar">
-												<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
-											</li>
-
-											<li class="liAvatar">
-												<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
-											</li>
-
-											<li class="liAvatar">
-												<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
-											</li>
-							
-										</ul>-->
-										
-										{% set logic = namespace(activate=false) %}
-										{% for user_completado in challenge.completado_users %}
-
-											{% if dataUser.name == user_completado %}
-												{% set logic.activate = true %}
-											{% endif %}
-
-										{% endfor %}
-										
-										{% if logic.activate %}
-											<a href="/challenge/{{challenge._id}}" class="btn btn-success mt-3" style="border-radius:25px;">Completado</a>
-										{% else %}
-											<a href="/challenge/{{challenge._id}}" class="btn btn-outline-primary mt-3" style="border-radius:25px;">Challenge</a>
-										{% endif %}
-							
-									</div>
-								</div>
-
-							</div> <!-- end card 1 -->
+								<div class="col-sm-6 col-md-6 col-lg-6">
 					
-						{% endif %}
+									<div class="card mt-3">
+							
+										<div class="progress mprogress">
+											<div class="progress-bar bg-{{challenge.challenge_type}}" role="progressbar" style="width: {{challenge.puntos}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
 
-					{% endfor %}
+										<div class="card-body">
+											<h5 class="card-title">{{challenge.titulo}}</h5>
+											<p class="card-text"><span data-feather="user"></span> <a class="text-muted" href="/profile/{{challenge.creador}}">{{challenge.creador}}</a></p>
+											<p><span data-feather="award"></span> {{challenge.puntos}} pts</p>
+											<p><span data-feather="clock"></span> {{challenge.fecha}}</p>
+											<p><span data-feather="check-circle"></span> {{challenge.completado_users|length}}</p>
+										
+											<!--<h6 class="topUsers">Top 5 Usuarios</h6>-->
+											<!--<ul>
+								
+												<li class="liAvatar">
+													<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
+												</li>
 
+												<li class="liAvatar">
+													<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
+												</li>
+
+												<li class="liAvatar">
+													<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
+												</li>
+
+												<li class="liAvatar">
+													<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
+												</li>
+
+												<li class="liAvatar">
+													<img alt="Claire Connors" class="listAvatars" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" data-filter-by="alt">
+												</li>
+								
+											</ul>-->
+											
+											{% set logic = namespace(activate=false) %}
+											{% for user_completado in challenge.completado_users %}
+
+												{% if dataUser.name == user_completado %}
+													{% set logic.activate = true %}
+												{% endif %}
+
+											{% endfor %}
+											
+											{% if logic.activate %}
+												<a href="/challenge/{{challenge._id}}" class="btn btn-success mt-3" style="border-radius:25px;">Completado</a>
+											{% else %}
+												<a href="/challenge/{{challenge._id}}" class="btn btn-outline-primary mt-3" style="border-radius:25px;">Challenge</a>
+											{% endif %}
+								
+										</div>
+									</div>
+
+								</div> <!-- end card 1 -->
+						
+							{% endif %}
+
+						{% endfor %}
+					{% endif %}
 					<div class="row col-lg-12" style="height: 25px;"></div>				
 				
 				</div> <!-- end row -->

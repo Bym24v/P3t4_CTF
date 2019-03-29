@@ -63,7 +63,8 @@ class P3t4ControllerUsers:
                             "activate": False,
                             "twitter": "",
                             "telegram": "",
-                            "puntos": 0
+                            "puntos": 0,
+                            "admin": False
                         }
                     )
 
@@ -91,6 +92,21 @@ class P3t4ControllerUsers:
         except:
             return False
     
+    def CheckTokenAdmin(self, token):
+
+        try:
+            result = mongo.db.users.find_one_or_404({"token": token})
+            
+            if result['admin'] == True:
+                print "[+] Check admin Found!"
+                return True
+            else:
+                print "[+] Error Check admin"
+                return False
+        except:
+            print "[+] Error Check admin"
+            return False
+
     def CheckTokenReturnData(self, token):
     
         try:
@@ -118,6 +134,14 @@ class P3t4ControllerUsers:
         except:
             return False
     
+    def FindUserNameReturnData(self, name):
+
+        try:
+            result = mongo.db.users.find_one_or_404({'name': name})
+            return result
+        except:
+            return "error"
+
     def FindAllUsersSort(self):
 
         try:
@@ -133,3 +157,19 @@ class P3t4ControllerUsers:
             return result['name']
         except:
             return "Error"
+    
+    def FindUserByNameAndDelete(self, name):
+
+        try:
+            result = mongo.db.users.delete_one({'name': name})
+            return "done"
+        except:
+            return "error"
+
+    def FindTopTresUsers(self):
+
+        try:
+            result = mongo.db.users.find().sort('puntos', -1).limit(3)
+            return result
+        except:
+            return "error"
