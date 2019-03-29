@@ -3,7 +3,7 @@ var horas = document.getElementById('horas')
 var minutos = document.getElementById('minutos')
 var segundos = document.getElementById('segundos')
 
-var countDownDate = new Date("Mar 29, 2019 00:00:00").getTime();
+var countDownDate = new Date("Mar 30, 2019 00:00:00").getTime();
 
 var conutDownFunction = setInterval(function(){
 

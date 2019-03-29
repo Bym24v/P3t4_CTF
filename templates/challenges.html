@@ -47,7 +47,7 @@
 							<span data-feather="users"></span>Usuarios</a>
 						</li>
 
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            			<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
 							<span>Menu Usuario</span>
 							<a class="d-flex align-items-center text-muted" href="/public/challenge">
 								<span data-feather="plus-circle"></span>
@@ -56,10 +56,10 @@
             
 						<li class="nav-item">
 
-              {% if dataUser %}
-                <a class="nav-link text-muted" href="/profile/{{dataUser.name}}">
-							  <span data-feather="user"></span>Perfil</a>
-              {% endif %}
+							{% if dataUser %}
+								<a class="nav-link text-muted" href="/profile/{{dataUser.name}}">
+											<span data-feather="user"></span>Perfil</a>
+							{% endif %}
 							
 						</li>
 
@@ -75,7 +75,7 @@
 
         	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
             
-				<div class="row col-lg-12">
+				<div class="row col-lg-12 mt-3">
 
 				
 					{% for challenge in dataChallenges %}
@@ -95,6 +95,7 @@
 										<p class="card-text"><span data-feather="user"></span> <a class="text-muted" href="/profile/{{challenge.creador}}">{{challenge.creador}}</a></p>
 										<p><span data-feather="award"></span> {{challenge.puntos}} pts</p>
 										<p><span data-feather="clock"></span> {{challenge.fecha}}</p>
+										<p><span data-feather="check-circle"></span> {{challenge.completado_users|length}}</p>
 									
 										<!--<h6 class="topUsers">Top 5 Usuarios</h6>-->
 										<!--<ul>
@@ -145,7 +146,7 @@
 
 					{% endfor %}
 
-				
+					<div class="row col-lg-12" style="height: 25px;"></div>				
 				
 				</div> <!-- end row -->
         	</main>

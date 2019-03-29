@@ -66,17 +66,23 @@ class P3t4ControllerChallenges:
 
         try:
             result = mongo.db.challenges.find_one_or_404({'_id': challengeID})
-            
+
             if result['flag'] == flag:
                 
                 print "[+] Flag Found!"
 
                 if not username in result['completado_users']:  
-                    save = mongo.db.challenges.find_one_and_update(
+
+                    mongo.db.challenges.find_one_and_update(
                         {'_id': challengeID},
                         {'$push': {'completado_users': username}}
                     )
-                
+
+                    mongo.db.users.find_one_and_update(
+                        {'name': username},
+                        {'$inc': {'puntos': result['puntos']}}
+                    )
+
                 return True
             else:
                 print "[+] Flag not Found!"

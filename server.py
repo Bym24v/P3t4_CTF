@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, redirect, flash, make_response
+from flask import Flask, render_template, request, redirect, flash, make_response, send_file
 from werkzeug.utils import secure_filename
 import hashlib, datetime, os, time
 
 # root upload folder
 UPLOAD_FOLDER = os.getcwd() + '\\public-challenges'
-ALLOWED_EXTENSIONS = set(['zip'])
+ALLOWED_EXTENSIONS = set(['.zip'])
 
 # app
 app = Flask(__name__)
@@ -229,7 +229,7 @@ def service_subchallenge():
         puntos = request.form['puntos']
         flag = request.form['flag']
         descripcion = request.form['descripcion']
-        
+
         if titulo == '' or len(titulo) > 30:
             flash("Titulo no valido.", "danger")
             return redirect('/public/challenge')
@@ -272,6 +272,12 @@ def service_subchallenge():
             flash("No se a podido publicar, ponte en contacto con un administrador.", "danger")
             return redirect('/public/challenge')
             
+@app.route('/send/<name>')
+def service_send_file(name):
+
+    path = app.config['UPLOAD_FOLDER'] + "\\" + name
+    return send_file(path, mimetype="application/x-zip-compressed")
+
 
 #@error(404)
 #def error404(error):
