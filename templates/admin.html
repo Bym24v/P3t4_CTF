@@ -50,7 +50,7 @@
 							<span data-feather="users"></span>Usuarios</a>
 					</li>
 
-					<a class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="true" aria-controls="multiCollapseExample1">
+					<a class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="true" aria-controls="multiCollapseExample1">
 						<span>Menu Usuario</span>
 						<!--<a class="d-flex align-items-center text-muted" href="/public/challenge">
 							<span data-feather="plus-circle"></span>
@@ -62,14 +62,26 @@
 					<div class="collapse multi-collapse" id="multiCollapseExample1">
 						<li class="nav-item">
 
-								{% if dataName.admin %}
+							{% if dataName.admin %}
 
-									<a class="nav-link active" href="/admin">
-									<span data-feather="database"></span>Admin</a>
+								<a class="nav-link active" href="/admin">
+								<span data-feather="database"></span>Admin</a>
+							
+							{% endif %}
 								
-								{% endif %}
-									
-							</li>
+						</li>
+
+						<li class="nav-item">
+
+						{% if dataName %}
+
+							<a class="nav-link text-muted" href="/profile/{{dataName.name}}">
+							<span data-feather="user"></span>Perfil</a>
+						
+						{% endif %}
+							
+					</li>
+
 					</div>
 
 					<!--<li class="nav-item">
