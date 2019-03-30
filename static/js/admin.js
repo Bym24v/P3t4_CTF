@@ -1,6 +1,6 @@
 var matches = document.querySelectorAll("td > a");
 
-var modName = document.getElementById('mod-name')
+var modName = "";
 var modScore = document.getElementById('mod-score')
 var modActivate = document.getElementById('mod-activate')
 var modAdmin = document.getElementById('mod-admin')
@@ -14,7 +14,7 @@ for (let i = 0; i < matches.length; i++) {
 
         e.preventDefault();
 
-
+        // edit
         if (matches[i].id.search('btn-edit') == 0)
         {   
             var parseName = e.target.href.split('/')
@@ -34,21 +34,28 @@ for (let i = 0; i < matches.length; i++) {
                     if (ajaxEdit.status == 200) {
 
                         var data = ajaxEdit.responseText;
-                        
-                        var parseJson = JSON.parse(data)
+                        var parseJson = "";
 
-                        modName.value = parseJson.name
-                        modScore.value = parseJson.puntos
-                        modActivate.value = parseJson.activate
-                        modAdmin.value = parseJson.admin
+                        if (data.search('{') != -1){
+                            parseJson = JSON.parse(data)
 
-                        // show modal
-                        $('#editModal').modal('show')
+                            modName = parseJson.name
+                            modScore.value = parseJson.puntos
+                            modActivate.value = parseJson.activate
+                            modAdmin.value = parseJson.admin
+
+                            // show modal
+                            $('#editModal').modal('show')
+                        }else{
+                            //console.log(data);
+                            window.location.href = "/"
+                        }
+
                     }
                 }
             };
 
-        }else{
+        }else{ // Delete
             
             var parseName = e.target.href.split('/')
 
@@ -67,18 +74,20 @@ for (let i = 0; i < matches.length; i++) {
                     // ok
                     if (ajaxDelete.status == 200) {
                         
-                        // data
+                        // data server 
                         var data = ajaxDelete.responseText;
-                        
-                        // json
-                        var parseJson = JSON.parse(data)
-                        //console.log(parseJson);
-                        
-                        // user name
-                        deleteUserName.textContent = parseJson.name
 
-                        // show modal
-                        $('#deleteModal').modal('show')
+                        if (data.search('Admin') == 0){
+                            //console.log(data);
+                            window.location.href = "/"
+                        }else{
+                            
+                            // Modal name
+                            deleteUserName.textContent = data
+
+                            // show modal
+                            $('#deleteModal').modal('show')
+                        }
                     }
                 }
             };
@@ -91,11 +100,48 @@ for (let i = 0; i < matches.length; i++) {
 var modBtnEdit = document.getElementById('mod-btn-edit')
 var modBtnDelete = document.getElementById('mod-btn-delete')
 
-
+// Edit
 modBtnEdit.addEventListener('click', function(){
+    
+    var ajaxDelete = new XMLHttpRequest();
+    /*ajax.upload.addEventListener("progress", progressHandler, false);
+    ajax.addEventListener("load", completeHandler, false);
+    ajax.addEventListener("error", errorHandler, false);
+    ajax.addEventListener("abort", abortHandler, false);*/
+    ajaxDelete.open("POST", "/admin/edit/" + modName); 
+
+    var formdata = new FormData();
+    formdata.append("mod-name", modName);
+    formdata.append("mod-score", modScore.value);
+    formdata.append("mod-activate", modActivate.value);
+    formdata.append("mod-admin", modAdmin.value);
+
+    ajaxDelete.send(formdata)
+
+    ajaxDelete.onreadystatechange = function () {
+
+        if (ajaxDelete.readyState == 4) {
+            
+            // ok
+            if (ajaxDelete.status == 200) {
+                
+                // data
+                var data = ajaxDelete.responseText;
+                
+                if (data == "done"){
+                    console.log(data);
+                    $('#deleteModal').modal('hide')
+                    window.location.reload();
+                }else{
+                    console.log("Error Edit user");
+                }
+            }
+        }
+    };
     
 })
 
+// Delete
 modBtnDelete.addEventListener('click', function(){
     
     var ajaxDelete = new XMLHttpRequest();
@@ -117,16 +163,12 @@ modBtnDelete.addEventListener('click', function(){
                 var data = ajaxDelete.responseText;
                 
                 if (data == "done"){
-                    console.log(data == "done");
+                    console.log(data);
                     $('#deleteModal').modal('hide')
                     window.location.reload();
                 }else{
                     console.log("Error Delete user");
                 }
-
-                
-                
-                
             }
         }
     };

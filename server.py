@@ -219,7 +219,7 @@ def service_admin():
             resp.set_cookie('token', '', path='/', expires=0)
             return resp
 
-@app.route('/admin/edit/<name>')
+@app.route('/admin/edit/<name>', methods=['GET', 'POST'])
 def service_editUser(name):
     
     if request.method == 'GET':
@@ -230,11 +230,16 @@ def service_editUser(name):
             
             if p3t4ControllerUsers.CheckToken(token):
 
-                dataName = p3t4ControllerUsers.FindUserNameReturnData(name)
-                #resp = make_response(redirect('/challenges'))
-                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+                dataName = p3t4ControllerUsers.FindUserNameReturnEdit(name)
+            
+                newPacket = {
+                    "name": dataName['name'],
+                    "puntos": dataName['puntos'],
+                    "activate": dataName['activate'],
+                    "admin": dataName['admin']
+                }
 
-                return jsonify(dataName)
+                return jsonify(newPacket)
             else:
                 return "error"
         else:
@@ -243,16 +248,41 @@ def service_editUser(name):
     if request.method == 'POST':
 
         token = request.cookies.get('token')
-        
+
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
+            editUserName = request.form['mod-name']
+            editUserScore = request.form['mod-score']
+            editUserActivate = request.form['mod-activate']
+            editUserAdmin = request.form['mod-admin']
+            
+            # check activate
+            if editUserActivate == "false" or editUserActivate == "False":
+                print "Active false"
+                editUserActivate = False
+            elif editUserActivate == "true" or editUserActivate == "True":
+                print "Active true"
+                editUserActivate = True
+            else:
+                print "Error type"
+                return "error"
+
+            # check admin
+            if editUserAdmin == "false" or editUserAdmin == "False":
+                print "Admin false"
+                editUserAdmin = False
+            elif editUserAdmin == "true" or editUserAdmin == "True":
+                print "Admin true"
+                editUserAdmin = True
+            else:
+                print "Error type"
+                return "error"
+
             if p3t4ControllerUsers.CheckToken(token):
-
-                dataName = p3t4ControllerUsers.FindUserNameReturnData(name)
-                #resp = make_response(redirect('/challenges'))
-                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
-
-                return jsonify(dataName)
+                
+                userID = p3t4ControllerUsers.FindUserNameReturnID(editUserName)
+                userResult = p3t4ControllerUsers.FindUserNameEditUser(userID, editUserScore, editUserActivate, editUserAdmin)
+                return userResult
             else:
                 return "error"
         else:
@@ -268,11 +298,8 @@ def service_deleteUser(name):
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
-                dataName = p3t4ControllerUsers.FindUserNameReturnData(name)
-                #resp = make_response(redirect('/challenges'))
-                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
-
-                return jsonify(dataName)
+                dataName = p3t4ControllerUsers.FindUserNameReturnName(name)
+                return dataName
             else:
                 "error"
         else:
@@ -285,10 +312,6 @@ def service_deleteUser(name):
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
-
-                dataName = p3t4ControllerUsers.FindUserNameReturnData(name)
-                #resp = make_response(redirect('/challenges'))
-                #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
                 result = p3t4ControllerUsers.FindUserByNameAndDelete(name)
                 return result
             else:

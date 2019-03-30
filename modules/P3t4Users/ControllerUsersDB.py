@@ -38,7 +38,6 @@ class P3t4ControllerUsers:
             print "[+] Password no Match!"
             return False
         
-
     def RegisterUser(self, name, password, email, code):
         
         token = hashlib.sha512(name + password).hexdigest()
@@ -82,7 +81,7 @@ class P3t4ControllerUsers:
             print "[+] Error Register code require"
             return "code"
     
-
+    """ User """
     def CheckToken(self, token):
 
         try:
@@ -134,14 +133,68 @@ class P3t4ControllerUsers:
         except:
             return False
     
-    def FindUserNameReturnData(self, name):
+    def FindUserNameReturnID(self, name):
 
+        try:
+            result = mongo.db.users.find_one_or_404({'name': name})
+            return result['_id']
+        except:
+            return False
+        
+    """ End User """
+
+    """ Delete User """
+
+    def FindUserNameReturnName(self, name):
+
+        try:
+            result = mongo.db.users.find_one_or_404({'name': name})
+            return result['name']
+        except:
+            return "error"
+
+    def FindUserByNameAndDelete(self, name):
+    
+        try:
+            result = mongo.db.users.delete_one({'name': name})
+            return "done"
+        except:
+            return "error"
+    
+    """ End Delete User """
+
+    """ Edit User """ 
+
+    def FindUserNameReturnEdit(self, name):
+    
         try:
             result = mongo.db.users.find_one_or_404({'name': name})
             return result
         except:
             return "error"
 
+    def FindUserNameEditUser(self, userID, new_puntos, new_activate, new_admin):
+        
+
+        if len(new_puntos) <= 6:
+
+            try:
+                mongo.db.users.find_one_and_update(
+                    {'_id': userID},
+                    {'$set': {
+                        'puntos': int(new_puntos, 10),
+                        'activate': new_activate,
+                        'admin': new_admin}
+                    }
+                )
+                
+                return "done"
+            except:
+                return "error"
+
+    """ End Edit User """
+
+    """ Challenge """ 
     def FindAllUsersSort(self):
 
         try:
@@ -157,15 +210,10 @@ class P3t4ControllerUsers:
             return result['name']
         except:
             return "Error"
-    
-    def FindUserByNameAndDelete(self, name):
 
-        try:
-            result = mongo.db.users.delete_one({'name': name})
-            return "done"
-        except:
-            return "error"
+    """ End Challenge """
 
+    """ Home Top Users """ 
     def FindTopTresUsers(self):
 
         try:

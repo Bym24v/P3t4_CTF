@@ -87,75 +87,78 @@
         	</nav>
 
         	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
-            
-				<!-- rows -->
-				<div class="row col-lg-12">
 
-					<div class="py-5 col-md-12 text-center">
-						<!-- img -->
-						<img class="d-block mx-auto mb-4" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" alt="" width="72" height="72" style="border-radius: 50px;">
-						
-						<h2>Perfil de Usuario</h2>
-						<p class="lead">Aquí podrás cambiar los datos de usuario.</p>
-					</div>
-				
-					<!-- Main -->
-					<div class="row col-md-12">
-					
-						<div class="col-md-12">
+				{% if data.activate %}
 
-							<h4 class="mb-4">Datos de usuario</h4>
+					<!-- rows -->
+					<div class="row col-lg-12">
+
+						<div class="py-5 col-md-12 text-center">
+							<!-- img -->
+							<img class="d-block mx-auto mb-4" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" alt="" width="72" height="72" style="border-radius: 50px;">
 							
-							<form class="needs-validation" novalidate>
+							<h2>Perfil de Usuario</h2>
+							<p class="lead">Aquí podrás cambiar los datos de usuario.</p>
+						</div>
+					
+						<!-- Main -->
+						<div class="row col-md-12">
 						
-								<div class="mb-3">
-									<label for="username">Usuario</label>
-									<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{data.name}}" required>
-									<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
-									<!--<small id="username" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-								</div>
+							<div class="col-md-12">
+
+								<h4 class="mb-4">Datos de usuario</h4>
 								
-								<div class="mb-3">
-									<label for="email">Correo</label>
-									<input type="email" class="form-control" id="email" maxlength="50" placeholder="email@email.com" value="{{data.email}}" required>
-									<div class="invalid-feedback">Correo requerido.</div>
-								</div>
+								<form class="needs-validation" novalidate>
 
-								<!--<div class="mb-3">
-									<label for="pass">Contraseña</label>
-									<input type="password" class="form-control" id="pass" maxlength="50" placeholder="password" required>
-									<div class="invalid-feedback">Contraseña requerida.</div>
-								</div>-->
-
-								<div class="mb-3">
-									<label for="address">Twitter <span class="text-muted">(Optional)</span></label>
-									<input type="text" class="form-control" id="address" maxlength="10" value="{{data.twitter}}">
-								</div>
-
-								<div class="mb-3">
-									<label for="address2">Telegram <span class="text-muted">(Optional)</span></label>
-									<input type="text" class="form-control" id="address2" maxlength="10" value="{{data.telegram}}">
-								</div>
-
-								<hr class="mb-4 mt-4 mb-3">
-
-								<div class="row">
-
-									<div class="col-lg-6">
-										<button class="btn btn-primary btn-lg btn-block" type="submit">Cambiar Contraseña</button>
-									</div>
-
-									<div class="col-lg-6">
-										<button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+									<div class="mb-3">
+										<label for="username">Usuario</label>
+										<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{data.name}}" required>
+										<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
+										<!--<small id="username" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 									</div>
 									
-								</div>
-								
-							</form>
-						</div>
-					</div> <!-- end main -->
-          		</div>
+									<div class="mb-3">
+										<label for="email">Correo</label>
+										<input type="email" class="form-control" id="email" maxlength="50" placeholder="email@email.com" value="{{data.email}}" required>
+										<div class="invalid-feedback">Correo requerido.</div>
+									</div>
 
+									<!--<div class="mb-3">
+										<label for="pass">Contraseña</label>
+										<input type="password" class="form-control" id="pass" maxlength="50" placeholder="password" required>
+										<div class="invalid-feedback">Contraseña requerida.</div>
+									</div>-->
+
+									<div class="mb-3">
+										<label for="address">Twitter <span class="text-muted">(Optional)</span></label>
+										<input type="text" class="form-control" id="address" maxlength="10" value="{{data.twitter}}">
+									</div>
+
+									<div class="mb-3">
+										<label for="address2">Telegram <span class="text-muted">(Optional)</span></label>
+										<input type="text" class="form-control" id="address2" maxlength="10" value="{{data.telegram}}">
+									</div>
+
+									<hr class="mb-4 mt-4 mb-3">
+
+									<div class="row">
+
+										<div class="col-lg-6">
+											<button class="btn btn-primary btn-lg btn-block" type="submit">Cambiar Contraseña</button>
+										</div>
+
+										<div class="col-lg-6">
+											<button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+										</div>
+										
+									</div>
+									
+								</form>
+							</div>
+						</div> <!-- end main -->
+					</div>
+				{% endif %}
+				
        		 </main>
       	</div>
     </div>
