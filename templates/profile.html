@@ -20,7 +20,7 @@
 
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-12 col-md-12 mr-0" href="/">P3t4 - CTF</a>
+      <a id="toggle-logo" class="navbar-brand col-sm-12 col-md-12 mr-0" href="#">P3t4 - CTF</a>
 	  {% if data %}
 
         <div class="score"><span data-feather="award"></span> {{data.puntos}}</div>
@@ -33,7 +33,7 @@
       	<div class="row">
 
 			<!-- sidebar -->
-			<nav class="col-md-2 d-none d-md-block sidebar" style="width: 200px;">
+			<nav id="sidebar" class="col-md-2 sidebar-expanded d-none d-md-block sidebar" style="width: 200px;">
 				
 				<!-- sidebar -->
 				<div class="sidebar-sticky sideColor">
@@ -49,38 +49,46 @@
 							<span data-feather="users"></span>Usuarios</a>
 						</li>
 
-						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-							<span>Menu Usuario</span>
-							<a class="d-flex align-items-center text-muted" href="/public/challenge">
-								<span data-feather="plus-circle"></span>
-							</a>
-						</h6>
-
 						<li class="nav-item">
-
-							{% if data %}
-								<a class="nav-link active" href="/profile/{{data.name}}">
-								<span data-feather="user"></span>Perfil</a>
-							{% endif %}
-							
+							<a class="nav-link text-muted"data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+							<span data-feather="user"></span>Menu</a>
 						</li>
 
-						<li class="nav-item">
+						<div class="collapse multi-collapse show" id="multiCollapseExample1">
 
-							{% if data.admin %}
-
-								<a class="nav-link text-muted" href="/admin">
-								<span data-feather="database"></span>Admin</a>
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/public/challenge">
+								<span class="subico" data-feather="circle"></span>Publicar</a>
+							</li>
 							
-							{% endif %}
+							<li class="nav-item">
+
+								{% if data %}
+									<a class="nav-link submenu active" href="/profile/{{data.name}}">
+									<span class="subico" data-feather="circle"></span>Perfil</a>
+								{% endif %}
 								
-						</li>
+							</li>
+							
+							{% if data.admin %}
+								
+								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin">
+									<span class="subico" data-feather="circle"></span>AD Usuarios</a>
+								</li>
 
-						<li class="nav-item">
-							<a class="nav-link text-muted" href="/logout">
-							<span data-feather="log-out"></span>Salir</a>
-						</li>
-				
+								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin/challenges">
+									<span class="subico" data-feather="circle"></span>AD Challenges</a>
+								</li>
+
+							{% endif %}
+
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/logout">
+								<span class="subico" data-feather="circle"></span>Salir</a>
+							</li>
+						</div>
 					</ul>
 				</div> <!-- end sidebar -->
 
@@ -154,6 +162,8 @@
 									
 								</div>
 								
+								<!-- Fix -->
+								<div class="row col-lg-12" style="height: 25px;"></div>	
 							</form>
 						</div>
 					</div> <!-- end main -->
@@ -169,7 +179,8 @@
     <script src="/static/js/jquery-slim.min.js"></script>
 		<script src="/static/js/bootstrap.min.js"></script>
 		<script src="/static/js/popper.min.js"></script>
-
+	<script src="/static/js/dashboard.js"></script>
+	
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>

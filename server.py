@@ -318,7 +318,124 @@ def service_deleteUser(name):
                 return "error"
         else:
             return "Admin Require"
+
+@app.route('/admin/challenges')
+def service_adminChallenges():
+
+    if request.method == 'GET':
+        
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+
+            if p3t4ControllerUsers.CheckToken(token):
+                dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
+                data = p3t4ControllerChallenges.GetAllChallenges()
+                return render_template('adminChallenge.html', data=data, dataName=dataName)
+            else:
+                resp = make_response(redirect('/'))
+                resp.set_cookie('token', '', path='/', expires=0)
+                return resp
+        else:
+            print "Admin Require"
+            resp = make_response(redirect('/'))
+            resp.set_cookie('token', '', path='/', expires=0)
+            return resp
+
+@app.route('/admin/challenges/edit/<challengeID>',  methods=['GET', 'POST'])
+def service_adminChallengesEdit(challengeID):
+
+    if request.method == 'GET':
+            
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+            
+            if p3t4ControllerUsers.CheckToken(token):
+
+                dataName = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+
+                newPacket = {
+                    "id": dataName['_id'],
+                    "puntos": dataName['puntos'],
+                    "validado": dataName['validado'],
+                    "creador": dataName['creador']
+                }
+
+                return jsonify(newPacket)
+            else:
+                return "error"
+        else:
+            return "Admin Require"
     
+    if request.method == 'POST':
+    
+        token = request.cookies.get('token')
+    
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+    
+            editChallengeID = request.form['mod-challengeID']
+            editUserScore = request.form['mod-score']
+            editUserValidate = request.form['mod-validate']
+            editUserCreator = request.form['mod-creator']
+            
+            # check activate
+            if editUserValidate == "false" or editUserValidate == "False":
+                print "Active false"
+                editUserValidate = False
+            elif editUserValidate == "true" or editUserValidate == "True":
+                print "Active true"
+                editUserValidate = True
+            else:
+                print "Error type"
+                return "error"
+    
+            if p3t4ControllerUsers.CheckToken(token):
+                
+                userResult = p3t4ControllerChallenges.FindByIDEditChallenge(editChallengeID, editUserScore, editUserValidate, editUserCreator)
+                return userResult
+            else:
+                return "error"
+        else:
+            return "Admin Require"
+
+@app.route('/admin/challenges/delete/<challengeID>', methods=['GET', 'POST'])
+def service_adminDelegeChallenge(challengeID):
+
+    if request.method == 'GET':
+        
+        token = request.cookies.get('token')
+
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+
+            if p3t4ControllerUsers.CheckToken(token):
+                challenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+
+                packet = {
+                    "titulo": challenge['titulo'],
+                    "id": challenge['_id']
+                }
+
+                return jsonify(packet)
+            else:
+                "error"
+        else:
+            return "Admin Require"
+    
+    if request.method == 'POST':
+        
+        token = request.cookies.get('token')
+
+        if p3t4ControllerUsers.CheckTokenAdmin(token):
+
+            if p3t4ControllerUsers.CheckToken(token):
+                result = p3t4ControllerChallenges.FindByIdDeleteChallenge(challengeID)
+                return result
+            else:
+                return "error"
+        else:
+            return "Admin Require"
+
 @app.route('/public/challenge', methods=['GET', 'POST'])
 def service_subchallenge():
 

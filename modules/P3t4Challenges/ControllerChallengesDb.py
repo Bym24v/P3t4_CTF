@@ -20,6 +20,8 @@ class P3t4ControllerChallenges:
   
         try:
             
+            hashFlag = hashlib.sha256(flag).hexdigest()
+
             parse = int(puntos, 10) * 10
             progressType = ""
 
@@ -43,7 +45,7 @@ class P3t4ControllerChallenges:
                 "fecha": fecha,
                 "puntos": parse,
                 "challenge_type": progressType,
-                "flag": flag,
+                "flag": hashFlag,
                 "zip": nameZip,
                 "descripcion": resumen,
                 "validado": False,
@@ -61,13 +63,48 @@ class P3t4ControllerChallenges:
             return result
         except:
             return False
+    
+    """ Challenge Edit""" 
+    def FindByIDEditChallenge(self, challengeID, new_puntos, new_validado, new_creador):
 
+        if len(new_puntos) <= 6 and len(new_creador) <= 30:
+    
+            try:
+                mongo.db.challenges.find_one_and_update(
+                    {'_id': challengeID},
+                    {'$set': {
+                        'puntos': int(new_puntos, 10),
+                        'validado': new_validado,
+                        'creador': new_creador}
+                    }
+                )
+                return "done"
+            except:
+                return "error"
+
+    """ End Challenge Edit """
+
+
+    """ Challenge Delete  """
+
+    def FindByIdDeleteChallenge(self, challengeID):
+
+        try:
+            result = mongo.db.challenges.delete_one({'_id': challengeID})
+            print result
+            return "done"
+        except:
+            return "error"
+
+    """ End Delete Challenge"""
     def CheckFlag(self, username, challengeID, flag):
 
         try:
             result = mongo.db.challenges.find_one_or_404({'_id': challengeID})
 
-            if result['flag'] == flag:
+            hashFlag = hashlib.sha256(flag).hexdigest()
+
+            if result['flag'] == hashFlag:
                 
                 print "[+] Flag Found!"
 
