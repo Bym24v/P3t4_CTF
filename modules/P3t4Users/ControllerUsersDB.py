@@ -233,7 +233,6 @@ class P3t4ControllerUsers:
                         salida.append(newUser)
                     except:
                         return False
-        
         return salida
 
     def FindUserByToken(self, token):

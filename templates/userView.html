@@ -96,6 +96,13 @@
 
         	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
 
+				<nav class="mnav" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Perfil</li>
+					</ol>
+				</nav>
+				
 				{% if dataUser.activate %}
 
 					<!-- rows -->
@@ -110,63 +117,47 @@
 						</div>
 					</div>
 
-					<!-- Main -->
+					<!-- row -->
 					<div class="row">
-					
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-							<h4 class="mb-4">Datos de usuario</h4>
-							
-							<form class="needs-validation" novalidate>
-
-								<div class="mb-3">
-									<label for="username">Usuario</label>
-									<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{dataUser.name}}" required>
-									<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
-									<!--<small id="username" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
-								</div>
-								
-								<div class="mb-3">
-									<label for="email">Correo</label>
-									<input type="email" class="form-control" id="email" maxlength="50" placeholder="email@email.com" value="{{dataUser.email}}" required>
-									<div class="invalid-feedback">Correo requerido.</div>
-								</div>
-
-								<!--<div class="mb-3">
-									<label for="pass">Contraseña</label>
-									<input type="password" class="form-control" id="pass" maxlength="50" placeholder="password" required>
-									<div class="invalid-feedback">Contraseña requerida.</div>
-								</div>-->
-
-								<div class="mb-3">
-									<label for="address">Twitter <span class="text-muted">(Opcional)</span></label>
-									<input type="text" class="form-control" id="address" maxlength="10" value="{{dataUser.twitter}}">
-								</div>
-
-								<div class="mb-3">
-									<label for="address2">Telegram <span class="text-muted">(Opcional)</span></label>
-									<input type="text" class="form-control" id="address2" maxlength="10" value="{{dataUser.telegram}}">
-								</div>
-
-								<hr class="mb-4 mt-4 mb-3">
-
-								<div class="row">
-
-									<div class="col-lg-6">
-										<button class="btn btn-primary btn-lg btn-block" type="submit">Cambiar Contraseña</button>
-									</div>
-
-									<div class="col-lg-6">
-										<button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
-									</div>
-									
-								</div>
-								
-								<!-- Fix -->
-								<div class="row col-lg-12" style="height: 25px;"></div>	
-							</form>
+						<div class="col-xs-4 col-sm-4 col-lg-4">
+							<div class="card" style="width: 100%;">
+							<!--<img src="..." class="card-img-top" alt="...">-->
+							<div class="card-body">
+								<h5 class="card-title">Card title</h5>
+								<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+							</div>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item">Cras justo odio</li>
+								<li class="list-group-item">Dapibus ac facilisis in</li>
+								<li class="list-group-item">Vestibulum at eros</li>
+							</ul>
+							<div class="card-body">
+								<a href="#" class="card-link">Card link</a>
+								<a href="#" class="card-link">Another link</a>
+							</div>
+							</div>
 						</div>
-					</div> <!-- end main -->
+
+						<div class="col-xs-8 col-sm-8 col-lg-8">
+							<ul class="nav nav-tabs" id="myTab" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+								</li>
+								</ul>
+								<div class="tab-content" id="myTabContent">
+								<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
+								<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+								<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+								</div>
+						</div>
+					</div><!-- end row -->
 				{% endif %}
 				
        		 </main>
