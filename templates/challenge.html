@@ -157,7 +157,7 @@
 
 						{% set logic2 = namespace(activate=false) %}
 						{% for completado_check in dataChallenge.completado_users %}
-							{% if dataUser.name == completado_check %}
+							{% if dataUser.name == completado_check.name %}
 								{% set logic2.activate = true %}
 							{% endif %}		
 						{% endfor %}
@@ -202,23 +202,24 @@
 										<th scope="col">#</th>
 										<th scope="col">Nombre</th>
 										<th scope="col">Puntos</th>
-										<th scope="col">Twitter</th>
-										<th scope="col">Telegram</th>
+										<th scope="col">Social</th>
+										<th scope="col">Fecha</th>
+										<th scope="col">Hora</th>
 									</tr>
 								</thead>
 								
 								<tbody>
 
 									{% set count = namespace(index=0) %}
-									{% for user in dataAllUsers %}
-										
-										{% for completado in dataChallenge.completado_users %}
-										
-											{% if user.name == completado %}
-											
-												<!-- counter -->
-												{% set count.index = count.index + 1 %}
+									{% for user in dataAllUsers  %}
+
+										{% for completado in  dataChallenge.completado_users %}
+
+											{% if completado.name == user.name %}
+
 												{% if user.activate %}
+
+													{% set count.index = count.index + 1 %}
 
 													<tr>
 														<td class="td-50">{{count.index}}</td>
@@ -227,24 +228,24 @@
 														<td>{{user.puntos}}</td>
 
 														{% if user.twitter %}
-															<td><a href="https://twitter.com/{{user.twitter}}">{{user.twitter}}<a></td>
+															<td>
+																<a href="https://twitter.com/{{user.twitter}}" class="text-muted"><span class="subico" data-feather="twitter"></span></a>
+																<a href="https://t.me/{{user.telegram}}" class="text-muted"><span class="subico" data-feather="send"></span></a>
+															</td>
 														{% else %}
 															<td>nada</td>
 														{% endif %}
+														
+														<td style="width: 100px;">{{completado.fecha}}</td>
+														<td style="width: 100px;">{{completado.hora}}</td>
 
-														{% if user.telegram %}
-															<td><a href="https://t.me/{{user.telegram}}">{{user.telegram}}<a></td>
-														{% else %}
-															<td>nada</td>
-														{% endif %}
 													</tr>
 												
 												{% endif %}
-											
+												
 											{% endif %}
-										
+											
 										{% endfor %}
-
 									{% endfor %}
 
 								</tbody>

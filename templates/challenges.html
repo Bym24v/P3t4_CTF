@@ -116,7 +116,7 @@
 											<p><span data-feather="award"></span> {{challenge.puntos}} pts</p>
 											<p><span data-feather="clock"></span> {{challenge.fecha}}</p>
 											<p><span data-feather="check-circle"></span> {{challenge.completado_users|length}}</p>
-										
+											
 											<!--<h6 class="topUsers">Top 5 Usuarios</h6>-->
 											<!--<ul>
 								
@@ -145,7 +145,7 @@
 											{% set logic = namespace(activate=false) %}
 											{% for user_completado in challenge.completado_users %}
 
-												{% if dataUser.name == user_completado %}
+												{% if dataUser.name == user_completado.name %}
 													{% set logic.activate = true %}
 												{% endif %}
 

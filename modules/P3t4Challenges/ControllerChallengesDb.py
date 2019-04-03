@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_pymongo import PyMongo
-import hashlib
+import hashlib, time
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/p3t4_ctf"
@@ -37,7 +37,7 @@ class P3t4ControllerChallenges:
             if parse > 80 and parse <= 100:
                 progressType = "danger"
                 
-            result = mongo.db.challenges.insert({
+            mongo.db.challenges.insert({
 
                 "_id": hashlib.sha256(titulo).hexdigest(),
                 "creador": creador,
@@ -64,7 +64,7 @@ class P3t4ControllerChallenges:
         except:
             return False
     
-    """ Challenge Edit""" 
+    """ Challenge Edit Api """ 
     def FindByIDEditChallenge(self, challengeID, new_puntos, new_validado, new_creador):
 
         if len(new_puntos) <= 6 and len(new_creador) <= 30:
@@ -84,8 +84,7 @@ class P3t4ControllerChallenges:
 
     """ End Challenge Edit """
 
-
-    """ Challenge Delete  """
+    """ Challenge Delete  Api """
 
     def FindByIdDeleteChallenge(self, challengeID):
 
@@ -102,19 +101,30 @@ class P3t4ControllerChallenges:
         try:
             result = mongo.db.challenges.find_one_or_404({'_id': challengeID})
 
+            # flag hash
             hashFlag = hashlib.sha256(flag).hexdigest()
+
+            # datetime
+            hora = time.strftime("%H-%M-%S")
+            fecha = time.strftime("%d-%m-%y")
 
             if result['flag'] == hashFlag:
                 
                 print "[+] Flag Found!"
 
                 if not username in result['completado_users']:  
-
+                    
+                    # update user complete challenge
                     mongo.db.challenges.find_one_and_update(
                         {'_id': challengeID},
-                        {'$push': {'completado_users': username}}
+                        {'$push': {'completado_users': {
+                            "name": username,
+                            "fecha": fecha,
+                            "hora": hora
+                        }}}
                     )
-
+                
+                    # update user score
                     mongo.db.users.find_one_and_update(
                         {'name': username},
                         {'$inc': {'puntos': result['puntos']}}

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 
-import hashlib
+import hashlib, json
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/p3t4_ctf"
@@ -112,7 +112,7 @@ class P3t4ControllerUsers:
             result = mongo.db.users.find_one_or_404({"token": token})
             return result
         except:
-            return "none"
+            return False
 
     def CheckTokenByName(self, name, token):
     
@@ -122,14 +122,18 @@ class P3t4ControllerUsers:
             if result['token'] == token:
                 print "[+] Token ByName Found!"
                 return True
+            else:
+                print "[+] Token ByName no Found"
+                return False
         except:
+            print "[+] Token ByName no Found"
             return False
 
-    def FindUserName(self, name):
+    def FindUserByNameReturnData(self, name):
         
         try:
             result = mongo.db.users.find_one_or_404({'name': name})
-            return True
+            return result
         except:
             return False
     
@@ -143,7 +147,7 @@ class P3t4ControllerUsers:
         
     """ End User """
 
-    """ Delete User """
+    """ Delete User Api """
 
     def FindUserNameReturnName(self, name):
 
@@ -151,7 +155,7 @@ class P3t4ControllerUsers:
             result = mongo.db.users.find_one_or_404({'name': name})
             return result['name']
         except:
-            return "error"
+            return False
 
     def FindUserByNameAndDelete(self, name):
     
@@ -159,11 +163,11 @@ class P3t4ControllerUsers:
             result = mongo.db.users.delete_one({'name': name})
             return "done"
         except:
-            return "error"
+            return False
     
     """ End Delete User """
 
-    """ Edit User """ 
+    """ Edit User Api """ 
 
     def FindUserNameReturnEdit(self, name):
     
@@ -171,7 +175,7 @@ class P3t4ControllerUsers:
             result = mongo.db.users.find_one_or_404({'name': name})
             return result
         except:
-            return "error"
+            return False
 
     def FindUserNameEditUser(self, userID, new_puntos, new_activate, new_admin):
         
@@ -190,7 +194,7 @@ class P3t4ControllerUsers:
                 
                 return "done"
             except:
-                return "error"
+                return False
 
     """ End Edit User """
 
@@ -201,7 +205,36 @@ class P3t4ControllerUsers:
             result = mongo.db.users.find().sort('puntos', -1)
             return result
         except:
-            print "Error"
+            return False
+    
+    def FindAllUsersCompleteChallenge(self, dataUers):
+
+        salida = []
+
+        for key, value in dataUers.iteritems():
+            
+            if key == 'completado_users':
+            
+                for item in value:
+                    
+                    try:
+                        result = mongo.db.users.find_one_or_404({'name': item['name']})
+                        
+                        newUser = {
+                            "name": result['name'],
+                            "puntos": result['puntos'],
+                            "twitter": result['twitter'],
+                            "telegram": result['telegram'],
+                            "activate": result['activate'],
+                            "fecha": item['fecha'],
+                            "hora": item['hora']
+                        }
+                        
+                        salida.append(newUser)
+                    except:
+                        return False
+        
+        return salida
 
     def FindUserByToken(self, token):
 
@@ -209,7 +242,7 @@ class P3t4ControllerUsers:
             result = mongo.db.users.find_one_or_404({'token': token})
             return result['name']
         except:
-            return "Error"
+            return False
 
     """ End Challenge """
 
@@ -220,4 +253,4 @@ class P3t4ControllerUsers:
             result = mongo.db.users.find().sort('puntos', -1).limit(3)
             return result
         except:
-            return "error"
+            return False

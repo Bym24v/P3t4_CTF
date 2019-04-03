@@ -12,6 +12,8 @@ app.config['SECRET_KEY'] = "secret_key_paco"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
+
 # Modules P3t4
 from modules.P3t4Users.ControllerUsersDB import P3t4ControllerUsers
 p3t4ControllerUsers = P3t4ControllerUsers()
@@ -27,23 +29,22 @@ def home():
 
     return render_template("home.html", data=data)
     
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def service_login():
-    return render_template("login.html")
 
-@app.route('/login', methods=['POST'])
-def service_login_post():
+    if request.method == 'GET':
+        return render_template("login.html")
 
-    # expirate token
-    ts = datetime.datetime.utcnow() + datetime.timedelta(days=30)
-    
     if request.method == 'POST':
         
         name = request.form['username']
         password = request.form['password']
 
         token = hashlib.sha512(name + password).hexdigest()
-
+        
+        # expirate token
+        ts = datetime.datetime.utcnow() + datetime.timedelta(days=30)
+        
         if p3t4ControllerUsers.LoginUser(name, password):
             resp = make_response(redirect('/challenges'))
             resp.set_cookie('token', token, path='/', expires=ts)
@@ -51,12 +52,11 @@ def service_login_post():
         else:
             return redirect("/login")
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def service_register():
-    return render_template("register.html")
 
-@app.route('/register', methods=['POST'])
-def service_register_post():
+    if request.method == 'GET':
+        return render_template("register.html")
 
     if request.method == 'POST':
         
@@ -81,8 +81,6 @@ def service_register_post():
         
         return redirect('/login')
 
-    return render_template("register.html")
-
 @app.route('/logout')
 def service_logout():
 
@@ -95,41 +93,62 @@ def service_logout():
 def service_chanllenges():
 
     if request.method == 'GET':
-        #resp = make_response(redirect('/challenges'))
-        #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+        
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
 
             dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
+            if dataUser == False:
+                return resp
+            
             dataChallenges = p3t4ControllerChallenges.GetAllChallenges()
+            if dataChallenges == False:
+                return resp
+
             return render_template('challenges.html', dataChallenges=dataChallenges, dataUser=dataUser)
         else:
-            return redirect('/')
+            return resp
 
 @app.route('/challenge/<challengeID>', methods=['GET', 'POST'])
 def service_challenge(challengeID):
 
-    token = request.cookies.get('token')
-
     if request.method == 'GET':
-        #resp = make_response(redirect('/challenges'))
-        #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+        
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+
+        token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
 
-            # return data user name
             dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
-            dataAllUsers = p3t4ControllerUsers.FindAllUsersSort()
+            if dataUser == False:
+                return resp
+            
             dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+            if dataChallenge == False:
+                return resp
+
+            dataAllUsers = p3t4ControllerUsers.FindAllUsersCompleteChallenge(dataChallenge)
+            if dataAllUsers == False:
+                return resp
+
             return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
         else:
-            return redirect('/')
+            return resp
     
     if request.method == 'POST':
-       
+        
+        token = request.cookies.get('token')
+        
         flag = request.form['flag']
-
+        
         if p3t4ControllerUsers.CheckToken(token):
             
             username = p3t4ControllerUsers.FindUserByToken(token)
@@ -137,8 +156,8 @@ def service_challenge(challengeID):
             if p3t4ControllerChallenges.CheckFlag(username, challengeID, flag):
                 
                 dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
-                dataAllUsers = p3t4ControllerUsers.FindAllUsersSort()
                 dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+                dataAllUsers = p3t4ControllerUsers.FindAllUsersCompleteChallenge(dataChallenge)
                 #flash("Flag correcta, buen trabajo", "success")
                 return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
             
@@ -146,8 +165,8 @@ def service_challenge(challengeID):
                 #return resp
             else:
                 dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
-                dataAllUsers = p3t4ControllerUsers.FindAllUsersSort()
                 dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+                dataAllUsers = p3t4ControllerUsers.FindAllUsersCompleteChallenge(dataChallenge)
                 #flash("Flag incorrecta, siguen intentandolo", "danger")
                 return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
                 
@@ -158,65 +177,90 @@ def service_challenge(challengeID):
 def service_usuarios():
 
     if request.method == 'GET':
-        #resp = make_response(redirect('/challenges'))
-        #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
+
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+        
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
 
             dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
-            data = p3t4ControllerUsers.FindAllUsersSort()
+            if dataName == False:
+                return resp
+            
+            dataAll = p3t4ControllerUsers.FindAllUsersSort()
+            if dataAll == False:
+                return resp
 
-            return render_template('users.html', data=data, dataName=dataName)
+            return render_template('users.html', data=dataAll, dataName=dataName)
         else:
-            resp = make_response(redirect('/'))
-            resp.set_cookie('token', '', path='/', expires=0)
             return resp
 
 @app.route('/profile/<name>')
 def service_dashboard(name):
   
     if request.method == 'GET':
-    
-        if p3t4ControllerUsers.FindUserName(name):
+        
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+        
+        token = request.cookies.get('token')
 
-            #resp = make_response(redirect('/challenges'))
-            #resp.set_cookie('token', instUsr.token, path='/', expires=ts)
-            token = request.cookies.get('token')
+        if p3t4ControllerUsers.CheckToken(token):
 
             if p3t4ControllerUsers.CheckTokenByName(name, token):
-                data = p3t4ControllerUsers.CheckTokenReturnData(token)
-                return render_template('profile.html', data=data)
-            else:
-                resp = make_response(redirect('/login'))
-                resp.set_cookie('token', '', path='/', expires=0)
-                return resp
+                
+                # local user
+                dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
+                if dataUser == False:
+                    return resp
 
+                return render_template('profile.html', dataUser=dataUser)
+            else:
+                
+                # view user
+                dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
+                if dataUser == False:
+                    return resp
+
+                viewUser = p3t4ControllerUsers.FindUserByNameReturnData(name)
+                if viewUser == False:
+                    return resp
+
+                return render_template('userView.html', dataUser=dataUser, viewUser=viewUser)
+        
         else:
-            resp2 = make_response(redirect('/'))
-            resp2.set_cookie('token', '', path='/', expires=0)
-            return resp2
+            return resp
 
 @app.route('/admin')
 def service_admin():
 
     if request.method == 'GET':
         
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckTokenAdmin(token):
+
             if p3t4ControllerUsers.CheckToken(token):
 
                 dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
-                data = p3t4ControllerUsers.FindAllUsersSort()
-                return render_template('admin.html', data=data, dataName=dataName)
+                if dataName == False:
+                    return resp
+
+                dataAll = p3t4ControllerUsers.FindAllUsersSort()
+                if dataAll == False:
+                    return resp
+                
+                return render_template('admin.html', data=dataAll, dataName=dataName)
             else:
-                resp = make_response(redirect('/'))
-                resp.set_cookie('token', '', path='/', expires=0)
                 return resp
         else:
-            resp = make_response(redirect('/'))
-            resp.set_cookie('token', '', path='/', expires=0)
             return resp
 
 @app.route('/admin/edit/<name>', methods=['GET', 'POST'])
@@ -231,7 +275,9 @@ def service_editUser(name):
             if p3t4ControllerUsers.CheckToken(token):
 
                 dataName = p3t4ControllerUsers.FindUserNameReturnEdit(name)
-            
+                if dataName == False:
+                    return "error"
+
                 newPacket = {
                     "name": dataName['name'],
                     "puntos": dataName['puntos'],
@@ -281,7 +327,13 @@ def service_editUser(name):
             if p3t4ControllerUsers.CheckToken(token):
                 
                 userID = p3t4ControllerUsers.FindUserNameReturnID(editUserName)
+                if userID == False:
+                    return "error"
+                
                 userResult = p3t4ControllerUsers.FindUserNameEditUser(userID, editUserScore, editUserActivate, editUserAdmin)
+                if userResult == False:
+                    return "error"
+
                 return userResult
             else:
                 return "error"
@@ -298,7 +350,11 @@ def service_deleteUser(name):
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
+                
                 dataName = p3t4ControllerUsers.FindUserNameReturnName(name)
+                if dataName == False:
+                    return "error"
+
                 return dataName
             else:
                 "error"
@@ -312,7 +368,11 @@ def service_deleteUser(name):
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
+                
                 result = p3t4ControllerUsers.FindUserByNameAndDelete(name)
+                if result == False:
+                    return "error"
+
                 return result
             else:
                 return "error"
@@ -324,22 +384,29 @@ def service_adminChallenges():
 
     if request.method == 'GET':
         
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+        
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
+                
                 dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
-                data = p3t4ControllerChallenges.GetAllChallenges()
-                return render_template('adminChallenge.html', data=data, dataName=dataName)
+                if dataName == False:
+                    return resp
+                
+                dataAll = p3t4ControllerChallenges.GetAllChallenges()
+                if dataAll == False:
+                    return resp
+
+                return render_template('adminChallenge.html', data=dataAll, dataName=dataName)
             else:
-                resp = make_response(redirect('/'))
-                resp.set_cookie('token', '', path='/', expires=0)
                 return resp
         else:
             print "Admin Require"
-            resp = make_response(redirect('/'))
-            resp.set_cookie('token', '', path='/', expires=0)
             return resp
 
 @app.route('/admin/challenges/edit/<challengeID>',  methods=['GET', 'POST'])
@@ -354,6 +421,8 @@ def service_adminChallengesEdit(challengeID):
             if p3t4ControllerUsers.CheckToken(token):
 
                 dataName = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+                if dataName == False:
+                    return "error"
 
                 newPacket = {
                     "id": dataName['_id'],
@@ -392,8 +461,11 @@ def service_adminChallengesEdit(challengeID):
     
             if p3t4ControllerUsers.CheckToken(token):
                 
-                userResult = p3t4ControllerChallenges.FindByIDEditChallenge(editChallengeID, editUserScore, editUserValidate, editUserCreator)
-                return userResult
+                challengeResult = p3t4ControllerChallenges.FindByIDEditChallenge(editChallengeID, editUserScore, editUserValidate, editUserCreator)
+                if challengeResult == False:
+                    return "error"
+
+                return challengeResult
             else:
                 return "error"
         else:
@@ -409,7 +481,10 @@ def service_adminDelegeChallenge(challengeID):
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
+                
                 challenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
+                if challenge == False:
+                    return "error"
 
                 packet = {
                     "titulo": challenge['titulo'],
@@ -429,7 +504,11 @@ def service_adminDelegeChallenge(challengeID):
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
+                
                 result = p3t4ControllerChallenges.FindByIdDeleteChallenge(challengeID)
+                if result == False:
+                    return "error"
+
                 return result
             else:
                 return "error"
@@ -441,14 +520,20 @@ def service_subchallenge():
 
     if request.method == 'GET':
 
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
+            
             data = p3t4ControllerUsers.CheckTokenReturnData(token)
+            if data == False:
+                return resp
+            
             return render_template('publicChallenge.html', data=data)
         else:
-            resp = make_response(redirect('/'))
-            resp.set_cookie('token', '', path='/', expires=0)
             return resp
 
     if request.method == "POST":
@@ -491,35 +576,42 @@ def service_subchallenge():
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
-            pass
-        else:
-            return redirect('/')
-
-        #if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        
-        # datetime
-        hora = time.strftime("%H-%M-%S")
-        fecha = time.strftime("%d-%m-%y")
-        
-        nameDate = fecha + "-" + hora + "_" + filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], nameDate))
-
-        user = p3t4ControllerUsers.CheckTokenReturnData(token)
-
-        if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, fecha, puntos, flag, nameDate, descripcion):
-            flash("Publicado con exito, a la espera de que un administrador lo valide.", "success")
-            return redirect('/public/challenge')
-        else:
-            flash("No se a podido publicar, ponte en contacto con un administrador.", "danger")
-            return redirect('/public/challenge')
             
-@app.route('/send/<name>')
+            #if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            
+            # datetime
+            hora = time.strftime("%H-%M-%S")
+            fecha = time.strftime("%d-%m-%y")
+            
+            nameDate = fecha + "-" + hora + "_" + filename
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], nameDate))
+
+            user = p3t4ControllerUsers.CheckTokenReturnData(token)
+            if user == False:
+                return resp
+
+            if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, fecha, puntos, flag, nameDate, descripcion):
+                flash("Publicado con exito, a la espera de que un administrador lo valide.", "success")
+                return redirect('/public/challenge')
+            else:
+                flash("No se a podido publicar, ponte en contacto con un administrador.", "danger")
+                return redirect('/public/challenge')
+        else:
+            return resp
+            
+@app.route('/send/<name>', methods=['GET'])
 def service_send_file(name):
 
-    path = app.config['UPLOAD_FOLDER'] + "\\" + name
-    return send_file(path, mimetype="application/x-zip-compressed")
+    if request.method == 'GET':
 
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckToken(token):
+            path = app.config['UPLOAD_FOLDER'] + "\\" + name
+            return send_file(path, mimetype="application/x-zip-compressed")
+        else:
+            return "Token Required"
 
 #@error(404)
 #def error404(error):
