@@ -28,6 +28,10 @@ def home():
     data = p3t4ControllerUsers.FindTopTresUsers()
 
     return render_template("home.html", data=data)
+
+@app.route('/faq')
+def service_faq():
+    return render_template('faq.html')
     
 @app.route('/login', methods=['GET', 'POST'])
 def service_login():

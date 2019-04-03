@@ -52,6 +52,7 @@
 							<span data-feather="user"></span>Menu</a>
 						</li>
 
+						<!-- Collapse Menu User -->
 						<div class="collapse multi-collapse show" id="multiCollapseExample1">
 
 							<li class="nav-item">
@@ -68,29 +69,54 @@
 								
 							</li>
 							
-							{% if dataUser.admin %}
-								
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin">
-									<span class="subico" data-feather="circle"></span>AD Usuarios</a>
-								</li>
-
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin/challenges">
-									<span class="subico" data-feather="circle"></span>AD Challenges</a>
-								</li>
-
-							{% endif %}
-
 							<li class="nav-item">
 								<a class="nav-link submenu text-muted" href="/logout">
 								<span class="subico" data-feather="circle"></span>Salir</a>
 							</li>
 
-						</div>
+						</div><!-- end Collapse Menu User -->
+
+						<!-- Menu Admin -->
+						{% if dataUser.admin %}
+							<li class="nav-item">
+								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
+								<span data-feather="user"></span>Admin</a>
+							</li>
+						{% endif %}
+
+						<!-- Collapse Menu Admin -->
+						<div class="collapse multi-collapse" id="multiCollapseExample2">
+
+							{% if dataUser.admin %}
+								
+								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin">
+									<span  class="subico" data-feather="circle"></span>Usuarios</a>
+								</li>
+
+								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin/challenges">
+									<span class="subico" data-feather="circle"></span>Challenges</a>
+								</li>
+
+							{% endif %}
+
+						</div><!-- end collapse 2 -->
 
 					</ul>
 				</div> <!-- end sidebar -->
+
+				<!-- bottom menu -->
+				<div class="bottom-menu">
+
+					<!-- Help -->
+					<a class="text-muted" href="/faq">
+					<span data-feather="help-circle"></span></a>
+
+					<!-- Logout -->
+					<a class="text-muted" href="/logout">
+					<span data-feather="log-out"></span></a>
+				</div>
 
         	</nav>
 

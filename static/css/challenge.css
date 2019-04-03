@@ -88,6 +88,28 @@ a[aria-expanded="true"]{
     background-color: #232d35;
 }
 
+#multiCollapseExample2{
+    background-color: #232d35;
+}
+
+/* nav content */
 .mnav{
     margin-top: 25px;
+}
+
+/* bottom menu */
+
+.bottom-menu{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 10px;
+}
+
+.bottom-menu > a{
+    margin-left: 10px;
+}
+
+.btn-logout{
+    margin-left: 10px;
 }
