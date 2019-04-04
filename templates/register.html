@@ -19,29 +19,7 @@
 
   <body class="text-center">
     
-	<form class="form-signin" method="POST">
-      	
-      	<input type="email" name="email" maxlength="50" class="form-control br50 mt10" placeholder="Email" required autofocus>
-
-      	<input type="text" name="username" maxlength="30" class="form-control br50 mt10" placeholder="Usuario" required>
-      
-      	<input type="password" name="password" maxlength="50" class="form-control br50 mt10 mb40" placeholder="Password" required>
-      
-      	<h6 class="text-muted">mov eax, 0xA y shl eax, 0x2</h6>
-        <input type="text" name="code" class="form-control br50 mb20" placeholder="code" required>
-      
-      	<button class="btn btn-lg btn-outline-primary btn-block br50 mt20 mb10" type="submit">Registrarse</button>
-      	<a class="text-muted" href="/login">Entrar</a>
-
-      	<!--<p class="mt-5 mb-3 text-muted">&copy; 2018-2019 CLS-CTF</p>-->
-
-      	<footer class="mastfoot mt-3">
-        	<div class="inner">
-          		<p class="text-muted mfooter">© 2018-2019 P3t4-CTF</p>
-        	</div>
-      	</footer>
-    
-
+	<div class="malert">
 		{% with messages  = get_flashed_messages(with_categories=true) %}
 			
 			{% if messages  %}
@@ -80,6 +58,30 @@
 			{% endif %}
 
 		{% endwith %}
+	</div>
+
+	<form class="form-signin" method="POST">
+      	
+      	<input type="email" name="email" maxlength="50" class="form-control br50 mt10" placeholder="Email" required autofocus>
+
+      	<input type="text" name="username" maxlength="30" class="form-control br50 mt10" placeholder="Usuario" required>
+      
+      	<input type="password" name="password" maxlength="50" class="form-control br50 mt10" placeholder="Password" required>
+      	<input type="password" name="confirm-password" maxlength="50" class="form-control br50 mt10 mb40" placeholder="Confirm Password" required>
+      
+      	<h6 class="text-muted">mov eax, 0xA y shl eax, 0x2</h6>
+        <input type="text" name="code" class="form-control br50 mb20" placeholder="code" required>
+      
+      	<button class="btn btn-lg btn-outline-primary btn-block br50 mt20 mb10" type="submit">Registrarse</button>
+      	<a class="text-muted" href="/login">Entrar</a>
+
+      	<!--<p class="mt-5 mb-3 text-muted">&copy; 2018-2019 CLS-CTF</p>-->
+
+      	<footer class="mastfoot mt-3">
+        	<div class="inner">
+          		<p class="text-muted mfooter">© 2018-2019 P3t4-CTF</p>
+        	</div>
+      	</footer>
 
     </form>
 

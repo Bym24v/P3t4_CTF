@@ -107,13 +107,16 @@ class P3t4ControllerChallenges:
             # datetime
             hora = time.strftime("%H-%M-%S")
             fecha = time.strftime("%d-%m-%y")
+            
+            tmpNames = []
 
             if result['flag'] == hashFlag:
-                
-                print "[+] Flag Found!"
 
-                if not username in result['completado_users']:  
-                    
+                for item in result['completado_users']:
+                    tmpNames.append(item['name'])
+
+                if not username in tmpNames:
+
                     # update user complete challenge
                     mongo.db.challenges.find_one_and_update(
                         {'_id': challengeID},
@@ -123,17 +126,27 @@ class P3t4ControllerChallenges:
                             "hora": hora
                         }}}
                     )
-                
+                    
                     # update user score
-                    mongo.db.users.find_one_and_update(
+                    mongo.db.users.update(
                         {'name': username},
-                        {'$inc': {'puntos': result['puntos']}}
+                        {'$inc': {
+                            'puntos': result['puntos']}, 
+                            '$push': {
+                                'completado_challenges': challengeID
+                            }
+                        }
                     )
+                    
+                else:
+                    print "[+] User exists"
+                    return False
 
+                print "[+] Flag Found!"
                 return True
             else:
-                print "[+] Flag not Found!"
+                print "[+] Flag not Match!"
                 return False
         except:
-            print "[+] Flag not Found!"
+            print "[+] Error DB"
             return False

@@ -42,6 +42,11 @@ body {
 .sideColor{
   background-color: #26323c;
 }
+
+.sideColor > ul > .nav-item:hover{
+  background-color: #232d35;
+}
+
 .sidebar .nav-link {
   font-weight: 500;
   color: #333;

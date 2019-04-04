@@ -214,12 +214,12 @@
 
 						{% else %}
 							
-							<form class="row col-lg-12" action="/challenge/{{dataChallenge._id}}" method="POST">
-								<div class="col-lg-10">
+							<form class="row col-lg-12" method="POST">
+								<div class="col col-lg-10">
 									<input type="text" name="flag" class="form-control" placeholder="FLAG" style="border-radius: 50px;">
 								</div>
 
-								<div class="col-lg-2">
+								<div class="col col-lg-2">
 									<button class="btn btn-outline-primary" type="submit" style="width: 100%; border-radius: 50px;">Enviar</button>
 								</div>
 							</form>
@@ -241,6 +241,7 @@
 									<tr>
 										<th scope="col">#</th>
 										<th scope="col">Nombre</th>
+										<th scope="col">Equipo</th>
 										<th scope="col">Puntos</th>
 										<th scope="col">Social</th>
 										<th scope="col">Fecha</th>
@@ -264,11 +265,12 @@
 													<tr>
 														<td class="td-50">{{count.index}}</td>
 														
-														<td>{{user.name}}</td>
-														<td>{{user.puntos}}</td>
+														<td style="width: 100px;"><a class="text-muted" href="/profile/{{user.name}}">{{user.name}}</a></td>
+														<td><a class="text-muted" href="#">Team</a></td>
+														<td style="width: 100px;">{{user.puntos}}</td>
 
 														{% if user.twitter %}
-															<td>
+															<td style="width: 60px;">
 																<a href="https://twitter.com/{{user.twitter}}" class="text-muted"><span class="subico" data-feather="twitter"></span></a>
 																<a href="https://t.me/{{user.telegram}}" class="text-muted"><span class="subico" data-feather="send"></span></a>
 															</td>
@@ -276,8 +278,8 @@
 															<td>nada</td>
 														{% endif %}
 														
-														<td style="width: 100px;">{{completado.fecha}}</td>
-														<td style="width: 100px;">{{completado.hora}}</td>
+														<td style="min-width: 100px; width: 100px;">{{completado.fecha}}</td>
+														<td style="min-width: 100px; width: 100px;">{{completado.hora}}</td>
 
 													</tr>
 												

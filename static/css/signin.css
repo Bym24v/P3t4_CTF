@@ -87,3 +87,9 @@ body {
 .mb40{
   margin-bottom: 40px;
 }
+
+.malert{
+  position: absolute;
+  right: 25px;
+  top: 0px;
+}

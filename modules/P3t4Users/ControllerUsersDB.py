@@ -63,7 +63,9 @@ class P3t4ControllerUsers:
                             "twitter": "",
                             "telegram": "",
                             "puntos": 0,
-                            "admin": False
+                            "admin": False,
+                            "completado_challenges": [],
+                            "team": ""
                         }
                     )
 

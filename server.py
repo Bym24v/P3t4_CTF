@@ -66,8 +66,18 @@ def service_register():
         
         name = request.form['username']
         password = request.form['password']
+        confirmPassword = request.form['confirm-password']
         email = request.form['email']
         code = request.form['code']
+
+        print password
+        print confirmPassword
+
+        if password != confirmPassword:
+            salida = "Los passwords tienen que ser iguales.".encode('utf-8')
+            flash(salida, "error")
+            return redirect('/register')
+        
 
         parseName = name.lower()
 
