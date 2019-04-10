@@ -277,8 +277,8 @@ def service_admin():
         else:
             return resp
 
-@app.route('/admin/edit/<name>', methods=['GET', 'POST'])
-def service_editUser(name):
+@app.route('/admin/edit/<userID>', methods=['GET', 'POST'])
+def service_editUser(userID):
     
     if request.method == 'GET':
         
@@ -288,7 +288,8 @@ def service_editUser(name):
             
             if p3t4ControllerUsers.CheckToken(token):
 
-                dataName = p3t4ControllerUsers.FindUserNameReturnEdit(name)
+                dataName = p3t4ControllerUsers.FindUserIdReturnEdit(userID)
+
                 if dataName == False:
                     return "error"
 
@@ -340,11 +341,7 @@ def service_editUser(name):
 
             if p3t4ControllerUsers.CheckToken(token):
                 
-                userID = p3t4ControllerUsers.FindUserNameReturnID(editUserName)
-                if userID == False:
-                    return "error"
-                
-                userResult = p3t4ControllerUsers.FindUserNameEditUser(userID, editUserScore, editUserActivate, editUserAdmin)
+                userResult = p3t4ControllerUsers.FindUserIdEditUser(userID, editUserScore, editUserActivate, editUserAdmin)
                 if userResult == False:
                     return "error"
 
@@ -354,8 +351,8 @@ def service_editUser(name):
         else:
             return "Admin Require"
 
-@app.route('/admin/delete/<name>', methods=['GET', 'POST'])
-def service_deleteUser(name):
+@app.route('/admin/delete/<userID>', methods=['GET', 'POST'])
+def service_deleteUser(userID):
     
     if request.method == 'GET':
         
@@ -365,7 +362,7 @@ def service_deleteUser(name):
 
             if p3t4ControllerUsers.CheckToken(token):
                 
-                dataName = p3t4ControllerUsers.FindUserNameReturnName(name)
+                dataName = p3t4ControllerUsers.FindUserIdReturnDelete(userID)
                 if dataName == False:
                     return "error"
 
@@ -383,7 +380,7 @@ def service_deleteUser(name):
 
             if p3t4ControllerUsers.CheckToken(token):
                 
-                result = p3t4ControllerUsers.FindUserByNameAndDelete(name)
+                result = p3t4ControllerUsers.FindUserIdDeleteUser(userID)
                 if result == False:
                     return "error"
 

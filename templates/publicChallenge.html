@@ -66,17 +66,18 @@
 
 							<li class="nav-item">
 
-								{% if data %}
+								{% if data and data.activate %}
 									<a class="nav-link submenu text-muted" href="/profile/{{data.name}}">
 									<span class="subico" data-feather="circle"></span>Perfil</a>
 								{% endif %}
 								
 							</li>
 
-							<li class="nav-item">
+							<!--<li class="nav-item">
 								<a class="nav-link submenu text-muted" href="/logout">
 								<span class="subico" data-feather="circle"></span>Salir</a>
-							</li>
+							</li>-->
+
 						</div><!-- end Collpase Menu user -->
 
 						<!-- Menu Admin -->
@@ -124,16 +125,16 @@
         	</nav>
 
         	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
-          		
-				<nav class="mnav" aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Publicar</li>
-					</ol>
-				</nav>
 
 				{% if data.activate %}
-				  
+
+					<nav class="mnav" aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Publicar</li>
+						</ol>
+					</nav>
+
 					<!-- rows -->
 					<form class="col-lg-12" method="post" enctype="multipart/form-data">
 
@@ -252,7 +253,7 @@
 	<script src="/static/js/dashboard.js"></script>
 	
     <!-- Icons -->
-    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script src="/static/feather/feather.min.js"></script>
     <script>
       feather.replace()
     </script>

@@ -62,17 +62,18 @@
 
 							<li class="nav-item">
 
-								{% if dataUser %}
+								{% if dataUser and dataUser.activate%}
 									<a class="nav-link submenu text-muted" href="/profile/{{dataUser.name}}">
 									<span class="subico" data-feather="circle"></span>Perfil</a>
 								{% endif %}
 								
 							</li>
 
-							<li class="nav-item">
+							<!--<li class="nav-item">
 								<a class="nav-link submenu text-muted" href="/logout">
 								<span class="subico" data-feather="circle"></span>Salir</a>
-							</li>
+							</li>-->
+
 						</div><!-- end Collapse Menu User -->
 
 						<!-- Menu Admin -->
@@ -210,7 +211,7 @@
 		<script src="/static/js/dashboard.js"></script>
 		
 		<!-- Icons -->
-		<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+		<script src="/static/feather/feather.min.js"></script>
 		<script>
 		feather.replace()
 		</script>

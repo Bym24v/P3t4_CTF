@@ -1,12 +1,13 @@
 var matches = document.querySelectorAll("td > a");
 
-var modName = "";
+var modName = document.getElementById('mod-name')
 var modScore = document.getElementById('mod-score')
 var modActivate = document.getElementById('mod-activate')
 var modAdmin = document.getElementById('mod-admin')
 
 var deleteUserName = document.getElementById('deleteUserName');
 
+var tmpID = ""
 
 for (let i = 0; i < matches.length; i++) {
     
@@ -19,12 +20,14 @@ for (let i = 0; i < matches.length; i++) {
         {   
             var parseName = e.target.href.split('/')
 
+            tmpID = parseName[5]
+
             var ajaxEdit = new XMLHttpRequest();
             /*ajax.upload.addEventListener("progress", progressHandler, false);
             ajax.addEventListener("load", completeHandler, false);
             ajax.addEventListener("error", errorHandler, false);
             ajax.addEventListener("abort", abortHandler, false);*/
-            ajaxEdit.open("GET", "/admin/edit/" + parseName[5]); 
+            ajaxEdit.open("GET", "/admin/edit/" + tmpID); 
             ajaxEdit.send(null)
 
             ajaxEdit.onreadystatechange = function () {
@@ -38,8 +41,8 @@ for (let i = 0; i < matches.length; i++) {
 
                         if (data.search('{') != -1){
                             parseJson = JSON.parse(data)
-
-                            modName = parseJson.name
+                            
+                            modName.value = parseJson.name
                             modScore.value = parseJson.puntos
                             modActivate.value = parseJson.activate
                             modAdmin.value = parseJson.admin
@@ -48,7 +51,7 @@ for (let i = 0; i < matches.length; i++) {
                             $('#editModal').modal('show')
                         }else{
                             //console.log(data);
-                            window.location.href = "/"
+                            window.location.href = "/admin"
                         }
 
                     }
@@ -58,13 +61,15 @@ for (let i = 0; i < matches.length; i++) {
         }else{ // Delete
             
             var parseName = e.target.href.split('/')
+            
+            tmpID = parseName[5]
 
             var ajaxDelete = new XMLHttpRequest();
             /*ajax.upload.addEventListener("progress", progressHandler, false);
             ajax.addEventListener("load", completeHandler, false);
             ajax.addEventListener("error", errorHandler, false);
             ajax.addEventListener("abort", abortHandler, false);*/
-            ajaxDelete.open("GET", "/admin/delete/" + parseName[5]); 
+            ajaxDelete.open("GET", "/admin/delete/" + tmpID); 
             ajaxDelete.send(null)
 
             ajaxDelete.onreadystatechange = function () {
@@ -108,7 +113,7 @@ modBtnEdit.addEventListener('click', function(){
     ajax.addEventListener("load", completeHandler, false);
     ajax.addEventListener("error", errorHandler, false);
     ajax.addEventListener("abort", abortHandler, false);*/
-    ajaxDelete.open("POST", "/admin/edit/" + modName); 
+    ajaxDelete.open("POST", "/admin/edit/" + tmpID); 
 
     var formdata = new FormData();
     formdata.append("mod-name", modName);
@@ -149,7 +154,8 @@ modBtnDelete.addEventListener('click', function(){
     ajax.addEventListener("load", completeHandler, false);
     ajax.addEventListener("error", errorHandler, false);
     ajax.addEventListener("abort", abortHandler, false);*/
-    ajaxDelete.open("POST", "/admin/delete/" + deleteUserName.textContent); 
+    
+    ajaxDelete.open("POST", "/admin/delete/" + tmpID); 
     ajaxDelete.send(null)
 
     ajaxDelete.onreadystatechange = function () {
@@ -163,7 +169,7 @@ modBtnDelete.addEventListener('click', function(){
                 var data = ajaxDelete.responseText;
                 
                 if (data == "done"){
-                    console.log(data);
+                    //console.log(data);
                     $('#deleteModal').modal('hide')
                     window.location.reload();
                 }else{

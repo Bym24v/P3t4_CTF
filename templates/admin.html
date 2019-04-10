@@ -66,7 +66,7 @@
 
 						<li class="nav-item">
 
-							{% if dataName %}
+							{% if dataName and dataName.activate %}
 
 								<a class="nav-link submenu text-muted" href="/profile/{{dataName.name}}">
 								<span class="subico" data-feather="circle"></span>Perfil</a>
@@ -75,10 +75,10 @@
 							
 						</li>
 
-						<li class="nav-item">
+						<!--<li class="nav-item">
 							<a class="nav-link submenu text-muted" href="/logout">
 							<span class="subico" data-feather="circle"></span>Salir</a>
-						</li>
+						</li>-->
 
 					</div> <!-- end Collapse Menu User-->
 
@@ -86,7 +86,7 @@
 						{% if dataName.admin %}
 							<li class="nav-item">
 								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample1">
-								<span data-feather="user"></span>Admin</a>
+								<span data-feather="shield"></span>Admin</a>
 							</li>
 						{% endif %}
 
@@ -195,7 +195,7 @@
 											<td>{{user.admin}}</td>
 
 											<td style="min-width: 180px; width: 180px">
-												<a id="btn-edit" class="btn btn-outline-info btn-sm" href="/admin/edit/{{user.name}}">Editar</a> <a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/admin/delete/{{user.name}}">Elimiar</a>
+												<a id="btn-edit" class="btn btn-outline-info btn-sm" href="/admin/edit/{{user._id}}">Editar</a> <a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/admin/delete/{{user._id}}">Elimiar</a>
 											</td>
 											
 										</tr>
@@ -215,7 +215,7 @@
 							<div class="modal-content">
 
 								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Datos de Usuario</h5>
+									<h5 class="modal-title" id="exampleModalLabel">Usuario</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 									</button>
@@ -223,6 +223,11 @@
 
 								<div class="modal-body">
 									<form>
+
+										<div class="form-group">
+											<label for="recipient-name" class="col-form-label">Name:</label>
+											<input type="text" maxlength="30" class="form-control" id="mod-name" readonly>
+										</div>
 
 										<div class="form-group">
 											<label for="recipient-name" class="col-form-label">Puntos:</label>
@@ -295,7 +300,7 @@
 		<script src="/static/js/dashboard.js"></script>
 		
     <!-- Icons -->
-    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script src="/static/feather/feather.min.js"></script>
     <script>
       feather.replace()
     </script>

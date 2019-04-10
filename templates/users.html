@@ -68,7 +68,7 @@
 							
 							<li class="nav-item">
 
-								{% if dataName %}
+								{% if dataName and dataName.activate %}
 
 									<a class="nav-link submenu text-muted" href="/profile/{{dataName.name}}">
 									<span  class="subico" data-feather="circle"></span>Perfil</a>
@@ -77,10 +77,10 @@
 									
 							</li>
 
-							<li class="nav-item">
+							<!--<li class="nav-item">
 								<a class="nav-link submenu text-muted" href="/logout">
 								<span  class="subico" data-feather="circle"></span>Salir</a>
-							</li>
+							</li>-->
 
 						</div><!-- end collapse 1 -->
 
@@ -229,7 +229,7 @@
 	<script src="/static/js/dashboard.js"></script>
 	
     <!-- Icons -->
-    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script src="/static/feather/feather.min.js"></script>
     <script>
       feather.replace()
     </script>

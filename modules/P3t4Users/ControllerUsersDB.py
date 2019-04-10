@@ -151,18 +151,18 @@ class P3t4ControllerUsers:
 
     """ Delete User Api """
 
-    def FindUserNameReturnName(self, name):
+    def FindUserIdReturnDelete(self, userID):
 
         try:
-            result = mongo.db.users.find_one_or_404({'name': name})
+            result = mongo.db.users.find_one_or_404({'_id': userID})
             return result['name']
         except:
             return False
 
-    def FindUserByNameAndDelete(self, name):
+    def FindUserIdDeleteUser(self, userID):
     
         try:
-            result = mongo.db.users.delete_one({'name': name})
+            result = mongo.db.users.delete_one({'_id': userID})
             return "done"
         except:
             return False
@@ -171,15 +171,15 @@ class P3t4ControllerUsers:
 
     """ Edit User Api """ 
 
-    def FindUserNameReturnEdit(self, name):
+    def FindUserIdReturnEdit(self, userID):
     
         try:
-            result = mongo.db.users.find_one_or_404({'name': name})
+            result = mongo.db.users.find_one_or_404({'_id': userID})
             return result
         except:
             return False
 
-    def FindUserNameEditUser(self, userID, new_puntos, new_activate, new_admin):
+    def FindUserIdEditUser(self, userID, new_puntos, new_activate, new_admin):
         
 
         if len(new_puntos) <= 6:
