@@ -83,6 +83,15 @@ a[aria-expanded="true"]{
     padding-bottom: 2px;
 }
 
+.user-twitter{
+    margin-left: 15px;
+}
+
+.no-twitter{
+    width: 100px;
+    padding-left: 9px;
+}
+
 #multiCollapseExample1{
     background-color: #232d35;
 }
@@ -121,3 +130,4 @@ a[aria-expanded="true"]{
 .mtabs > ul{
     margin-top: 25px;
 }
+

@@ -83,7 +83,7 @@
 					{% if dataName.admin %}
 						<li class="nav-item">
 							<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample1">
-							<span data-feather="user"></span>Admin</a>
+							<span data-feather="shield"></span>Admin</a>
 						</li>
 					{% endif %}
 
@@ -185,9 +185,9 @@
 											<td class="td-50">{{count.index}}</td>
 											
 											<td>{{challenge.titulo}}</td>
-											<td>{{challenge.puntos}}</td>
+											<td><span data-feather="award"></span> {{challenge.puntos}}</td>
 											<td>{{challenge.validado}}</td>
-											<td>{{challenge.creador}}</td>
+											<td><span data-feather="user"></span> {{challenge.creador}}</td>
 
 											<td style="min-width: 180px; width: 180px">
 												<a id="btn-edit" class="btn btn-outline-info btn-sm" href="/admin/edit/{{challenge._id}}">Editar</a> <a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/admin/delete/{{challenge._id}}">Elimiar</a>
@@ -221,7 +221,7 @@
 
 										<div class="form-group">
 											<label for="recipient-name" class="col-form-label">Challenge ID:</label>
-											<input type="text" class="form-control" id="mod-challengeID" readonly>
+											<input type="text" class="form-control" id="mod-challengeID" disabled>
 										</div>
 
 										<div class="form-group">
@@ -260,9 +260,7 @@
 								
 								<div class="modal-header">
 									<h5 class="modal-title" id="exampleModalLabel">Eliminar Challenge</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 								</div>
 
 								<div class="modal-body">

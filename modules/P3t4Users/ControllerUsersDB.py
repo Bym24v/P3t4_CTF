@@ -54,18 +54,20 @@ class P3t4ControllerUsers:
                     result = mongo.db.users.insert(
                         {
                             "_id": parseID,
+                            "avatar": "", 
                             "name": name,
                             "password": parsePassword,
                             "email": email,
                             "token": token,
-                            "avatar": "",
                             "activate": False,
-                            "twitter": "",
-                            "telegram": "",
-                            "puntos": 0,
                             "admin": False,
+                            "puntos": 0,
                             "completado_challenges": [],
-                            "team": ""
+                            "team_title": "",
+                            "team_users": [],
+                            "team_code": "",
+                            "followers": [],
+                            "twitter": ""
                         }
                     )
 
@@ -226,10 +228,10 @@ class P3t4ControllerUsers:
                             "name": result['name'],
                             "puntos": result['puntos'],
                             "twitter": result['twitter'],
-                            "telegram": result['telegram'],
                             "activate": result['activate'],
                             "fecha": item['fecha'],
-                            "hora": item['hora']
+                            "hora": item['hora'],
+                            "team": ""
                         }
                         
                         salida.append(newUser)

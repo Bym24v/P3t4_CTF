@@ -568,7 +568,7 @@ def service_subchallenge():
         flag = request.form['flag']
         descripcion = request.form['descripcion']
 
-        if titulo == '' or len(titulo) > 30:
+        if titulo == '' or len(titulo) > 25:
             flash("Titulo no valido.", "danger")
             return redirect('/public/challenge')
         

@@ -189,8 +189,8 @@
 										<tr>
 											<td class="td-50">{{count.index}}</td>
 											
-											<td>{{user.name}}</td>
-											<td>{{user.puntos}}</td>
+											<td><span data-feather="user"></span> {{user.name}}</td>
+											<td><span data-feather="award"></span> {{user.puntos}}</td>
 											<td>{{user.activate}}</td>
 											<td>{{user.admin}}</td>
 
@@ -226,7 +226,7 @@
 
 										<div class="form-group">
 											<label for="recipient-name" class="col-form-label">Name:</label>
-											<input type="text" maxlength="30" class="form-control" id="mod-name" readonly>
+											<input type="text" maxlength="30" class="form-control" id="mod-name" disabled>
 										</div>
 
 										<div class="form-group">

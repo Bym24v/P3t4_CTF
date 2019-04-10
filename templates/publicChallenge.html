@@ -84,7 +84,7 @@
 						{% if data.admin %}
 							<li class="nav-item">
 								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
-								<span data-feather="user"></span>Admin</a>
+								<span data-feather="shield"></span>Admin</a>
 							</li>
 						{% endif %}
 
@@ -183,14 +183,14 @@
 								
 								<h3 class="text-muted">Titulo</h3>
 								<div class="input-group mb-3">
-									<input type="text" maxlength="30" name="titulo" class="form-control" placeholder="Titulo" required>
+									<input type="text" maxlength="25" name="titulo" class="form-control" placeholder="Titulo" required>
 									<div class="invalid-feedback">Titulo requerido.</div>
 								</div>
 						
 								<h3 class="text-muted mt-3">Archivo</h3>
 								<div class="custom-file">
-									<input type="file" name="file" class="custom-file-input" id="validatedCustomFile" required>
-									<label class="custom-file-label" for="validatedCustomFile">None</label>
+									<input id="validatedCustomFile" type="file" name="file" class="custom-file-input" required>
+									<label id="file-show" class="custom-file-label" for="validatedCustomFile">None</label>
 									<div class="invalid-feedback">Archivo requerido.</div>
 								</div>
 								

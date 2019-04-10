@@ -81,7 +81,7 @@
 						{% if dataUser.admin %}
 							<li class="nav-item">
 								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
-								<span data-feather="user"></span>Admin</a>
+								<span data-feather="shield"></span>Admin</a>
 							</li>
 						{% endif %}
 
@@ -143,7 +143,7 @@
 						</div>
 					</div>
 
-					<!-- Main -->
+					<!-- rows -->
 					<div class="row">
 					
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -168,30 +168,53 @@
 
 								<div class="mb-3">
 									<label for="address">Twitter <span class="text-muted">(Opcional)</span></label>
-									<input type="text" class="form-control" id="address" maxlength="10" value="{{dataUser.twitter}}">
+									<input type="text" class="form-control" id="address" maxlength="10" placeholder="Usuario en Twitter" value="{{dataUser.twitter}}">
 								</div>
 
-								<div class="mb-3">
-									<label for="address2">Telegram <span class="text-muted">(Opcional)</span></label>
-									<input type="text" class="form-control" id="address2" maxlength="10" value="{{dataUser.telegram}}">
+								<!--<div class="mb-3">
+									<label for="team-code">Equipo <span class="text-muted">(Opcional)</span></label>
+									<input type="text" class="form-control col-lg-4" id="team-code" maxlength="10" value="{{dataUser.team}}"><button class="btn btn-primary" type="submit">Guardar</button>
+								</div>-->
+								
+								<div class="form-row">
+
+									<div class="col-md-6 mb-3">
+										<label for="validationCustom03">Equipo</label>
+										<input type="text" class="form-control" id="validationCustom03" placeholder="Titulo" value="{{dataUser.team_title}}">
+										<div class="invalid-feedback">Please provide a valid city.</div>
+									</div>
+
+									<div class="col-md-6 mb-3">
+										<label for="validationCustom04">Codigo de invitaión</label>
+										<input type="text" class="form-control" id="validationCustom04" placeholder="Codigo">
+										<div class="invalid-feedback">Please provide a valid state.</div>
+									</div>
+
+									<!--<div class="col-md-3 mb-3">
+										<label for="validationCustom05">Zip</label>
+										<input type="text" class="form-control" id="validationCustom05" placeholder="Zip" required>
+										<div class="invalid-feedback">Please provide a valid zip.</div>
+									</div>-->
+									
 								</div>
+
+								<!--<button class="btn btn-outline-primary" type="submit">Generar</button>-->
+								<!--<button class="btn btn-outline-primary" type="submit">Generar</button>-->
 
 								<hr class="mb-4 mt-4 mb-3">
 
 								<div class="row">
 
 									<div class="col-lg-6">
-										<button class="btn btn-primary btn-lg btn-block" type="submit">Cambiar Contraseña</button>
+										<button class="btn btn-primary btn-lg btn-block" style="margin-top: 15px;" type="submit">Cambiar Contraseña</button>
 									</div>
 
 									<div class="col-lg-6">
-										<button class="btn btn-primary btn-lg btn-block" type="submit">Guardar</button>
+										<button class="btn btn-primary btn-lg btn-block"  style="margin-top: 15px; margin-bottom: 15px;" type="submit">Guardar</button>
 									</div>
 									
 								</div>
-								
-								
-								<div class="row col-lg-12" style="height: 25px;"></div>	
+
 							</form>
 
 						</div>

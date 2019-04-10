@@ -80,7 +80,7 @@
 						{% if dataUser.admin %}
 							<li class="nav-item">
 								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
-								<span data-feather="user"></span>Admin</a>
+								<span data-feather="shield"></span>Admin</a>
 							</li>
 						{% endif %}
 
@@ -132,11 +132,11 @@
 					</nav>
 
 					<!-- row -->
-					<div class="row p-0 m-0 mt-5">
+					<div class="row p-0 m-0">
 
-						<div class="col-xs-12 col-sm-4 col-lg-4 pl-0">
-							<div class="card" style="width: 100%;">
-								<img src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" class="card-img-top" alt="..." width="100%" height="250px">
+						<div class="col-xs-12 col-sm-4 col-lg-4 pl-0 pr-1" style="margin-top: 30px;">
+							<div class="card">
+								<!--<img src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" class="card-img-top" alt="..." width="100%" height="250px">-->
 								
 								<div class="card-body">
 									<h5 class="card-title">Paco</h5>
@@ -144,20 +144,21 @@
 								</div>
 								
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item">Cras justo odio</li>
-									<li class="list-group-item">Dapibus ac facilisis in</li>
-									<li class="list-group-item">Vestibulum at eros</li>
+									<li class="list-group-item"><span class="subico" data-feather="award"></span> 150</li>
+									<li class="list-group-item"><span class="subico" data-feather="layers"></span> CLS</li>
+									<li class="list-group-item"><span class="subico" data-feather="heart"></span> 309</li>
 								</ul>
 								
 								<div class="card-body">
-									<a href="#" class="card-link">Card link</a>
-									<a href="#" class="card-link">Another link</a>
+									<!--<a href="#" class="card-link">Card link</a>-->
+									<!--<a href="#" class="card-link">Another link</a>-->
+									<a href="#" class="btn btn-outline-primary" style="border-radius: 100px;"><span class="subico" data-feather="user-plus"></span> Seguir</a>
 								</div>
 							</div>
 						</div>
 
 						<!-- tabs -->
-						<div class="mtabs col-xs-12 col-sm-8 col-lg-8">
+						<div class="mtabs col-xs-12 col-sm-8 col-lg-8" style="margin-top: 30px;">
 
 							<ul class="nav nav-tabs" id="myTab" role="tablist">
 								
@@ -187,7 +188,7 @@
 
 					</div><!-- end row -->
 				{% endif %}
-				
+
        		 </main>
       	</div>
     </div>

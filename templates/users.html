@@ -88,7 +88,7 @@
 						{% if dataName.admin %}
 							<li class="nav-item">
 								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
-								<span data-feather="user"></span>Admin</a>
+								<span data-feather="shield"></span>Admin</a>
 							</li>
 						{% endif %}
 
@@ -174,7 +174,7 @@
 										<th scope="col">Usuarios</th>
 										<th scope="col">Equipo</th>
 										<th scope="col">Puntos</th>
-										<th scope="col">Social</th>
+										<th scope="col">Twitter</th>
 									</tr>
 								</thead>
 
@@ -191,16 +191,22 @@
 												<td class="td-50">{{count.index}}</td>
 												
 												<td style="width: 100px;"><a class="text-muted" href="/profile/{{user.name}}">{{user.name}}</a></td>
-												<td><a class="text-muted" href="#">Team</a></td>
+												
+												{% if user.team_title %}
+													<td><a class="text-muted" href="#">{{user.team_title}}</a></td>
+												{% else %}
+													<td class="text-muted">nada</td>
+												{% endif %}
+
+												
 												<td style="width: 100px;"><span class="subico" data-feather="award"></span>{{user.puntos}}</td>
 
 												{% if user.twitter %}
-													<td style="width: 60px;">
-														<a href="https://twitter.com/{{user.twitter}}" class="text-muted"><span class="subico" data-feather="twitter"></span></a>
-														<a href="https://t.me/{{user.telegram}}" class="text-muted"><span class="subico" data-feather="send"></span></a>
+													<td style="width: 100px;">
+														<a href="https://twitter.com/{{user.twitter}}" class="text-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
 													</td>
 												{% else %}
-													<td style="width: 60px;">nada</td>
+													<td style="width: 100px;"><span class="no-twitter">nada</span></td>
 												{% endif %}
 												
 											</tr>

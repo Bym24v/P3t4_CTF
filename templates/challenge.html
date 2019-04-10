@@ -88,7 +88,7 @@
 						{% if dataUser.admin %}
 							<li class="nav-item">
 								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
-								<span data-feather="user"></span>Admin</a>
+								<span data-feather="shield"></span>Admin</a>
 							</li>
 						{% endif %}
 
@@ -175,7 +175,7 @@
 
 								{% if dataChallenge %}
 									<h2>{{dataChallenge.titulo}}</h2>
-									<p class="lead mt-3">{{dataChallenge.descripcion}}</p>
+									<p class="lead mt-3" style="overflow: auto;">{{dataChallenge.descripcion}}</p>
 								{% endif %}
 								
 							</div>
@@ -243,7 +243,7 @@
 										<th scope="col">Nombre</th>
 										<th scope="col">Equipo</th>
 										<th scope="col">Puntos</th>
-										<th scope="col">Social</th>
+										<th scope="col">Twitter</th>
 										<th scope="col">Fecha</th>
 										<th scope="col">Hora</th>
 									</tr>
@@ -267,15 +267,14 @@
 														
 														<td style="width: 100px;"><a class="text-muted" href="/profile/{{user.name}}">{{user.name}}</a></td>
 														<td><a class="text-muted" href="#">Team</a></td>
-														<td style="width: 100px;">{{user.puntos}}</td>
+														<td style="width: 100px;"><span class="subico" data-feather="award"></span>{{user.puntos}}</td>
 
 														{% if user.twitter %}
-															<td style="width: 60px;">
-																<a href="https://twitter.com/{{user.twitter}}" class="text-muted"><span class="subico" data-feather="twitter"></span></a>
-																<a href="https://t.me/{{user.telegram}}" class="text-muted"><span class="subico" data-feather="send"></span></a>
+															<td style="width: 100px;">
+																<a href="https://twitter.com/{{user.twitter}}" class="text-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
 															</td>
 														{% else %}
-															<td>nada</td>
+															<td style="width: 100px;" ><span class="no-twitter">nada</span></td>
 														{% endif %}
 														
 														<td style="min-width: 100px; width: 100px;">{{completado.fecha}}</td>
