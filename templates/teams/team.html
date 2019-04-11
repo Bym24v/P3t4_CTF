@@ -1,0 +1,288 @@
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="@Bym24v">
+    <!--<link rel="icon" href="../../../../favicon.ico">-->
+
+    <title>P3t4 - CTF | Equipo</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+    <link href="/static/css/challenge.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+      <a id="toggle-logo" class="navbar-brand col-sm-12 col-md-12 mr-0" href="#">P3t4 - CTF</a>
+	  	{% if dataUser %}
+        <div class="score"><span data-feather="award"></span> {{dataUser.puntos}}</div>
+      {% endif %}
+    </nav>
+
+    <div class="container-fluid">
+
+      	<div class="row">
+
+			<!-- sidebar -->
+			<nav id="sidebar" class="col-md-2 sidebar-expanded d-none d-md-block sidebar" style="width: 200px;">
+				
+				<!-- sidebar -->
+				<div class="sidebar-sticky sideColor">
+					<ul class="nav flex-column">
+				
+						<li class="nav-item">
+							<a class="nav-link text-muted" href="/challenges">
+							<span data-feather="coffee"></span> Challenges</a>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link text-muted" href="/users">
+							<span data-feather="users"></span> Usuarios</a>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link active" href="/teams">
+							<span data-feather="trending-up"></span> Equipos</a>
+						</li>
+
+						{% if dataUser and dataUser.activate%}
+
+							<li class="nav-item">
+								<a class="nav-link text-muted"data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">
+								<span data-feather="user"></span> Menu</a>
+							</li>
+						
+							<!-- Collapse Menu User -->
+							<div class="collapse multi-collapse" id="multiCollapseExample1">
+
+								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/public/challenge">
+									<span class="subico" data-feather="circle"></span>Publicar</a>
+								</li>
+								
+								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/profile/{{dataUser.name}}">
+									<span class="subico" data-feather="circle"></span>Perfil</a>
+								</li>
+									
+								<!--<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/logout">
+									<span class="subico" data-feather="circle"></span>Salir</a>
+								</li>-->
+
+							</div><!-- end Collapse Menu User -->
+						{% endif %}
+
+						<!-- Menu Admin -->
+						{% if dataUser.admin %}
+							<li class="nav-item">
+								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
+								<span data-feather="shield"></span> Admin</a>
+							</li>
+						{% endif %}
+
+						<!-- Collapse Menu Admin -->
+						<div class="collapse multi-collapse" id="multiCollapseExample2">
+
+							{% if dataUser.admin %}
+								
+								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin">
+									<span  class="subico" data-feather="circle"></span>Usuarios</a>
+								</li>
+
+								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin/challenges">
+									<span class="subico" data-feather="circle"></span>Challenges</a>
+								</li>
+
+							{% endif %}
+
+						</div><!-- end collapse 2 -->
+
+					</ul>
+				</div> <!-- end sidebar -->
+
+				<!-- bottom menu -->
+				<div class="bottom-menu">
+
+					<!-- Help -->
+					<a class="text-muted" href="/faq">
+					<span data-feather="help-circle"></span></a>
+
+					<!-- Logout -->
+					<a class="text-muted" href="/logout">
+					<span data-feather="log-out"></span></a>
+				</div>
+
+        	</nav>
+
+        	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
+				
+				{% if dataUser.activate %}
+
+					<nav class="mnav" aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Perfil</li>
+						</ol>
+					</nav>
+
+					<!-- row -->
+					<div class="row p-0 m-0">
+
+						<div class="col-xs-12 col-sm-4 col-lg-4 pl-0 pr-1" style="margin-top: 30px;">
+							<div class="card">
+								<!--<img src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" class="card-img-top" alt="..." width="100%" height="250px">-->
+								
+								<div class="card-body">
+									<h5 class="card-title">{{team.title}}</h5>
+									<p class="card-text">Texto de prueba.</p>
+								</div>
+								
+								
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item"><span class="subico" data-feather="award"></span> {{team.score}}</li>
+									<li class="list-group-item"><span class="subico" data-feather="users"></span> {{team.members|length}}</li>
+									<li class="list-group-item"><span class="subico" data-feather="heart"></span> 309</li>
+								</ul>
+								
+								<div class="card-body">
+									<!--<a href="#" class="card-link">Card link</a>-->
+									<!--<a href="#" class="card-link">Another link</a>-->
+									{% if dataUser.name == team.creator %}
+										<a href="#" class="btn btn-outline-danger" style="border-radius: 100px;"></span> Borrar</a>
+									{% else %}
+										<a href="#" class="btn btn-outline-primary" style="border-radius: 100px;"><span class="subico" data-feather="user-plus"></span> Seguir</a>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+
+						<!-- tabs -->
+						<div class="mtabs col-xs-12 col-sm-8 col-lg-8" style="margin-top: 30px;">
+
+							<ul class="nav nav-tabs" id="myTab" role="tablist">
+								
+								<li class="nav-item">
+									<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Miembros</a>
+								</li>
+								
+							</ul>
+
+							<div class="tab-content" id="myTabContent">
+								
+								<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+									
+									<!-- table -->
+									<div class="table-responsive mt-5">
+								
+										<div class="col-md-12">
+											
+											<table class="table table-striped">
+												
+												<thead>
+													<tr>
+														<th scope="col">#</th>
+														<th scope="col">Usuario</th>
+														<th scope="col">Puntos</th>
+														<th scope="col">Twitter</th>
+
+														{% if dataUser.name == team.creator %}
+															<th scope="col">Opciones</th>
+														{% endif %}
+														
+													</tr>
+												</thead>
+
+												<tbody>
+													
+													{% set count = namespace(index=0) %}
+													{% for user in teamMembers %}
+														
+														<!-- counter -->
+														{% set count.index = count.index + 1 %}
+														{% if user %}
+
+															<tr>
+																<td class="td-50">{{count.index}}</td>
+																
+																<td style="width: 100px;"><a class="mtext-muted" href="/profile/{{user.name}}"><span class="subico" data-feather="user"></span> {{user.name}}</a></td>
+		
+																<td style="width: 100px;"><span class="subico" data-feather="award"></span> {{user.score}}</td>
+
+																{% if user.twitter %}
+																	<td style="width: 100px;">
+																		<a href="https://twitter.com/{{user.twitter}}" class="mtext-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
+																	</td>
+																{% else %}
+																	<td style="width: 100px;"><span class="no-twitter">nada</span></td>
+																{% endif %}
+																
+																{% if dataUser.name == team.creator %}
+
+																	{% if dataUser.name == user.name %}
+																		<td style="width: 50px">
+																			<a id="btn-delete"class="btn btn-outline-danger btn-sm disabled"  href="/team/delete/user/{{user.name}}" disabled>Elimiar</a>
+																		</td>
+																	{% else %}
+																		<td style="width: 50px">
+																			<a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/team/delete/user/{{user.name}}">Elimiar</a>
+																		</td>
+																	{% endif %}
+																	
+																{% endif %}
+
+															</tr>
+														
+														{% endif %}
+													{% endfor %}
+
+												</tbody>
+											</table>
+
+										</div>
+									</div> <!-- end table -->
+								</div>
+								
+							</div>
+
+						</div><!-- end tabs -->
+
+					</div><!-- end row -->
+				{% endif %}
+
+       		 </main>
+      	</div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-slim.min.js"></script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/popper.min.js"></script>
+	<script src="/static/js/dashboard.js"></script>
+	
+    <!-- Icons -->
+    <script src="/static/feather/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+
+    </script>
+    
+  </body>
+</html>

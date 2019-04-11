@@ -272,7 +272,7 @@
 														
 														<!-- Team -->
 														{% if user.team %}
-															<td><a class="mtext-muted" href="/team/{{user.team[0].teamID}}">{{user.team[0].teamName}}</a></td>
+															<td><a class="mtext-muted" href="/team/{{user.team.teamID}}">{{user.team.teamName}}</a></td>
 														{% else %}
 															<td class="mtext-muted">nada</td>
 														{% endif %}

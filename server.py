@@ -612,7 +612,6 @@ def service_subchallenge():
         else:
             return resp
 
-
 @app.route('/teams', methods=['GET'])
 def service_teams():
 
@@ -645,10 +644,65 @@ def service_teams():
 
 @app.route('/team/<teamID>', methods=['GET'])
 def service_team(teamID):
-    return "Team Done"
+    
+    if request.method == 'GET':
+        
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+        
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckToken(token):
+
+            dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
+            if dataUser == False:
+                return resp
+            
+            #if p3t4ControllerTeams.CreateTeam("paco", "CLS"):
+            #    print "Add Team"
+            #else:
+            #    print "Error Create Team"
+
+            team = p3t4ControllerTeams.FindTeamID(teamID)
+            if team == False:
+                return resp
+
+            membersTeam = p3t4ControllerTeams.FindTeamMembers(team['members'])
+            if membersTeam == False:
+                return "Error"
 
 
+            return render_template('/teams/team.html', team=team, teamMembers=membersTeam, dataUser=dataUser)
+        else:
+            return resp
 
+
+@app.route('/delete/team/<teamID>', methods=['POST'])
+def service_deleteTeam(teamID):
+
+    pass
+
+
+@app.route('/create/team/<name>', methods=['GET'])
+def service_createTeam(name):
+    
+    if request.method == 'GET':
+        
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+        
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckToken(token):
+
+            if p3t4ControllerTeams.CreateTeam(token, name):
+                return "Add Team"
+            else:
+                return "Error Create Team"
+        else:
+            return "Error token"
 
 
 

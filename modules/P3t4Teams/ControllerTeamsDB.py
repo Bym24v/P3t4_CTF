@@ -14,28 +14,64 @@ class P3t4ControllerTeams:
         pass
     
 
-    def CreateTeam(self, creator, teamName):
+    def CreateTeam(self, tokenUser, teamName):
 
         try:
             
-            if len(creator) > 30 or len(teamName) > 30:
+            if len(teamName) > 30:
                 return False
 
-
             teamHash = hashlib.sha256(teamName).hexdigest()
-
-            result = mongo.db.teams.insert(
+            
+            """ Create Team """ 
+            resultTeamID = mongo.db.teams.insert(
                 {
                     "_id": teamHash,
                     "title": teamName,
-                    "members": [creator],
-                    "creator": creator,
+                    "members": [],
+                    "creator": "",
                     "score": 0,
                     "activate": False,
                     "twitter": ""
                 }
                 
             )
+            
+            """ Update user creator team """ 
+            user = mongo.db.users.find_one_and_update(
+                {'token': tokenUser},
+                    {'$set': {'team': {
+                        "teamName": teamName,
+                        "teamID": resultTeamID
+                    }}}
+            )
+
+            updateTeam = mongo.db.teams.find_one_and_update(
+                {'_id': resultTeamID},
+                    {'$set': {
+                        'creator': user['name']}
+                    }
+            )
+
+            updateTeam2 = mongo.db.teams.find_one_and_update(
+                {'_id': resultTeamID},
+                    {'$push': {
+                        'members': user['name']}
+                    }
+            )
+
+            #result = mongo.db.teams.insert(
+            #    {
+            #        "_id": teamHash,
+            #        "title": teamName,
+            #        "members": [creator],
+            #        "creator": creator,
+            #        "score": 0,
+            #        "activate": False,
+            #        "twitter": ""
+            #    }
+            #    
+            #)
 
             return True
         except:
@@ -43,8 +79,32 @@ class P3t4ControllerTeams:
     
 
     def FindTeamID(self, teamID):
-        pass
+        
+        try:
+            result = mongo.db.teams.find_one_or_404({'_id': teamID})
+            return result
+        except:
+            return False
     
+    def FindTeamMembers(self, members):
+
+        try:
+            
+            tmpData = []
+
+            for user in members:
+                result = mongo.db.users.find_one_or_404({'name': user})
+                
+                packet = {
+                    "name": result['name'],
+                    "score": result['puntos'],
+                    "twitter": result['twitter']
+                }
+                tmpData.append(packet)
+            
+            return tmpData
+        except:
+            return False
 
     def FindTeamsTopLimit100(self):
     

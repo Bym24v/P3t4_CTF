@@ -209,7 +209,7 @@
 										{% set is_team.found = false %}
 										<div class="col-md-12 mb-3">
 											<label for="validationCustom03">Equipo</label>
-											<input type="text" name="team-name" class="form-control" id="validationCustom03" placeholder="Titulo del equipo">
+											<input type="text" name="team-name" class="form-control" id="validationCustom03" placeholder="Titulo">
 										</div>
 
 									{% else %}
@@ -218,7 +218,7 @@
 										{% set is_team.found = true %}
 										<div class="col-md-12 mb-3">
 											<label for="validationCustom04">Equipo</label>
-											<input type="text" class="form-control" id="validationCustom04" placeholder="Titulo del equipo" value="{{dataUser.team[0].teamName}}" disabled>
+											<input type="text" class="form-control" id="validationCustom04" placeholder="Titulo" value="{{dataUser.team.teamName}}" disabled>
 										</div>
 
 									{% endif %}
@@ -244,9 +244,9 @@
 									{% if dataUser.team|length > 0 and is_team.found %}
 
 										<!-- delete team btn -->
-										<div class="col-lg-2">
-											<a id="btn-edit" class="btn btn-outline-danger mb-5" href="/delete/team/{{dataUser.team[0].teamID}}">Borrar Equipo</a>
-										</div>
+										<!--<div class="col-lg-2">
+											<a id="btn-edit" class="btn btn-outline-danger mb-5" href="/delete/team/{{dataUser.team.teamID}}">Borrar Equipo</a>
+										</div>-->
 									{% else %}
 										<!-- create team btn -->
 										<div class="col-lg-2">
