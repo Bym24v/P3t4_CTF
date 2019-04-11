@@ -73,7 +73,9 @@ a[aria-expanded="true"]{
     }
 }
 
-
+.mtext-muted{
+    color: #212529!important;
+}
 
 .submenu{
     margin-left: 10px;

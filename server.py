@@ -2,25 +2,26 @@ from flask import Flask, render_template, request, redirect, flash, make_respons
 from werkzeug.utils import secure_filename
 import hashlib, datetime, os, time
 
-# root upload folder
+# Upload Folder
 UPLOAD_FOLDER = os.getcwd() + '\\public-challenges'
-ALLOWED_EXTENSIONS = set(['.zip'])
+#ALLOWED_EXTENSIONS = set(['.zip'])
 
-# app
+# App
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "secret_key_paco"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
-app.jinja_env.add_extension('jinja2.ext.loopcontrols')
-
-# Modules P3t4
+# Modules Users
 from modules.P3t4Users.ControllerUsersDB import P3t4ControllerUsers
 p3t4ControllerUsers = P3t4ControllerUsers()
 
-# Modules P3t4
+# Modules Challenges
 from modules.P3t4Challenges.ControllerChallengesDb import P3t4ControllerChallenges
 p3t4ControllerChallenges = P3t4ControllerChallenges()
+
+# Modules Teams
+from modules.P3t4Teams.ControllerTeamsDB import P3t4ControllerTeams
+p3t4ControllerTeams = P3t4ControllerTeams()
 
 @app.route('/')
 def home():
@@ -124,7 +125,7 @@ def service_chanllenges():
             if dataChallenges == False:
                 return resp
 
-            return render_template('challenges.html', dataChallenges=dataChallenges, dataUser=dataUser)
+            return render_template('challenges/challenges.html', dataChallenges=dataChallenges, dataUser=dataUser)
         else:
             return resp
 
@@ -153,7 +154,7 @@ def service_challenge(challengeID):
             if dataAllUsers == False:
                 return resp
 
-            return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
+            return render_template('/challenges/challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
         else:
             return resp
     
@@ -173,7 +174,7 @@ def service_challenge(challengeID):
                 dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
                 dataAllUsers = p3t4ControllerUsers.FindAllUsersCompleteChallenge(dataChallenge)
                 #flash("Flag correcta, buen trabajo", "success")
-                return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
+                return render_template('/challenges/challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
             
                 #resp = make_response(render_template('challenges.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge))
                 #return resp
@@ -182,7 +183,7 @@ def service_challenge(challengeID):
                 dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
                 dataAllUsers = p3t4ControllerUsers.FindAllUsersCompleteChallenge(dataChallenge)
                 #flash("Flag incorrecta, siguen intentandolo", "danger")
-                return render_template('challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
+                return render_template('/challenges/challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
                 
         else:
             return redirect('/')
@@ -204,11 +205,11 @@ def service_usuarios():
             if dataName == False:
                 return resp
             
-            dataAll = p3t4ControllerUsers.FindAllUsersSort()
+            dataAll = p3t4ControllerUsers.FindUsersTopLimit100()
             if dataAll == False:
                 return resp
 
-            return render_template('users.html', data=dataAll, dataName=dataName)
+            return render_template('/users/users.html', data=dataAll, dataName=dataName)
         else:
             return resp
 
@@ -232,7 +233,7 @@ def service_dashboard(name):
                 if dataUser == False:
                     return resp
 
-                return render_template('profile.html', dataUser=dataUser)
+                return render_template('/profile/profile.html', dataUser=dataUser)
             else:
                 
                 # view user
@@ -244,7 +245,7 @@ def service_dashboard(name):
                 if viewUser == False:
                     return resp
 
-                return render_template('userView.html', dataUser=dataUser, viewUser=viewUser)
+                return render_template('/profile/userView.html', dataUser=dataUser, viewUser=viewUser)
         
         else:
             return resp
@@ -271,7 +272,7 @@ def service_admin():
                 if dataAll == False:
                     return resp
                 
-                return render_template('admin.html', data=dataAll, dataName=dataName)
+                return render_template('/admin/admin.html', data=dataAll, dataName=dataName)
             else:
                 return resp
         else:
@@ -413,7 +414,7 @@ def service_adminChallenges():
                 if dataAll == False:
                     return resp
 
-                return render_template('adminChallenge.html', data=dataAll, dataName=dataName)
+                return render_template('/admin/adminChallenge.html', data=dataAll, dataName=dataName)
             else:
                 return resp
         else:
@@ -543,7 +544,7 @@ def service_subchallenge():
             if data == False:
                 return resp
             
-            return render_template('publicChallenge.html', data=data)
+            return render_template('/challenges/publicChallenge.html', data=data)
         else:
             return resp
 
@@ -610,7 +611,48 @@ def service_subchallenge():
                 return redirect('/public/challenge')
         else:
             return resp
+
+
+@app.route('/teams', methods=['GET'])
+def service_teams():
+
+    if request.method == 'GET':
+    
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+        
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckToken(token):
+
+            dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
+            if dataName == False:
+                return resp
             
+            #if p3t4ControllerTeams.CreateTeam("paco", "CLS"):
+            #    print "Add Team"
+            #else:
+            #    print "Error Create Team"
+
+            teamsAll = p3t4ControllerTeams.FindTeamsTopLimit100()
+            if teamsAll == False:
+                return resp
+
+            return render_template('/teams/teams.html', teams=teamsAll, dataName=dataName)
+        else:
+            return resp
+
+@app.route('/team/<teamID>', methods=['GET'])
+def service_team(teamID):
+    return "Team Done"
+
+
+
+
+
+
+
 @app.route('/send/<name>', methods=['GET'])
 def service_send_file(name):
 

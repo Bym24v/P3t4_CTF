@@ -43,48 +43,52 @@
 				
 						<li class="nav-item">
 							<a class="nav-link text-muted" href="/challenges">
-							<span data-feather="coffee"></span>Challenges</a>
+							<span data-feather="coffee"></span> Challenges</a>
 						</li>
 
 						<li class="nav-item">
 							<a class="nav-link text-muted" href="/users">
-							<span data-feather="users"></span>Usuarios</a>
+							<span data-feather="users"></span> Usuarios</a>
 						</li>
 						
 						<li class="nav-item">
-							<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
-							<span data-feather="user"></span>Menu</a>
+							<a class="nav-link text-muted" href="/teams">
+							<span data-feather="trending-up"></span> Equipos</a>
 						</li>
-						
-						<!-- Collapse Menu User -->
-						<div class="collapse multi-collapse show" id="multiCollapseExample1">
 
+						{% if data and data.activate %}
+							
 							<li class="nav-item">
-								<a class="nav-link active submenu" href="/public/challenge">
-								<span class="subico" data-feather="circle"></span>Publicar</a>
+								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+								<span data-feather="user"></span> Menu</a>
 							</li>
 
-							<li class="nav-item">
+							<!-- Collapse Menu User -->
+							<div class="collapse multi-collapse show" id="multiCollapseExample1">
 
-								{% if data and data.activate %}
+								<li class="nav-item">
+									<a class="nav-link active submenu" href="/public/challenge">
+									<span class="subico" data-feather="circle"></span>Publicar</a>
+								</li>
+
+								<li class="nav-item">
 									<a class="nav-link submenu text-muted" href="/profile/{{data.name}}">
 									<span class="subico" data-feather="circle"></span>Perfil</a>
-								{% endif %}
-								
-							</li>
+								</li>
+									
+								<!--<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/logout">
+									<span class="subico" data-feather="circle"></span>Salir</a>
+								</li>-->
 
-							<!--<li class="nav-item">
-								<a class="nav-link submenu text-muted" href="/logout">
-								<span class="subico" data-feather="circle"></span>Salir</a>
-							</li>-->
-
-						</div><!-- end Collpase Menu user -->
+							</div><!-- end Collpase Menu user -->
+						{% endif %}
 
 						<!-- Menu Admin -->
 						{% if data.admin %}
 							<li class="nav-item">
 								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
-								<span data-feather="shield"></span>Admin</a>
+								<span data-feather="shield"></span> Admin</a>
 							</li>
 						{% endif %}
 
@@ -232,7 +236,7 @@
 						<div class="row mb-5">
 
 							<div class="col-lg-12">
-								<button class="btn btn-primary btn-lg btn-block mt-3" type="submit">ENVIAR</button>
+								<button class="btn btn-primary btn-lg btn-block mt-3" type="submit">Enviar</button>
 							</div>
 						</div>
 

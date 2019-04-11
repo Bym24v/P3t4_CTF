@@ -41,90 +41,89 @@
 					<ul class="nav flex-column">
 					
 					<li class="nav-item">
-							<a class="nav-link text-muted" href="/challenges">
-							<span data-feather="coffee"></span>Challenges</a>
+						<a class="nav-link text-muted" href="/challenges">
+						<span data-feather="coffee"></span> Challenges</a>
 					</li>
 
 					<li class="nav-item">
-							<a class="nav-link text-muted" href="/users">
-							<span data-feather="users"></span>Usuarios</a>
+						<a class="nav-link text-muted" href="/users">
+						<span data-feather="users"></span> Usuarios</a>
 					</li>
 
-					<!-- Menu User-->
 					<li class="nav-item">
+						<a class="nav-link text-muted" href="/teams">
+						<span data-feather="trending-up"></span> Equipos</a>
+					</li>
+					
+					{% if dataName and dataName.activate%}
+					
+						<li class="nav-item">
 							<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">
-							<span data-feather="user"></span>Menu</a>
-					</li>
-
-					<!--Collapse Menu User-->
-					<div class="collapse multi-collapse" id="multiCollapseExample1">
-
-						<li class="nav-item">
-							<a class="nav-link submenu text-muted" href="/public/challenge">
-							<span class="subico" data-feather="circle"></span>Publicar</a>
+							<span data-feather="user"></span> Menu</a>
 						</li>
+					
+						<!-- Collapse Menu User -->
+						<div class="collapse multi-collapse" id="multiCollapseExample1">
 
-						<li class="nav-item">
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/public/challenge">
+								<span class="subico" data-feather="circle"></span>Publicar</a>
+							</li>
 
-							{% if dataName and dataName.activate %}
-
+							<li class="nav-item">
 								<a class="nav-link submenu text-muted" href="/profile/{{dataName.name}}">
 								<span class="subico" data-feather="circle"></span>Perfil</a>
-						
-							{% endif %}
+							</li>
 							
-						</li>
+							<!--<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/logout">
+								<span class="subico" data-feather="circle"></span>Salir</a>
+							</li>-->
 
-						<!--<li class="nav-item">
-							<a class="nav-link submenu text-muted" href="/logout">
-							<span class="subico" data-feather="circle"></span>Salir</a>
-						</li>-->
-
-					</div> <!-- end Collapse Menu User-->
+						</div><!-- end Collapse Menu User -->
+					{% endif %}
 
 					<!-- Menu Admin -->
+					{% if dataName.admin %}
+						<li class="nav-item">
+							<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample1">
+							<span data-feather="shield"></span> Admin</a>
+						</li>
+					{% endif %}
+
+					<!-- Collapse Menu Admin -->
+					<div class="collapse multi-collapse show" id="multiCollapseExample2">
+
 						{% if dataName.admin %}
+							
 							<li class="nav-item">
-								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample1">
-								<span data-feather="shield"></span>Admin</a>
+								<a class="nav-link submenu text-muted" href="/admin">
+								<span  class="subico" data-feather="circle"></span>Usuarios</a>
 							</li>
+
+							<li class="nav-item">
+								<a class="nav-link submenu active" href="/admin/challenges">
+								<span class="subico" data-feather="circle"></span>Challenges</a>
+							</li>
+
 						{% endif %}
 
-						
-						<!-- Collapse Menu Admin -->
-						<div class="collapse multi-collapse show" id="multiCollapseExample2">
-
-							{% if dataName.admin %}
-								
-								<li class="nav-item">
-									<a class="nav-link submenu active" href="/admin">
-									<span  class="subico" data-feather="circle"></span>Usuarios</a>
-								</li>
-
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin/challenges">
-									<span class="subico" data-feather="circle"></span>Challenges</a>
-								</li>
-
-							{% endif %}
-
-						</div><!-- end collapse 2 -->
+					</div><!-- end collapse 2 -->
 
 					</ul>
+				</div><!--end sidebar -->
 
-					<!-- bottom menu -->
-					<div class="bottom-menu">
+				<!-- bottom menu -->
+				<div class="bottom-menu">
 
-						<!-- Help -->
-						<a class="text-muted" href="/faq">
-						<span data-feather="help-circle"></span></a>
+					<!-- Help -->
+					<a class="text-muted" href="/faq">
+					<span data-feather="help-circle"></span></a>
 
-						<!-- Logout -->
-						<a class="text-muted" href="/logout">
-						<span data-feather="log-out"></span></a>
-					<</div>
-					
-				</div><!-- end sidebar -->
+					<!-- Logout -->
+					<a class="text-muted" href="/logout">
+					<span data-feather="log-out"></span></a>
+				</div>
 
 			</nav> <!-- end nav -->
 
@@ -133,7 +132,8 @@
 				<nav class="mnav" aria-label="breadcrumb">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Admin</li>
+						<li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Challenges</li>
 					</ol>
 				</nav>
 
@@ -163,17 +163,17 @@
 					<div class="table-responsive mt-5">
 				
 						<div class="col-md-12">
-							<h2 class="mb-3">Usuarios</h2>
+							<h2 class="mb-3">Challenges</h2>
 
 							<table class="table table-striped table">
 								
 								<thead>
 									<tr>
 										<th scope="col">#</th>
-										<th scope="col">Nombre</th>
+										<th scope="col">Titulo</th>
 										<th scope="col">Puntos</th>
-										<th scope="col">Activado</th>
-										<th scope="col">Admin</th>
+										<th scope="col">Validado</th>
+										<th scope="col">Creador</th>
 										<th scope="col">Opciones</th>
 									</tr>
 								</thead>
@@ -181,21 +181,20 @@
 								<tbody>
 									
 									{% set count = namespace(index=0) %}
-									{% for user in data %}
+									{% for challenge in data %}
 										
-										<!-- counter -->
 										{% set count.index = count.index + 1 %}
 										
 										<tr>
 											<td class="td-50">{{count.index}}</td>
 											
-											<td><span data-feather="user"></span> {{user.name}}</td>
-											<td><span data-feather="award"></span> {{user.puntos}}</td>
-											<td>{{user.activate}}</td>
-											<td>{{user.admin}}</td>
+											<td>{{challenge.titulo}}</td>
+											<td><span data-feather="award"></span> {{challenge.puntos}}</td>
+											<td>{{challenge.validado}}</td>
+											<td><span data-feather="user"></span> {{challenge.creador}}</td>
 
 											<td style="min-width: 180px; width: 180px">
-												<a id="btn-edit" class="btn btn-outline-info btn-sm" href="/admin/edit/{{user._id}}">Editar</a> <a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/admin/delete/{{user._id}}">Elimiar</a>
+												<a id="btn-edit" class="btn btn-outline-info btn-sm" href="/admin/edit/{{challenge._id}}">Editar</a> <a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/admin/delete/{{challenge._id}}">Elimiar</a>
 											</td>
 											
 										</tr>
@@ -215,7 +214,7 @@
 							<div class="modal-content">
 
 								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Usuario</h5>
+									<h5 class="modal-title" id="exampleModalLabel">Datos de Usuario</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 									</button>
@@ -225,8 +224,8 @@
 									<form>
 
 										<div class="form-group">
-											<label for="recipient-name" class="col-form-label">Name:</label>
-											<input type="text" maxlength="30" class="form-control" id="mod-name" disabled>
+											<label for="recipient-name" class="col-form-label">Challenge ID:</label>
+											<input type="text" class="form-control" id="mod-challengeID" disabled>
 										</div>
 
 										<div class="form-group">
@@ -235,13 +234,13 @@
 										</div>
 
 										<div class="form-group">
-											<label for="recipient-name" class="col-form-label">Activado:</label>
-											<input type="text" maxlength="5" class="form-control" id="mod-activate">
+											<label for="recipient-name" class="col-form-label">Validado:</label>
+											<input type="text" maxlength="5" class="form-control" id="mod-validate">
 										</div>
 
 										<div class="form-group">
-											<label for="recipient-name" class="col-form-label">Admin:</label>
-											<input type="text" maxlength="5" class="form-control" id="mod-admin">
+											<label for="recipient-name" class="col-form-label">Creador:</label>
+											<input type="text" maxlength="30" class="form-control" id="mod-creator">
 										</div>
 
 
@@ -264,14 +263,12 @@
 							<div class="modal-content">
 								
 								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Eliminar Usuario</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
+									<h5 class="modal-title" id="exampleModalLabel">Eliminar Challenge</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 								</div>
 
 								<div class="modal-body">
-									<h6 id="deleteUserName">name</h6>
+									<h6 id="deleteChallengeName">name</h6>
 								</div>
 
 								<div class="modal-footer">
@@ -296,9 +293,9 @@
     <script src="/static/js/jquery-slim.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/popper.min.js"></script>
-		<script src="/static/js/admin.js"></script>
-		<script src="/static/js/dashboard.js"></script>
-		
+	<script src="/static/js/adminChallenges.js"></script>
+	<script src="/static/js/dashboard.js"></script>
+
     <!-- Icons -->
     <script src="/static/feather/feather.min.js"></script>
     <script>

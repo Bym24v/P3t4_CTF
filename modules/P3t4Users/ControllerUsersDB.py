@@ -63,11 +63,9 @@ class P3t4ControllerUsers:
                             "admin": False,
                             "puntos": 0,
                             "completado_challenges": [],
-                            "team_title": "",
-                            "team_users": [],
-                            "team_code": "",
                             "followers": [],
-                            "twitter": ""
+                            "twitter": "",
+                            "team": []
                         }
                     )
 
@@ -203,10 +201,10 @@ class P3t4ControllerUsers:
     """ End Edit User """
 
     """ Challenge """ 
-    def FindAllUsersSort(self):
+    def FindUsersTopLimit100(self):
 
         try:
-            result = mongo.db.users.find().sort('puntos', -1)
+            result = mongo.db.users.find().sort('puntos', -1).limit(100)
             return result
         except:
             return False
@@ -231,7 +229,7 @@ class P3t4ControllerUsers:
                             "activate": result['activate'],
                             "fecha": item['fecha'],
                             "hora": item['hora'],
-                            "team": ""
+                            "team": result['team']
                         }
                         
                         salida.append(newUser)
@@ -248,6 +246,17 @@ class P3t4ControllerUsers:
             return False
 
     """ End Challenge """
+
+    """ Admin """
+    def FindAllUsersSort(self):
+    
+        try:
+            result = mongo.db.users.find().sort('puntos', -1)
+            return result
+        except:
+            return False
+
+    """ end Admin """
 
     """ Home Top Users """ 
     def FindTopTresUsers(self):
