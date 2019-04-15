@@ -133,3 +133,6 @@ a[aria-expanded="true"]{
     margin-top: 25px;
 }
 
+.author{
+    font-weight: bold;
+}

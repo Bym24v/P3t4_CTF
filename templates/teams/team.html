@@ -131,7 +131,7 @@
 					<nav class="mnav" aria-label="breadcrumb">
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
-							<li class="breadcrumb-item active" aria-current="page">Perfil</li>
+							<li class="breadcrumb-item active" aria-current="page">Equipo</li>
 						</ol>
 					</nav>
 
@@ -144,23 +144,32 @@
 								
 								<div class="card-body">
 									<h5 class="card-title">{{team.title}}</h5>
-									<p class="card-text">Texto de prueba.</p>
+
+									{% if dataUser.name == team.creator %}
+										<p class="card-text">Propietario</p>
+									{% elif dataUser.name in team.members %}
+										<p class="card-text">Miembro</p>
+									{% else %}
+										<p class="card-text">Visitante</p>
+									{% endif %}
 								</div>
 								
 								
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item"><span class="subico" data-feather="award"></span> {{team.score}}</li>
 									<li class="list-group-item"><span class="subico" data-feather="users"></span> {{team.members|length}}</li>
-									<li class="list-group-item"><span class="subico" data-feather="heart"></span> 309</li>
+									<li class="list-group-item"><span class="subico" data-feather="heart"></span> {{team.followers|length}}</li>
 								</ul>
 								
 								<div class="card-body">
 									<!--<a href="#" class="card-link">Card link</a>-->
 									<!--<a href="#" class="card-link">Another link</a>-->
 									{% if dataUser.name == team.creator %}
-										<a href="#" class="btn btn-outline-danger" style="border-radius: 100px;"></span> Borrar</a>
+										<button class="btn btn-success" style="border-radius: 100px;">Siguiendo</button>
+									{% elif dataUser.name in team.members %}
+										<button class="btn btn-success" style="border-radius: 100px;">Siguiendo</button>
 									{% else %}
-										<a href="#" class="btn btn-outline-primary" style="border-radius: 100px;"><span class="subico" data-feather="user-plus"></span> Seguir</a>
+										<button class="btn btn-outline-primary" style="border-radius: 100px;"> Seguir</button>
 									{% endif %}
 								</div>
 							</div>
@@ -171,21 +180,103 @@
 
 							<ul class="nav nav-tabs" id="myTab" role="tablist">
 								
+								<!-- Panel Users -->
 								<li class="nav-item">
-									<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Miembros</a>
-								</li>
+									<a class="nav-link text-muted active" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Usuarios</a>
+								</li><!-- end panel users -->
 								
+								{% if dataUser.name == team.creator or dataUser.name in team.members %}
+									<!-- Panel Options -->
+									<li class="nav-item">
+										<a class="nav-link text-muted" id="options-tab" data-toggle="tab" href="#options" role="tab" aria-controls="options" aria-selected="false">Opciones</a>
+									</li><!-- end panel options -->
+								{% endif %}
+
 							</ul>
 
 							<div class="tab-content" id="myTabContent">
 								
-								<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+								<!-- Usuarios -->
+								<div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
 									
 									<!-- table -->
-									<div class="table-responsive mt-5">
+									<div class="table-responsive mt-3">
 								
 										<div class="col-md-12">
 											
+											<table class="table table-striped">
+												
+												<thead>
+													<tr>
+														<th scope="col">#</th>
+														<th scope="col">Usuario</th>
+														<th scope="col">Puntos</th>
+														<th scope="col">Twitter</th>
+														
+													</tr>
+												</thead>
+
+												<tbody>
+													
+													{% set count = namespace(index=0) %}
+													{% for user in teamMembers %}
+														
+														<!-- counter -->
+														{% set count.index = count.index + 1 %}
+														{% if user %}
+
+															<tr>
+																<!-- Position -->
+																<td class="td-50">{{count.index}}</td>
+
+																<!-- Name -->
+																<td style="width: 100px;"><a class="mtext-muted" href="/profile/{{user.name}}"><span class="subico" data-feather="user"></span> {{user.name}}</a></td>
+
+																<!-- Score -->
+																<td style="width: 100px;"><span class="subico" data-feather="award"></span> {{user.score}}</td>
+
+																<!-- Twitter -->
+																{% if user.twitter %}
+																	<td style="width: 50px;">
+																		<a href="https://twitter.com/{{user.twitter}}" class="mtext-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
+																	</td>
+																{% else %}
+																	<td style="width: 50px;"><span class="no-twitter">nada</span></td>
+																{% endif %}
+
+															</tr>
+														
+														{% endif %}
+													{% endfor %}
+
+												</tbody>
+											</table>
+											
+										</div>
+									</div> <!-- end table -->
+								</div>
+								
+								<!-- opctiones admin -->
+								<div class="tab-pane fade show" id="options" role="tabpanel" aria-labelledby="options-tab">
+									
+									{% if dataUser.name == team.creator %}
+
+										<h5 class="mt-4">Borrar Equipo</h5>
+										<div class="card text-center mt-3">
+
+											<div class="card-body">
+												<h5 class="card-title">Opcion de borrar el equipo</h5>
+												<p class="card-text">Eliminaras todo el equipo y su progreso.</p>
+												<a href="/delete/team/{{team._id}}" class="btn btn-danger">Borrar equipo</a>
+											</div>
+									
+										</div>
+
+										<h5 class="mt-4">Borrar Usuarios</h5>
+
+										<!-- table -->
+										<div class="table-responsive mt-3">
+									
 											<table class="table table-striped">
 												
 												<thead>
@@ -212,12 +303,16 @@
 														{% if user %}
 
 															<tr>
+																<!-- Position -->
 																<td class="td-50">{{count.index}}</td>
-																
+
+																<!-- Name -->
 																<td style="width: 100px;"><a class="mtext-muted" href="/profile/{{user.name}}"><span class="subico" data-feather="user"></span> {{user.name}}</a></td>
-		
+
+																<!-- Score -->
 																<td style="width: 100px;"><span class="subico" data-feather="award"></span> {{user.score}}</td>
 
+																<!-- Twitter -->
 																{% if user.twitter %}
 																	<td style="width: 100px;">
 																		<a href="https://twitter.com/{{user.twitter}}" class="mtext-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
@@ -226,11 +321,12 @@
 																	<td style="width: 100px;"><span class="no-twitter">nada</span></td>
 																{% endif %}
 																
+																<!-- Opciones -->
 																{% if dataUser.name == team.creator %}
 
 																	{% if dataUser.name == user.name %}
 																		<td style="width: 50px">
-																			<a id="btn-delete"class="btn btn-outline-danger btn-sm disabled"  href="/team/delete/user/{{user.name}}" disabled>Elimiar</a>
+																			<a id="btn-delete"class="btn btn-outline-danger btn-sm disabled"  href="#" disabled>Elimiar</a>
 																		</td>
 																	{% else %}
 																		<td style="width: 50px">
@@ -247,17 +343,57 @@
 
 												</tbody>
 											</table>
-
+										</div> <!-- end table -->
+									{% else %}
+										
+										<!-- opctiones user -->
+										<div class="card text-center" style="margin-top: 35px;">
+											
+											<div class="card-body">
+												<h5 class="card-title">Abandonar equipo</h5>
+												<p class="card-text">¿ Estas seguro que quieres abandonar el equipo ?</p>
+												<a href="/leave/team/{{team._id}}" class="btn btn-danger">Quiero Salir</a>
+											</div>
+									
 										</div>
-									</div> <!-- end table -->
+
+									{% endif %}
+
 								</div>
-								
-							</div>
+
+							</div><!-- end content tabs -->
 
 						</div><!-- end tabs -->
 
 					</div><!-- end row -->
 				{% endif %}
+
+				<!-- Modal delete team -->
+				<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Eliminar Equipo</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+							<div class="modal-body">
+								<h6 id="deleteUserName">name</h6>
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+								<button id="mod-btn-delete" type="button" class="btn btn-danger">Elimiar</button>
+							</div>
+
+						</div>
+					</div>
+
+				</div><!-- end modal delete team -->
 
        		 </main>
       	</div>

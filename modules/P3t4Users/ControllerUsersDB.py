@@ -65,7 +65,8 @@ class P3t4ControllerUsers:
                             "completado_challenges": [],
                             "followers": [],
                             "twitter": "",
-                            "team": []
+                            "team_create": {},
+                            "team_member": {}
                         }
                     )
 
@@ -229,7 +230,8 @@ class P3t4ControllerUsers:
                             "activate": result['activate'],
                             "fecha": item['fecha'],
                             "hora": item['hora'],
-                            "team": result['team']
+                            "team_create": result['team_create'],
+                            "team_member": result['team_member']
                         }
                         
                         salida.append(newUser)

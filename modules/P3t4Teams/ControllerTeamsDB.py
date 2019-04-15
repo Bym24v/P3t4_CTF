@@ -40,7 +40,7 @@ class P3t4ControllerTeams:
             """ Update user creator team """ 
             user = mongo.db.users.find_one_and_update(
                 {'token': tokenUser},
-                    {'$set': {'team': {
+                    {'$set': {'team_create': {
                         "teamName": teamName,
                         "teamID": resultTeamID
                     }}}
@@ -103,6 +103,24 @@ class P3t4ControllerTeams:
                 tmpData.append(packet)
             
             return tmpData
+        except:
+            return False
+
+    def FindTeamMembersTotalScore(self, members):
+
+        try:
+            
+            tmpData = 0
+
+            for user in members:
+                result = mongo.db.users.find_one_or_404({'name': user})
+                tmpData += result['puntos']
+            
+            package = {
+                "score": tmpData
+            }
+
+            return package
         except:
             return False
 

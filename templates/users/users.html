@@ -194,9 +194,9 @@
 												<td class="td-50">{{count.index}}</td>
 												
 												<td style="width: 100px;"><a class="mtext-muted" href="/profile/{{user.name}}"><span class="subico" data-feather="user"></span> {{user.name}}</a></td>
-
-												{% if user.team %}
-													<td><a class="mtext-muted" href="/team/{{user.team.teamID}}">{{user.team.teamName}}</a></td>
+				
+												{% if user.team_member %}
+													<td><a class="mtext-muted" href="/team/{{user.team_member.id}}">{{user.team_member.name}}</a></td>
 												{% else %}
 													<td class="mtext-muted">nada</td>
 												{% endif %}

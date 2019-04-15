@@ -99,7 +99,7 @@ class P3t4ControllerChallenges:
     def CheckFlag(self, username, challengeID, flag):
 
         try:
-            result = mongo.db.challenges.find_one_or_404({'_id': challengeID})
+            challenge = mongo.db.challenges.find_one_or_404({'_id': challengeID})
 
             # flag hash
             hashFlag = hashlib.sha256(flag).hexdigest()
@@ -110,9 +110,9 @@ class P3t4ControllerChallenges:
             
             tmpNames = []
 
-            if result['flag'] == hashFlag:
+            if challenge['flag'] == hashFlag:
 
-                for item in result['completado_users']:
+                for item in challenge['completado_users']:
                     tmpNames.append(item['name'])
 
                 if not username in tmpNames:
@@ -127,11 +127,26 @@ class P3t4ControllerChallenges:
                         }}}
                     )
                     
+                    try:
+                        user = mongo.db.users.find_one_or_404({'name': username})
+                    except:
+                        pass
+                    
+                    if user['team_member']:
+                    
+                        # update score user complete challenge
+                        mongo.db.teams.find_one_and_update(
+                            {'_id': user['team_member']['id']},
+                            {'$inc': {'score': challenge['puntos']}}
+                        )
+                    else:
+                        pass
+
                     # update user score
                     mongo.db.users.update(
                         {'name': username},
                         {'$inc': {
-                            'puntos': result['puntos']}, 
+                            'puntos': challenge['puntos']}, 
                             '$push': {
                                 'completado_challenges': challengeID
                             }

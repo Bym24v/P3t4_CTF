@@ -202,88 +202,66 @@
 
 								<div class="form-row">
 									
-									{% set is_team = namespace(found=false) %}
-									{% if dataUser.team|length == 0 %}
+									{% set team_create = namespace(found=false) %}
+									{% set team_member = namespace(found=false) %}
 
-										<!-- Create Team -->
-										{% set is_team.found = false %}
+									{% if dataUser.team_create|length > 0%}
+
+										<!-- Found Create Team -->
+										{% set team_create.found = true %}
 										<div class="col-md-12 mb-3">
-											<label for="validationCustom03">Equipo</label>
-											<input type="text" name="team-name" class="form-control" id="validationCustom03" placeholder="Titulo">
+											<label for="validationCustom03">Propietario</label>
+											<input type="text" name="team-name" class="form-control" id="validationCustom03" placeholder="Titulo" value="{{dataUser.team_create.name}}" disabled>
 										</div>
 
 									{% else %}
+										
+										{% set team_create.found = false %}
+										
+										{% if dataUser.team_member|length > 0 %}
 
-										<!-- Delete Team -->
-										{% set is_team.found = true %}
-										<div class="col-md-12 mb-3">
-											<label for="validationCustom04">Equipo</label>
-											<input type="text" class="form-control" id="validationCustom04" placeholder="Titulo" value="{{dataUser.team.teamName}}" disabled>
-										</div>
+											{% set team_member.found = true %}
+
+											<!-- Found in Team -->
+											<div class="col-md-12 mb-3">
+												<label for="validationCustom04">Miembro</label>
+												<input type="text" class="form-control" id="validationCustom04" placeholder="Titulo" value="{{dataUser.team_member.name}}" disabled>
+											</div>
+										{% else %}
+											{% set team_member.found = false %}
+
+											<!-- Create Team -->
+											<div class="col-md-12 mb-3">
+												<label for="validationCustom04">Equipo</label>
+												<input type="text" class="form-control" id="validationCustom04" placeholder="Titulo">
+											</div>
+
+										{% endif %}
 
 									{% endif %}
-									
-
-									<!--<div class="col-md-2 mb-3">
-										<label for="validationCustom04">Codigo</label>
-										<input type="button" class="form-control btn btn-outline-primary" id="validationCustom04" value="Crear Equipo">
-										
-									</div>-->
-
-									<!--<div class="col-md-3 mb-3">
-										<label for="validationCustom05">Zip</label>
-										<input type="text" class="form-control" id="validationCustom05" placeholder="Zip" required>
-										<div class="invalid-feedback">Please provide a valid zip.</div>
-									</div>-->
+		
 									
 								</div>
 
 								<!-- btns create - delete - team -->
 								<div class="row">
-
-									{% if dataUser.team|length > 0 and is_team.found %}
-
-										<!-- delete team btn -->
-										<!--<div class="col-lg-2">
-											<a id="btn-edit" class="btn btn-outline-danger mb-5" href="/delete/team/{{dataUser.team.teamID}}">Borrar Equipo</a>
-										</div>-->
+									
+									{% if team_create.found %}
+										<!-- team create -->
 									{% else %}
-										<!-- create team btn -->
-										<div class="col-lg-2">
-											<a id="btn-edit" class="btn btn-outline-primary mb-5" href="#">Crear Equipo</a>
-										</div>
 
+										{% if team_member.found %}
+											<!-- in team -->
+										{% else %}
+											<!-- create team btn -->
+											<div class="col-lg-2">
+												<a id="btn-edit" class="btn btn-outline-primary mb-5" href="#">Crear Equipo</a>
+											</div>
+										{% endif %}
+										
 									{% endif %}
 
 								</div>
-
-								<!-- Modal delete team -->
-								<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											
-											<div class="modal-header">
-												<h5 class="modal-title" id="exampleModalLabel">Eliminar Equipo</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-
-											<div class="modal-body">
-												<h6 id="deleteUserName">name</h6>
-											</div>
-
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
-												<button id="mod-btn-delete" type="button" class="btn btn-danger">Elimiar</button>
-											</div>
-
-										</div>
-									</div>
-
-								</div><!-- end modal delete team -->
-								
 
 							</form>
 
