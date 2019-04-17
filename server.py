@@ -356,24 +356,18 @@ def service_editUser(userID):
             
             # check activate
             if editUserActivate == "false" or editUserActivate == "False":
-                print "Active false"
                 editUserActivate = False
             elif editUserActivate == "true" or editUserActivate == "True":
-                print "Active true"
                 editUserActivate = True
             else:
-                print "Error type"
                 return "error"
 
             # check admin
             if editUserAdmin == "false" or editUserAdmin == "False":
-                print "Admin false"
                 editUserAdmin = False
             elif editUserAdmin == "true" or editUserAdmin == "True":
-                print "Admin true"
                 editUserAdmin = True
             else:
-                print "Error type"
                 return "error"
 
             if p3t4ControllerUsers.CheckToken(token):
@@ -730,7 +724,7 @@ def service_adminTeamDelete(teamID):
         else:
             return "Admin Require"
 
-""" user team """ 
+""" team """ 
 @app.route('/team/<teamID>', methods=['GET'])
 def service_team(teamID):
     
@@ -761,11 +755,6 @@ def service_team(teamID):
         else:
             return resp
 
-@app.route('/delete/team/<teamID>', methods=['POST'])
-def service_deleteTeam(teamID):
-
-    pass
-
 @app.route('/create/team/<name>', methods=['POST'])
 def service_createTeam(name):
     
@@ -785,6 +774,11 @@ def service_createTeam(name):
                 return "error"
         else:
             return "Error token"
+
+""" owner delete team """
+@app.route('/delete/team', methods=['POST'])
+def service_deleteTeam():
+    pass
 
 """ Leave member in team """
 @app.route('/user/leave/team/<teamID>', methods=['POST'])
@@ -808,16 +802,48 @@ def service_userLeaveTeam(teamID):
             return "Error token"
 
 
-"""  owner user team """
-@app.route('/owner/remove/team/<teamID>')
-def service_ownerRemoveTeam(teamID):
-    pass
+"""  owner add user team """
+@app.route('/owner/team/add/user', methods=['POST'])
+def service_ownerRemoveTeam():
+    
+    if request.method == 'POST':
+        
+        teamID = request.form['mod-teamID']
+        username = request.form['mod-username']
+        
+        if len(username) > 30:
+            return "error"
+
+        token = request.cookies.get('token')
+        
+        if p3t4ControllerUsers.CheckToken(token):
+
+            if p3t4ControllerTeams.AddMemberTeam(token, teamID, username):
+                return "done"
+            else:
+                return "error"
+        else:
+            return "Error token"
 
 
 """  owner team delete users"""
-@app.route('/owner/team/remove/user/<userID>')
-def service_ownerTeamRemoveUser(teamID):
-    pass
+@app.route('/owner/team/remove/user/<userID>', methods=['POST'])
+def service_ownerTeamRemoveUser(userID):
+    
+    if request.method == 'POST':
+        
+        token = request.cookies.get('token')
+
+        if p3t4ControllerUsers.CheckToken(token):
+                
+            result = p3t4ControllerTeams.DeleteUserInTeam(token, userID)
+            if result == False:
+                return "error"
+
+            return result
+        else:
+            return "error"
+
 
 """ followers users """ 
 @app.route('/follow/<name>', methods=['POST'])

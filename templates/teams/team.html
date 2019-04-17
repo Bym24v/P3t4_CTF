@@ -143,9 +143,9 @@
 					<!-- row -->
 					<div class="row p-0 m-0">
 
+						<!-- User -->
 						<div class="col-xs-12 col-sm-4 col-lg-4 pl-0 pr-1" style="margin-top: 30px;">
 							<div class="card">
-								<!--<img src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" class="card-img-top" alt="..." width="100%" height="250px">-->
 								
 								<div class="card-body">
 									<h5 class="card-title">{{team.title}}</h5>
@@ -178,11 +178,12 @@
 									{% endif %}
 								</div>
 							</div>
-						</div>
+						</div><!--end user -->
 
 						<!-- tabs -->
 						<div class="mtabs col-xs-12 col-sm-8 col-lg-8" style="margin-top: 30px;">
-
+							
+							<!-- Menu Tabs -->
 							<ul class="nav nav-tabs" id="myTab" role="tablist">
 								
 								<!-- Panel Users -->
@@ -255,13 +256,15 @@
 								</div>
 								
 								
-								<!-- opctiones admin -->
-								<div class="tab-pane fade show" id="options" role="tabpanel" aria-labelledby="options-tab">
+								<!-- opctiones admin team -->
+								<div class="tab-pane mt-4 fade show" id="options" role="tabpanel" aria-labelledby="options-tab">
 									
 									{% if dataUser.name == team.creator %}
 
-										<a class="btn btn-outline-primary mt-4" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Borrar Equipo</a>
+										<!-- borrar team -->
+										<a class=" mt-4" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Opciones de Equipo</a>
 										<div class="card text-center mt-3">
+
 											<div class="collapse" id="collapseExample">
 												<div class="card-body">
 													<h5 class="card-title">Borrar el equipo</h5>
@@ -269,20 +272,21 @@
 													<a href="/delete/team/{{team._id}}" class="btn btn-danger">Eliminar</a>
 												</div>
 											</div>
+
 										</div>
 
-										<a class="btn btn-outline-primary mt-4" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">Nuevo Usuario</a>
+										<!-- Nuevo Usuario -->
 										<div class="card text-center mt-3">
-											<div class="collapse" id="collapseExample2">
+											<div class="collapse" id="collapseExample">
 												<div class="card-body">
-													<h5 class="card-title">Añadir un nuevo usuario</h5>
-													<p class="card-text">En el momento que se una, empezá a sumar puntos al equipo.</p>
-													<a href="/delete/team/{{team._id}}" class="btn btn-outline-primary">Añadir</a>
+													<h5 class="card-title">Nuevo usuario</h5>
+													<p class="card-text">Se puede añadir asta 10 usuarios por equipo.</p>
+													<bottom id="btn-addUserTeam" class="btn btn-outline-primary">Añadir</bottom>
 												</div>
 											</div>
 										</div>
 
-										<h5 class="mt-4">Borrar Usuarios</h5>
+										<h5 class="mt-4">Usuarios</h5>
 
 										<!-- table -->
 										<div class="table-responsive mt-3">
@@ -329,11 +333,11 @@
 
 																	{% if dataUser.name == user.name %}
 																		<td style="width: 50px">
-																			<a id="btn-delete"class="btn btn-outline-danger btn-sm disabled"  href="#" disabled>Elimiar</a>
+																			<button class="btn btn-outline-danger btn-sm disabled" disabled>Elimiar</button>
 																		</td>
 																	{% else %}
 																		<td style="width: 50px">
-																			<a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/team/delete/user/{{user.name}}">Elimiar</a>
+																			<button id="btn-ownerDeleteUserTeam" name="{{user.id}}" class="btn btn-outline-danger btn-sm">Elimiar</button>
 																		</td>
 																	{% endif %}
 																	
@@ -393,6 +397,61 @@
 					</div>
 
 				</div><!-- end modal delete team -->
+
+				<!-- Modal add user team -->
+				<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
+					
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							
+							<div class="modal-header">
+								<h5 class="modal-title" id="addUserModal">Añadir Usuario</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							
+							<div class="modal-body">
+
+								<div class="form-group">
+									<label for="recipient-name" class="col-form-label">Nombre:</label>
+									<input type="text" maxlength="30" class="form-control" id="mod-userName" placeholder="Nombre de usuario">
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								<button id="mod-addUserTeam" name="{{team._id}}" class="btn btn-primary">Guardar</button>
+							</div>
+
+						</div>
+					</div>
+
+				</div><!-- end modal add user team -->
+
+				<!-- Modal owner user delete team -->
+				<div class="modal fade" id="ownerDeleteUserModal" tabindex="-1" role="dialog" aria-labelledby="ownerDeleteUserModal" aria-hidden="true">
+					
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							
+							<div class="modal-header">
+								<h5 class="modal-title" id="ownerDeleteUserModal">Elimiar Usuario</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								<button id="mod-ownerDeleteUserTeam" class="btn btn-danger">Eliminar</button>
+							</div>
+
+						</div>
+					</div>
+
+				</div><!-- end modal owner user delete team -->
 
        		 </main>
       	</div>

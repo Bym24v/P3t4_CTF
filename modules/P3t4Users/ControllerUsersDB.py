@@ -162,7 +162,20 @@ class P3t4ControllerUsers:
     def FindUserIdDeleteUser(self, userID):
     
         try:
-            result = mongo.db.users.delete_one({'_id': userID})
+
+            user = mongo.db.users.find_one_or_404({'_id': userID})
+
+            for challenge in user['completado_challenges']:
+                
+                #challengeID = mongo.db.challenges.find_one_or_404({'_id': challenge})
+
+                mongo.db.challenges.find_one_and_update(
+                    {"_id": challenge},
+                    {'$pull': {'completado_users': {'name': user['name']}}}
+                )
+
+            mongo.db.users.delete_one({'_id': userID})
+            
             return "done"
         except:
             return False

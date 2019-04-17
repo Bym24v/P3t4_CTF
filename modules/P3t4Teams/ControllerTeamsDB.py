@@ -70,20 +70,6 @@ class P3t4ControllerTeams:
                     }
             )
 
-
-            #result = mongo.db.teams.insert(
-            #    {
-            #        "_id": teamHash,
-            #        "title": teamName,
-            #        "members": [creator],
-            #        "creator": creator,
-            #        "score": 0,
-            #        "activate": False,
-            #        "twitter": ""
-            #    }
-            #    
-            #)
-
             return True
         except:
             return False
@@ -114,6 +100,7 @@ class P3t4ControllerTeams:
                 result = mongo.db.users.find_one_or_404({'name': user})
                 
                 packet = {
+                    "id": result['_id'],
                     "name": result['name'],
                     "score": result['puntos'],
                     "flags": result['completado_challenges']
@@ -142,7 +129,7 @@ class P3t4ControllerTeams:
         except:
             return False
 
-    """ admin edit team """ 
+    """ admin teams """ 
     def AdminTeamEdit(self, teamID, new_score, new_activate, new_creator):
 
         if len(new_score) <= 6 and len(new_creator) <= 30:
@@ -166,6 +153,7 @@ class P3t4ControllerTeams:
 
             team = mongo.db.teams.find_one_or_404({'_id': teamID})
 
+            # owner team
             mongo.db.users.find_one_and_update(
                 {'name': team['creator']},
                 {'$set': {'team_create': {}}}
@@ -176,16 +164,126 @@ class P3t4ControllerTeams:
                 {'$set': {'team_member': {}}}
             )
 
+            for user in team['members']:
+                
+                mongo.db.users.find_one_and_update(
+                    {'name': user},
+                    {'$set': {'team_member': {}}}
+                )
+
+
             result = mongo.db.teams.delete_one({'_id': teamID})
             return "done"
         except:
-            return "error"
+            return False
     
-    def AddMemberTeam(self):
-        pass
+    """ owner team """
+    def AddMemberTeam(self, token, teamID, username):
+        
+        try:
 
-    def DeleteUserInTeam(self):
-        pass
+            ownerTeam = mongo.db.users.find_one_or_404({'token': token})
+            team = mongo.db.teams.find_one_or_404({'_id': teamID})
+            user = mongo.db.users.find_one_or_404({'name': username})
+            
+            # user is activate ? 
+            if user['activate']:
+
+                # user in not team and not owner team
+                if len(user['team_create']) == 0 and len(user['team_member']) == 0:
+
+                    # check owner team and token 
+                    if team['creator'] == ownerTeam['name']:
+                    
+                        # user in not team 
+                        if not username in team['members'] and len(team['members']) <= 9:
+
+                            mongo.db.teams.find_one_and_update(
+                                {'_id': teamID},
+                                {'$push': {'members': username}}
+                            )
+
+                            mongo.db.users.find_one_and_update(
+                                {'_id': user['_id']},
+                                    {'$set': {'team_member': {
+                                        "name": team['title'],
+                                        "id": team['_id']
+                                    }}}
+                            )
+                            return True
+                        else:
+                            return False
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        except:
+            return False
+
+    def DeleteTeam(self, token):
+
+        try:
+
+            user = mongo.db.users.find_one_or_404({'token': token})
+            #team = mongo.db.users.find_one_or_404({'': token})
+
+            print user['team_create']['name']
+
+
+            # owner team
+            #mongo.db.users.find_one_and_update(
+            #    {'name': team['creator']},
+            #    {'$set': {'team_create': {}}}
+            #)
+            #
+            #mongo.db.users.find_one_and_update(
+            #    {'name': team['creator']},
+            #    {'$set': {'team_member': {}}}
+            #)
+            #
+            #for user in team['members']:
+            #    
+            #    mongo.db.users.find_one_and_update(
+            #        {'name': user},
+            #        {'$set': {'team_member': {}}}
+            #    )
+
+
+            #result = mongo.db.teams.delete_one({'_id': teamID})
+            return True
+        except:
+            return False
+
+    def DeleteUserInTeam(self, token, userID):
+        
+        try:
+            
+            # owner team 
+            ownerTeam = mongo.db.users.find_one_or_404({"token": token})
+            
+            # team
+            team = mongo.db.teams.find_one_or_404({"_id": ownerTeam['team_create']['id']})
+            
+            # user delete
+            userDelete = mongo.db.users.find_one_or_404({'_id': userID})
+
+            if userDelete['name'] in team['members']:
+                
+                mongo.db.teams.find_one_and_update(
+                    {"_id": ownerTeam['team_create']['id']},
+                    {'$pull': {'members': userDelete['name']}}
+                )
+                
+                mongo.db.users.find_one_and_update(
+                    {'_id': userID},
+                    {'$set': {'team_member': {}}}
+                )
+
+            return "done"
+        except:
+            return False
 
     def FindTeamsTopLimit100(self):
     
