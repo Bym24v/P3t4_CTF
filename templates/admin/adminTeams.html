@@ -8,7 +8,7 @@
     <meta name="author" content="@Bym24v">
     <!--<link rel="icon" href="../../../../favicon.ico">-->
 
-    <title>P3t4 - CTF | Admin</title>
+    <title>P3t4 - CTF | Equipos</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -97,17 +97,17 @@
 						{% if dataName.admin %}
 							
 							<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin/teams">
-									<span class="subico" data-feather="circle"></span>Equipos</a>
-								</li>
-								
+								<a class="nav-link submenu active" href="/admin/teams">
+								<span class="subico" data-feather="circle"></span>Equipos</a>
+							</li>
+
 							<li class="nav-item">
 								<a class="nav-link submenu text-muted" href="/admin">
 								<span  class="subico" data-feather="circle"></span>Usuarios</a>
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link submenu active" href="/admin/challenges">
+								<a class="nav-link submenu text-muted" href="/admin/challenges">
 								<span class="subico" data-feather="circle"></span>Challenges</a>
 							</li>
 
@@ -138,7 +138,7 @@
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
 						<li class="breadcrumb-item"><a href="/admin">Admin</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Challenges</li>
+						<li class="breadcrumb-item active" aria-current="page">Equipos</li>
 					</ol>
 				</nav>
 
@@ -168,7 +168,7 @@
 					<div class="table-responsive mt-5">
 				
 						<div class="col-md-12">
-							<h2 class="mb-3">Challenges</h2>
+							<h2 class="mb-3">Equipos</h2>
 
 							<table class="table table-striped table">
 								
@@ -186,20 +186,20 @@
 								<tbody>
 									
 									{% set count = namespace(index=0) %}
-									{% for challenge in data %}
+									{% for team in data %}
 										
 										{% set count.index = count.index + 1 %}
 										
 										<tr>
 											<td class="td-50">{{count.index}}</td>
 											
-											<td>{{challenge.titulo}}</td>
-											<td><span data-feather="award"></span> {{challenge.puntos}}</td>
-											<td>{{challenge.validado}}</td>
-											<td><span data-feather="user"></span> {{challenge.creador}}</td>
+											<td>{{team.title}}</td>
+											<td><span data-feather="award"></span> {{team.score}}</td>
+											<td>{{team.activate}}</td>
+											<td><span data-feather="user"></span> {{team.creator}}</td>
 
 											<td style="min-width: 180px; width: 180px">
-												<a id="btn-edit" class="btn btn-outline-info btn-sm" href="/admin/edit/{{challenge._id}}">Editar</a> <a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/admin/delete/{{challenge._id}}">Elimiar</a>
+												<a id="btn-edit" class="btn btn-outline-info btn-sm" href="/admin/team/{{team._id}}">Editar</a> <a id="btn-delete"class="btn btn-outline-danger btn-sm"  href="/admin/team/{{team._id}}">Elimiar</a>
 											</td>
 											
 										</tr>
@@ -229,8 +229,8 @@
 									<form>
 
 										<div class="form-group">
-											<label for="recipient-name" class="col-form-label">Challenge ID:</label>
-											<input type="text" class="form-control" id="mod-challengeID" disabled>
+											<label for="recipient-name" class="col-form-label">Equipo ID:</label>
+											<input type="text" class="form-control" id="mod-teamID" disabled>
 										</div>
 
 										<div class="form-group">
@@ -245,7 +245,7 @@
 
 										<div class="form-group">
 											<label for="recipient-name" class="col-form-label">Creador:</label>
-											<input type="text" maxlength="30" class="form-control" id="mod-creator">
+											<input type="text" maxlength="30" class="form-control" id="mod-creator" disabled>
 										</div>
 
 
@@ -268,7 +268,7 @@
 							<div class="modal-content">
 								
 								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Eliminar Challenge</h5>
+									<h5 class="modal-title" id="exampleModalLabel">Eliminar Equipo</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 								</div>
 
@@ -298,7 +298,7 @@
     <script src="/static/js/jquery-slim.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/popper.min.js"></script>
-	<script src="/static/js/adminChallenges.js"></script>
+	<script src="/static/js/adminTeams.js"></script>
 	<script src="/static/js/dashboard.js"></script>
 
     <!-- Icons -->

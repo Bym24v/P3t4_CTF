@@ -29,10 +29,10 @@ class P3t4ControllerTeams:
                     "_id": teamHash,
                     "title": teamName,
                     "members": [],
+                    "followers": [],
                     "creator": "",
                     "score": 0,
-                    "activate": False,
-                    "twitter": ""
+                    "activate": False
                 }
                 
             )
@@ -41,8 +41,17 @@ class P3t4ControllerTeams:
             user = mongo.db.users.find_one_and_update(
                 {'token': tokenUser},
                     {'$set': {'team_create': {
-                        "teamName": teamName,
-                        "teamID": resultTeamID
+                        "name": teamName,
+                        "id": resultTeamID
+                    }}}
+            )
+
+            """ Update user member team """ 
+            user = mongo.db.users.find_one_and_update(
+                {'token': tokenUser},
+                    {'$set': {'team_member': {
+                        "name": teamName,
+                        "id": resultTeamID
                     }}}
             )
 
@@ -56,9 +65,11 @@ class P3t4ControllerTeams:
             updateTeam2 = mongo.db.teams.find_one_and_update(
                 {'_id': resultTeamID},
                     {'$push': {
-                        'members': user['name']}
+                        'members': user['name'],
+                        'followers': user['name']}
                     }
             )
+
 
             #result = mongo.db.teams.insert(
             #    {
@@ -77,6 +88,13 @@ class P3t4ControllerTeams:
         except:
             return False
     
+    def FindAllTeams(self):
+        
+        try:
+            result = mongo.db.teams.find()
+            return result
+        except:
+            return False
 
     def FindTeamID(self, teamID):
         
@@ -98,7 +116,7 @@ class P3t4ControllerTeams:
                 packet = {
                     "name": result['name'],
                     "score": result['puntos'],
-                    "twitter": result['twitter']
+                    "flags": result['completado_challenges']
                 }
                 tmpData.append(packet)
             
@@ -123,6 +141,51 @@ class P3t4ControllerTeams:
             return package
         except:
             return False
+
+    """ admin edit team """ 
+    def AdminTeamEdit(self, teamID, new_score, new_activate, new_creator):
+
+        if len(new_score) <= 6 and len(new_creator) <= 30:
+        
+            try:
+                mongo.db.teams.find_one_and_update(
+                    {'_id': teamID},
+                    {'$set': {
+                        'score': int(new_score, 10),
+                        'activate': new_activate,
+                        'creator': new_creator}
+                    }
+                )
+                return "done"
+            except:
+                return False
+
+    def AdminDeleteTeam(self, teamID):
+
+        try:
+
+            team = mongo.db.teams.find_one_or_404({'_id': teamID})
+
+            mongo.db.users.find_one_and_update(
+                {'name': team['creator']},
+                {'$set': {'team_create': {}}}
+            )
+
+            mongo.db.users.find_one_and_update(
+                {'name': team['creator']},
+                {'$set': {'team_member': {}}}
+            )
+
+            result = mongo.db.teams.delete_one({'_id': teamID})
+            return "done"
+        except:
+            return "error"
+    
+    def AddMemberTeam(self):
+        pass
+
+    def DeleteUserInTeam(self):
+        pass
 
     def FindTeamsTopLimit100(self):
     

@@ -1,13 +1,13 @@
 var matches = document.querySelectorAll("td > a");
 
-var modName = document.getElementById('mod-name')
+var modTeamID = document.getElementById('mod-teamID')
 var modScore = document.getElementById('mod-score')
-var modActivate = document.getElementById('mod-activate')
-var modAdmin = document.getElementById('mod-admin')
+var modValidate = document.getElementById('mod-validate')
+var modCreator = document.getElementById('mod-creator')
 
-var deleteUserName = document.getElementById('deleteUserName');
+var deleteTeamID = "";
+var deleteTeamTitle = document.getElementById('deleteChallengeName');
 
-var tmpID = ""
 
 for (let i = 0; i < matches.length; i++) {
     
@@ -20,14 +20,12 @@ for (let i = 0; i < matches.length; i++) {
         {   
             var parseName = e.target.href.split('/')
 
-            tmpID = parseName[5]
-
             var ajaxEdit = new XMLHttpRequest();
             /*ajax.upload.addEventListener("progress", progressHandler, false);
             ajax.addEventListener("load", completeHandler, false);
             ajax.addEventListener("error", errorHandler, false);
             ajax.addEventListener("abort", abortHandler, false);*/
-            ajaxEdit.open("GET", "/admin/edit/" + tmpID); 
+            ajaxEdit.open("GET", "/admin/teams/edit/" + parseName[5]); 
             ajaxEdit.send(null)
 
             ajaxEdit.onreadystatechange = function () {
@@ -41,17 +39,18 @@ for (let i = 0; i < matches.length; i++) {
 
                         if (data.search('{') != -1){
                             parseJson = JSON.parse(data)
+                            //console.log(parseJson);
                             
-                            modName.value = parseJson.name
-                            modScore.value = parseJson.puntos
-                            modActivate.value = parseJson.activate
-                            modAdmin.value = parseJson.admin
+                            modTeamID.value = parseJson.id
+                            modScore.value = parseJson.score
+                            modValidate.value = parseJson.activate
+                            modCreator.value = parseJson.creator
 
                             // show modal
                             $('#editModal').modal('show')
                         }else{
                             //console.log(data);
-                            window.location.href = "/admin"
+                            window.location.href = "/admin/teams"
                         }
 
                     }
@@ -61,15 +60,13 @@ for (let i = 0; i < matches.length; i++) {
         }else{ // Delete
             
             var parseName = e.target.href.split('/')
-            
-            tmpID = parseName[5]
 
             var ajaxDelete = new XMLHttpRequest();
             /*ajax.upload.addEventListener("progress", progressHandler, false);
             ajax.addEventListener("load", completeHandler, false);
             ajax.addEventListener("error", errorHandler, false);
             ajax.addEventListener("abort", abortHandler, false);*/
-            ajaxDelete.open("GET", "/admin/delete/" + tmpID); 
+            ajaxDelete.open("GET", "/admin/teams/delete/" + parseName[5]); 
             ajaxDelete.send(null)
 
             ajaxDelete.onreadystatechange = function () {
@@ -81,18 +78,25 @@ for (let i = 0; i < matches.length; i++) {
                         
                         // data server 
                         var data = ajaxDelete.responseText;
-
-                        if (data.search('Admin') == 0){
-                            //console.log(data);
-                            window.location.href = "/"
-                        }else{
+                        parseJson = ""
+                        
+                        if (data.search('{') != -1){
+                            parseJson = JSON.parse(data)
+                            //console.log(parseJson);
                             
-                            // Modal name
-                            deleteUserName.textContent = data
+                            // challenge id
+                            deleteTeamID = parseJson.id;
 
+                            // Modal name
+                            deleteTeamTitle.textContent = parseJson.title
+                            
                             // show modal
                             $('#deleteModal').modal('show')
+                        }else{
+                            //console.log(data);
+                            window.location.href = "/admin/teams"
                         }
+
                     }
                 }
             };
@@ -113,13 +117,13 @@ modBtnEdit.addEventListener('click', function(){
     ajax.addEventListener("load", completeHandler, false);
     ajax.addEventListener("error", errorHandler, false);
     ajax.addEventListener("abort", abortHandler, false);*/
-    ajaxDelete.open("POST", "/admin/edit/" + tmpID); 
+    ajaxDelete.open("POST", "/admin/teams/edit/" + modTeamID.value); 
 
     var formdata = new FormData();
-    formdata.append("mod-name", modName);
+    formdata.append("mod-teamID", modTeamID.value);
     formdata.append("mod-score", modScore.value);
-    formdata.append("mod-activate", modActivate.value);
-    formdata.append("mod-admin", modAdmin.value);
+    formdata.append("mod-validate", modValidate.value);
+    formdata.append("mod-creator", modCreator.value);
 
     ajaxDelete.send(formdata)
 
@@ -139,7 +143,7 @@ modBtnEdit.addEventListener('click', function(){
                     window.location.reload();
                 }else{
                     $('#editModal').modal('hide')
-                    console.log("Error edit user");
+                    console.log("Error Edit team");
                 }
             }
         }
@@ -155,9 +159,8 @@ modBtnDelete.addEventListener('click', function(){
     ajax.addEventListener("load", completeHandler, false);
     ajax.addEventListener("error", errorHandler, false);
     ajax.addEventListener("abort", abortHandler, false);*/
-    
-    ajaxDelete.open("POST", "/admin/delete/" + tmpID); 
-    ajaxDelete.send(null)
+    ajaxDelete.open("POST", "/admin/teams/delete/" + deleteTeamID);
+    ajaxDelete.send(null);
 
     ajaxDelete.onreadystatechange = function () {
 
@@ -175,7 +178,7 @@ modBtnDelete.addEventListener('click', function(){
                     window.location.reload();
                 }else{
                     $('#deleteModal').modal('hide')
-                    console.log("Error delete user");
+                    console.log("Error delete team");
                 }
             }
         }

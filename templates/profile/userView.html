@@ -94,6 +94,11 @@
 							{% if dataUser.admin %}
 								
 								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin/teams">
+									<span class="subico" data-feather="circle"></span>Equipos</a>
+								</li>
+
+								<li class="nav-item">
 									<a class="nav-link submenu text-muted" href="/admin">
 									<span  class="subico" data-feather="circle"></span>Usuarios</a>
 								</li>
@@ -143,21 +148,42 @@
 								<!--<img src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" class="card-img-top" alt="..." width="100%" height="250px">-->
 								
 								<div class="card-body">
-									<h5 class="card-title">Paco</h5>
-									<p class="card-text">Texto de prueba.</p>
+									<h5 class="card-title">{{viewUser.name}}</h5>
+									<p class="card-text">noob</p><!-- badges -->
 								</div>
 								
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item"><span class="subico" data-feather="award"></span> 150</li>
-									<li class="list-group-item"><span class="subico" data-feather="bookmark"></span> CLS</li>
-									<li class="list-group-item"><span class="subico" data-feather="heart"></span> 309</li>
+									<li class="list-group-item"><span class="subico" data-feather="award"></span> {{viewUser.puntos}}</li>
+
+									{% if viewUser.team_member['name']|length > 0 %}
+										<li class="list-group-item"><span class="subico" data-feather="bookmark"></span> {{viewUser.team_member['name']}}</li>
+									{% else %}
+										<li class="list-group-item"><span class="subico" data-feather="bookmark"></span> nada</li>
+									{% endif %}
+
+									<li class="list-group-item"><span class="subico" data-feather="flag"></span> {{viewUser.completado_challenges|length}}</li>
+									<li class="list-group-item"><span class="subico" data-feather="heart"></span> {{viewUser.followers|length}}</li>
 								</ul>
 								
-								<div class="card-body">
-									<!--<a href="#" class="card-link">Card link</a>-->
-									<!--<a href="#" class="card-link">Another link</a>-->
-									<a href="#" class="btn btn-outline-primary" style="border-radius: 100px;"><span class="subico" data-feather="user-plus"></span> Seguir</a>
-								</div>
+								<!-- followers -->
+								{% if dataUser.name in viewUser.followers %}
+
+									<div class="card-body">
+										<!--<a href="#" class="card-link">Card link</a>-->
+										<!--<a href="#" class="card-link">Another link</a>-->
+										<bottom id="btn-unfollower" name="{{viewUser.name}}" class="btn btn-success" style="border-radius: 100px;"> Siguiendo</bottom>
+									</div>
+								
+								{% else %}
+
+									<div class="card-body">
+										<!--<a href="#" class="card-link">Card link</a>-->
+										<!--<a href="#" class="card-link">Another link</a>-->
+										<bottom id="btn-follower" name="{{viewUser.name}}" class="btn btn-outline-primary" style="border-radius: 100px;"><span class="subico" data-feather="user-plus"></span> Seguir</bottom>
+									</div>
+
+								{% endif %}
+								
 							</div>
 						</div>
 
@@ -203,7 +229,8 @@
     <script src="/static/js/jquery-slim.min.js"></script>
 		<script src="/static/js/bootstrap.min.js"></script>
 		<script src="/static/js/popper.min.js"></script>
-	<script src="/static/js/dashboard.js"></script>
+		<script src="/static/js/profile.js"></script>
+		<script src="/static/js/dashboard.js"></script>
 	
     <!-- Icons -->
     <script src="/static/feather/feather.min.js"></script>

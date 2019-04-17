@@ -94,6 +94,11 @@
 							{% if dataUser.admin %}
 								
 								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin/teams">
+									<span class="subico" data-feather="circle"></span>Equipos</a>
+								</li>
+								
+								<li class="nav-item">
 									<a class="nav-link submenu text-muted" href="/admin">
 									<span  class="subico" data-feather="circle"></span>Usuarios</a>
 								</li>
@@ -166,10 +171,10 @@
 									<!--<a href="#" class="card-link">Another link</a>-->
 									{% if dataUser.name == team.creator %}
 										<button class="btn btn-success" style="border-radius: 100px;">Siguiendo</button>
-									{% elif dataUser.name in team.members %}
-										<button class="btn btn-success" style="border-radius: 100px;">Siguiendo</button>
+									{% elif dataUser.name in team.followers %}
+										<button id="btn-unfollow-team" name="{{team._id}}" class="btn btn-success" style="border-radius: 100px;">Siguiendo</button>
 									{% else %}
-										<button class="btn btn-outline-primary" style="border-radius: 100px;"> Seguir</button>
+										<button id="btn-follower-team" name="{{team._id}}" class="btn btn-outline-primary" style="border-radius: 100px;"> Seguir</button>
 									{% endif %}
 								</div>
 							</div>
@@ -194,6 +199,7 @@
 
 							</ul>
 
+							
 							<div class="tab-content" id="myTabContent">
 								
 								<!-- Usuarios -->
@@ -211,7 +217,7 @@
 														<th scope="col">#</th>
 														<th scope="col">Usuario</th>
 														<th scope="col">Puntos</th>
-														<th scope="col">Twitter</th>
+														<th scope="col">Flags</th>
 														
 													</tr>
 												</thead>
@@ -230,19 +236,11 @@
 																<td class="td-50">{{count.index}}</td>
 
 																<!-- Name -->
-																<td style="width: 100px;"><a class="mtext-muted" href="/profile/{{user.name}}"><span class="subico" data-feather="user"></span> {{user.name}}</a></td>
+																<td><a class="mtext-muted" href="/profile/{{user.name}}"><span class="subico" data-feather="user"></span> {{user.name}}</a></td>
 
 																<!-- Score -->
 																<td style="width: 100px;"><span class="subico" data-feather="award"></span> {{user.score}}</td>
-
-																<!-- Twitter -->
-																{% if user.twitter %}
-																	<td style="width: 50px;">
-																		<a href="https://twitter.com/{{user.twitter}}" class="mtext-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
-																	</td>
-																{% else %}
-																	<td style="width: 50px;"><span class="no-twitter">nada</span></td>
-																{% endif %}
+																<td style="width: 100px;"><span class="subico" data-feather="flag"></span> {{user.flags|length}}</td>
 
 															</tr>
 														
@@ -256,20 +254,32 @@
 									</div> <!-- end table -->
 								</div>
 								
+								
 								<!-- opctiones admin -->
 								<div class="tab-pane fade show" id="options" role="tabpanel" aria-labelledby="options-tab">
 									
 									{% if dataUser.name == team.creator %}
 
-										<h5 class="mt-4">Borrar Equipo</h5>
+										<a class="btn btn-outline-primary mt-4" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Borrar Equipo</a>
 										<div class="card text-center mt-3">
-
-											<div class="card-body">
-												<h5 class="card-title">Opcion de borrar el equipo</h5>
-												<p class="card-text">Eliminaras todo el equipo y su progreso.</p>
-												<a href="/delete/team/{{team._id}}" class="btn btn-danger">Borrar equipo</a>
+											<div class="collapse" id="collapseExample">
+												<div class="card-body">
+													<h5 class="card-title">Borrar el equipo</h5>
+													<p class="card-text">Eliminaras todo el equipo y sus usuarios.</p>
+													<a href="/delete/team/{{team._id}}" class="btn btn-danger">Eliminar</a>
+												</div>
 											</div>
-									
+										</div>
+
+										<a class="btn btn-outline-primary mt-4" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">Nuevo Usuario</a>
+										<div class="card text-center mt-3">
+											<div class="collapse" id="collapseExample2">
+												<div class="card-body">
+													<h5 class="card-title">Añadir un nuevo usuario</h5>
+													<p class="card-text">En el momento que se una, empezá a sumar puntos al equipo.</p>
+													<a href="/delete/team/{{team._id}}" class="btn btn-outline-primary">Añadir</a>
+												</div>
+											</div>
 										</div>
 
 										<h5 class="mt-4">Borrar Usuarios</h5>
@@ -284,7 +294,7 @@
 														<th scope="col">#</th>
 														<th scope="col">Usuario</th>
 														<th scope="col">Puntos</th>
-														<th scope="col">Twitter</th>
+														<th scope="col">Flags</th>
 
 														{% if dataUser.name == team.creator %}
 															<th scope="col">Opciones</th>
@@ -307,19 +317,12 @@
 																<td class="td-50">{{count.index}}</td>
 
 																<!-- Name -->
-																<td style="width: 100px;"><a class="mtext-muted" href="/profile/{{user.name}}"><span class="subico" data-feather="user"></span> {{user.name}}</a></td>
-
+																<td><a class="mtext-muted" href="/profile/{{user.name}}"><span class="subico" data-feather="user"></span> {{user.name}}</a></td>
+																
 																<!-- Score -->
 																<td style="width: 100px;"><span class="subico" data-feather="award"></span> {{user.score}}</td>
+																<td style="width: 100px;"><span class="subico" data-feather="flag"></span> {{user.flags|length}}</td>
 
-																<!-- Twitter -->
-																{% if user.twitter %}
-																	<td style="width: 100px;">
-																		<a href="https://twitter.com/{{user.twitter}}" class="mtext-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
-																	</td>
-																{% else %}
-																	<td style="width: 100px;"><span class="no-twitter">nada</span></td>
-																{% endif %}
 																
 																<!-- Opciones -->
 																{% if dataUser.name == team.creator %}
@@ -352,7 +355,7 @@
 											<div class="card-body">
 												<h5 class="card-title">Abandonar equipo</h5>
 												<p class="card-text">¿ Estas seguro que quieres abandonar el equipo ?</p>
-												<a href="/leave/team/{{team._id}}" class="btn btn-danger">Quiero Salir</a>
+												<button id="btn-userLeave" class="btn btn-danger">Abandonar</button>
 											</div>
 									
 										</div>
@@ -368,26 +371,22 @@
 					</div><!-- end row -->
 				{% endif %}
 
-				<!-- Modal delete team -->
-				<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<!-- Modal user leave team -->
+				<div class="modal fade" id="userLeaveModal" tabindex="-1" role="dialog" aria-labelledby="userLeaveModal" aria-hidden="true">
 					
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							
 							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Eliminar Equipo</h5>
+								<h5 class="modal-title" id="userLeaveModal">Abandonar Equipo</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
 
-							<div class="modal-body">
-								<h6 id="deleteUserName">name</h6>
-							</div>
-
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
-								<button id="mod-btn-delete" type="button" class="btn btn-danger">Elimiar</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								<button id="mod-userLeaveTeam" name="{{team._id}}" class="btn btn-danger">Si, Estoy Seguro</button>
 							</div>
 
 						</div>
@@ -405,6 +404,7 @@
     <script src="/static/js/jquery-slim.min.js"></script>
 		<script src="/static/js/bootstrap.min.js"></script>
 		<script src="/static/js/popper.min.js"></script>
+		<script src="/static/js/team.js"></script>
 	<script src="/static/js/dashboard.js"></script>
 	
     <!-- Icons -->

@@ -100,6 +100,11 @@
 							{% if dataUser.admin %}
 								
 								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin/teams">
+									<span class="subico" data-feather="circle"></span>Equipos</a>
+								</li>
+								
+								<li class="nav-item">
 									<a class="nav-link submenu text-muted" href="/admin">
 									<span  class="subico" data-feather="circle"></span>Usuarios</a>
 								</li>
@@ -244,7 +249,7 @@
 										<th scope="col">Nombre</th>
 										<th scope="col">Equipo</th>
 										<th scope="col">Puntos</th>
-										<th scope="col">Twitter</th>
+										<th scope="col">Flags</th>
 										<th scope="col">Fecha</th>
 										<th scope="col">Hora</th>
 									</tr>
@@ -278,15 +283,7 @@
 														{% endif %}
 
 														<td style="width: 100px;"><span class="subico" data-feather="award"></span>{{user.puntos}}</td>
-
-														<!-- Twitter -->
-														{% if user.twitter %}
-															<td style="width: 100px;">
-																<a href="https://twitter.com/{{user.twitter}}" class="mtext-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
-															</td>
-														{% else %}
-															<td style="width: 100px;" ><span class="no-twitter">nada</span></td>
-														{% endif %}
+														<td style="width: 100px;"><span class="subico" data-feather="flag"></span>{{user.completado_challenges|length}}</td>
 														
 														<!-- date - time -->
 														<td style="min-width: 100px; width: 100px;">{{completado.fecha}}</td>

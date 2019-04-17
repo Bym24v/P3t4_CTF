@@ -97,6 +97,11 @@
 							{% if dataUser.admin %}
 								
 								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin/teams">
+									<span class="subico" data-feather="circle"></span>Equipos</a>
+								</li>
+								
+								<li class="nav-item">
 									<a class="nav-link submenu text-muted" href="/admin">
 									<span  class="subico" data-feather="circle"></span>Usuarios</a>
 								</li>
@@ -156,114 +161,127 @@
 
 							<h4 class="mb-4">Datos de usuario</h4>
 							
+							<div class="mb-3">
+								<label for="username">Usuario</label>
+								<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{dataUser.name}}" disabled>
+								<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
+								<!--<small id="username" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+							</div>
 							
-							<form class="needs-validation" novalidate>
+							<div class="mb-3">
+								<label for="email">Correo</label>
+								<input type="email" class="form-control" id="email" maxlength="50" placeholder="email@email.com" value="{{dataUser.email}}" disabled>
+								<div class="invalid-feedback">Correo requerido.</div>
+							</div>
+							
+							<hr class="mb-4 mt-4 mb-3">
+
+							<!-- form profile -->
+							<form class="needs-validation" method="POST">
+								<h4 class="mb-4 mt-4">Nueva contraseña</h4>
 
 								<div class="mb-3">
-									<label for="username">Usuario</label>
-									<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{dataUser.name}}" required>
-									<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
-									<!--<small id="username" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+									<label for="address">Ultima contraseña </label>
+									<input type="text" name="old-password" class="form-control" id="address" maxlength="50" required>
+								</div>
+
+								<div class="mb-3">
+									<label for="address">Nueva contraseña </label>
+									<input type="text" name="new-password" class="form-control" id="address" maxlength="50" required>
+								</div>
+
+								<div class="mb-3">
+									<label for="address">Confirmar contraseña </label>
+									<input type="text" narme="confirm-password" class="form-control" id="address" maxlength="50" required>
 								</div>
 								
-								<div class="mb-3">
-									<label for="email">Correo</label>
-									<input type="email" class="form-control" id="email" maxlength="50" placeholder="email@email.com" value="{{dataUser.email}}" required>
-									<div class="invalid-feedback">Correo requerido.</div>
-								</div>
-
-								<div class="mb-3">
-									<label for="address">Twitter <span class="text-muted">(Opcional)</span></label>
-									<input type="text" class="form-control" id="address" maxlength="10" placeholder="Usuario en Twitter" value="{{dataUser.twitter}}">
-								</div>
-
-								<!--<div class="mb-3">
-									<label for="team-code">Equipo <span class="text-muted">(Opcional)</span></label>
-									<input type="text" class="form-control col-lg-4" id="team-code" maxlength="10" value="{{dataUser.team}}"><button class="btn btn-primary" type="submit">Guardar</button>
-								</div>-->
-								
+								<!-- separate -->
 								<hr class="mb-4 mt-4 mb-3">
 
 								<div class="row">
 
-									<!--<div class="col-lg-6">
-										<button class="btn btn-primary btn-lg btn-block" style="margin-top: 15px;" type="submit">Cambiar Contraseña</button>
-									</div>-->
-
 									<div class="col-lg-2">
-										<button class="btn btn-primary btn-lg btn-block"  style="margin-top: 15px; margin-bottom: 15px;" type="submit">Guardar</button>
+										<button class="btn btn-outline-primary "  style="margin-top: 15px; margin-bottom: 15px;" type="submit">Cambiar contraseña</button>
 									</div>
 									
 								</div>
 								
+								<!-- separate -->
 								<hr class="mb-4 mt-4 mb-3">
 
-								<h4 class="mb-4 mt-4">Datos de Equipo</h4>
+							</form><!-- end form profile -->
+					
 
-								<div class="form-row">
+							<!-- form create team -->
+							<hr class="mb-4 mt-4 mb-3">
+
+							<h4 class="mb-4 mt-4">Datos de Equipo</h4>
+
+							<div class="form-row">
+								
+								{% set team_create = namespace(found=false) %}
+								{% set team_member = namespace(found=false) %}
+
+								{% if dataUser.team_create|length > 0%}
+
+									<!-- Found Create Team -->
+									{% set team_create.found = true %}
+									<div class="col-md-12 mb-3">
+										<label for="owner">Propietario</label>
+										<input type="text" class="form-control" maxlength="30" id="owner" placeholder="Titulo" value="{{dataUser.team_create.name}}" disabled>
+									</div>
+
+								{% else %}
 									
-									{% set team_create = namespace(found=false) %}
-									{% set team_member = namespace(found=false) %}
+									{% set team_create.found = false %}
+									
+									{% if dataUser.team_member|length > 0 %}
 
-									{% if dataUser.team_create|length > 0%}
+										{% set team_member.found = true %}
 
-										<!-- Found Create Team -->
-										{% set team_create.found = true %}
+										<!-- Found in Team -->
 										<div class="col-md-12 mb-3">
-											<label for="validationCustom03">Propietario</label>
-											<input type="text" name="team-name" class="form-control" id="validationCustom03" placeholder="Titulo" value="{{dataUser.team_create.name}}" disabled>
+											<label for="member">Miembro</label>
+											<input type="text" class="form-control" maxlength="30" id="member" placeholder="Titulo" value="{{dataUser.team_member.name}}" disabled>
+										</div>
+									{% else %}
+										{% set team_member.found = false %}
+
+										<!-- Create Team -->
+										<div class="col-md-12 mb-3">
+											<label for="title-team">Equipo</label>
+											<input type="text" class="form-control" maxlength="30" id="title-team" placeholder="Titulo" required>
 										</div>
 
-									{% else %}
-										
-										{% set team_create.found = false %}
-										
-										{% if dataUser.team_member|length > 0 %}
-
-											{% set team_member.found = true %}
-
-											<!-- Found in Team -->
-											<div class="col-md-12 mb-3">
-												<label for="validationCustom04">Miembro</label>
-												<input type="text" class="form-control" id="validationCustom04" placeholder="Titulo" value="{{dataUser.team_member.name}}" disabled>
-											</div>
-										{% else %}
-											{% set team_member.found = false %}
-
-											<!-- Create Team -->
-											<div class="col-md-12 mb-3">
-												<label for="validationCustom04">Equipo</label>
-												<input type="text" class="form-control" id="validationCustom04" placeholder="Titulo">
-											</div>
-
-										{% endif %}
-
-									{% endif %}
-		
-									
-								</div>
-
-								<!-- btns create - delete - team -->
-								<div class="row">
-									
-									{% if team_create.found %}
-										<!-- team create -->
-									{% else %}
-
-										{% if team_member.found %}
-											<!-- in team -->
-										{% else %}
-											<!-- create team btn -->
-											<div class="col-lg-2">
-												<a id="btn-edit" class="btn btn-outline-primary mb-5" href="#">Crear Equipo</a>
-											</div>
-										{% endif %}
-										
 									{% endif %}
 
-								</div>
+								{% endif %}
+	
+								
+							</div>
+							
+							<hr class="mb-4 mt-4 mb-3">
 
-							</form>
+							<!-- btns create - delete - team -->
+							<div class="row">
+								
+								{% if team_create.found %}
+									<!-- team create -->
+								{% else %}
+
+									{% if team_member.found %}
+										<!-- in team -->
+									{% else %}
+
+										<!-- create team btn -->
+										<div class="col-lg-2">
+											<button id="create-team" class="btn btn-outline-primary mb-5">Crear equipo</button>
+										</div>
+									{% endif %}
+									
+								{% endif %}
+
+							</div>
 
 						</div>
 					</div> <!-- end main -->
@@ -277,9 +295,10 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/static/js/jquery-slim.min.js"></script>
-		<script src="/static/js/bootstrap.min.js"></script>
-		<script src="/static/js/popper.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/popper.min.js"></script>
 	<script src="/static/js/dashboard.js"></script>
+	<script src="/static/js/profile.js"></script>
 	
     <!-- Icons -->
     <script src="/static/feather/feather.min.js"></script>

@@ -101,6 +101,11 @@
 							{% if dataName.admin %}
 								
 								<li class="nav-item">
+									<a class="nav-link submenu text-muted" href="/admin/teams">
+									<span class="subico" data-feather="circle"></span>Equipos</a>
+								</li>
+								
+								<li class="nav-item">
 									<a class="nav-link submenu text-muted" href="/admin">
 									<span  class="subico" data-feather="circle"></span>Usuarios</a>
 								</li>
@@ -176,7 +181,6 @@
 										<th scope="col">Equipo</th>
 										<th scope="col">Usuarios</th>
 										<th scope="col">Puntos</th>
-										<th scope="col">Twitter</th>
 									</tr>
 								</thead>
 
@@ -196,20 +200,11 @@
 												<td style="width: 100px;"><a class="mtext-muted" href="/team/{{team._id}}">{{team.title}}</a></td>
 												
 												<!-- Members -->
-												<td style="padding-left: 28px;"><span class="subico" data-feather="users"></span> {{team.members|length}}</td>
+												<td style="padding-left: 25px;"><span class="subico" data-feather="users"></span> {{team.members|length}}</td>
 
 												<!-- Score -->
-												<td style="width: 150px;"><span class="subico" data-feather="award"></span> {{team.score}}</td>
-												
-												<!-- Twitter -->
-												{% if team.twitter %}
-													<td style="width: 100px;">
-														<a href="https://twitter.com/{{team.twitter}}" class="mtext-muted user-twitter"><span class="subico" data-feather="twitter"></span></a>
-													</td>
-												{% else %}
-													<td style="width: 100px;"><span class="no-twitter">nada</span></td>
-												{% endif %}
-												
+												<td style="width: 110px;"><span class="subico" data-feather="award"></span> {{team.score}}</td>
+
 											</tr>
 										
 										{% endif %}

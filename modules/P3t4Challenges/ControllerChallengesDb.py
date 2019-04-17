@@ -90,7 +90,6 @@ class P3t4ControllerChallenges:
 
         try:
             result = mongo.db.challenges.delete_one({'_id': challengeID})
-            print result
             return "done"
         except:
             return "error"

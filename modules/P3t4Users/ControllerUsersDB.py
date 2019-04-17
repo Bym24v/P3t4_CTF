@@ -64,7 +64,6 @@ class P3t4ControllerUsers:
                             "puntos": 0,
                             "completado_challenges": [],
                             "followers": [],
-                            "twitter": "",
                             "team_create": {},
                             "team_member": {}
                         }
@@ -226,12 +225,12 @@ class P3t4ControllerUsers:
                         newUser = {
                             "name": result['name'],
                             "puntos": result['puntos'],
-                            "twitter": result['twitter'],
                             "activate": result['activate'],
                             "fecha": item['fecha'],
                             "hora": item['hora'],
                             "team_create": result['team_create'],
-                            "team_member": result['team_member']
+                            "team_member": result['team_member'],
+                            "completado_challenges": result['completado_challenges']
                         }
                         
                         salida.append(newUser)
@@ -266,5 +265,116 @@ class P3t4ControllerUsers:
         try:
             result = mongo.db.users.find().sort('puntos', -1).limit(3)
             return result
+        except:
+            return False
+
+    
+    """ followers user """
+    def FindUserAddFollower(self, token, user_follow):
+        
+        try:
+
+            if len(user_follow) > 30:
+                return False
+
+            userFollower = mongo.db.users.find_one_or_404({"token": token})
+        
+            user = mongo.db.users.find_one_or_404({'name': user_follow})
+            
+            if not userFollower['name'] in user['followers']:
+
+                mongo.db.users.find_one_and_update(
+                    {"name": user_follow},
+                    {'$push': {'followers': userFollower['name']}}
+                )
+            return True
+        except:
+            return False
+
+    def FindUserUnFollower(self, token, user_unfollow):
+        
+        try:
+
+            if len(user_unfollow) > 30:
+                return False
+
+            userFollower = mongo.db.users.find_one_or_404({"token": token})
+
+            user = mongo.db.users.find_one_or_404({'name': user_unfollow})
+            
+            if userFollower['name'] in user['followers']:
+
+                mongo.db.users.find_one_and_update(
+                    {"name": user_unfollow},
+                    {'$pull': {'followers': userFollower['name']}}
+                )
+            return True
+        except:
+            return False
+    
+    """ follower team """ 
+    def FindTeamAddFollower(self, token, team_follow):
+        
+        try:
+
+            userFollower = mongo.db.users.find_one_or_404({"token": token})
+        
+            team = mongo.db.teams.find_one_or_404({'_id': team_follow})
+            
+            if not userFollower['name'] in team['followers']:
+
+                mongo.db.teams.find_one_and_update(
+                    {"_id": team_follow},
+                    {'$push': {'followers': userFollower['name']}}
+                )
+            return True
+        except:
+            return False
+
+    def FindTeamUnFollower(self, token, team_unfollow):
+        
+        try:
+
+            userFollower = mongo.db.users.find_one_or_404({"token": token})
+
+            team = mongo.db.teams.find_one_or_404({'_id': team_unfollow})
+            
+            if userFollower['name'] in team['followers']:
+
+                mongo.db.teams.find_one_and_update(
+                    {"_id": team_unfollow},
+                    {'$pull': {'followers': userFollower['name']}}
+                )
+            return True
+        except:
+            return False
+
+    """ user leave team  """ 
+    def UserLeaveTeam(self, token, teamID):
+
+        try:
+
+            userLeave = mongo.db.users.find_one_or_404({"token": token})
+
+            team = mongo.db.teams.find_one_or_404({'_id': teamID})
+            
+            if userLeave['name'] in team['members']:
+
+                mongo.db.teams.find_one_and_update(
+                    {"_id": teamID},
+                    {'$pull': {'members': userLeave['name']}}
+                )
+
+                mongo.db.users.find_one_and_update(
+                    {'token': token},
+                    {'$set': {'team_member': {}}}
+                )
+
+                #mongo.db.teams.find_one_and_update(
+                #    {"_id": teamID},
+                #    {'$pull': {'followers': userLeave['name']}}
+                #)
+
+            return True
         except:
             return False
