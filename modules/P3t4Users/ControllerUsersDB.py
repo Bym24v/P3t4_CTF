@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 
-import hashlib, json
+import hashlib, json, time
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/p3t4_ctf"
@@ -19,28 +19,32 @@ class P3t4ControllerUsers:
 
             if len(name) > 30:
                 print "[+] Name require length"
-                return False
+                return "error"
         
             if len(password) > 50:
                 print "[+] Password require length"
-                return False
+                return "error"
 
-            result = mongo.db.users.find_one_or_404({"name": name})
-            parsePassword = hashlib.sha512(password).hexdigest()
+            user = mongo.db.users.find_one_or_404({"name": name})
+            hashPass = hashlib.sha512(password).hexdigest()
             
-            if parsePassword == result['password']:
+            if user['password'] == hashPass:
                 print "[+] User Password Match!"
-                return True
+                return "done"
             else:
                 print "[+] Password no Match!"
-                return False
+                return "pass"
         except:
-            print "[+] Password no Match!"
-            return False
+            print "[+] User no Match!"
+            return "user"
         
     def RegisterUser(self, name, password, email, code):
         
-        token = hashlib.sha512(name + password).hexdigest()
+        # datetime
+        hora = time.strftime("%H-%M-%S")
+        fecha = time.strftime("%d-%m-%y")
+
+        token = hashlib.sha512(name + str(fecha) + str(hora)).hexdigest()
         parseID = hashlib.sha256(name).hexdigest()
         parsePassword = hashlib.sha512(password).hexdigest()
 
@@ -65,7 +69,8 @@ class P3t4ControllerUsers:
                             "completado_challenges": [],
                             "followers": [],
                             "team_create": {},
-                            "team_member": {}
+                            "team_member": {},
+                            "register_date": fecha
                         }
                     )
 
@@ -74,15 +79,60 @@ class P3t4ControllerUsers:
                 except:
                     print "[+] Error Register User"
                     return "error"
-
             else:
                 print "[+] Error Register minimun require"
                 return "require"
-
         else:
             print "[+] Error Register code require"
             return "code"
     
+    def GenerateNewToken(self, name, hashPass):
+
+        try:
+
+            # datetime
+            hora = time.strftime("%H-%M-%S")
+            fecha = time.strftime("%d-%m-%y")
+
+            # user
+            user = mongo.db.users.find_one_or_404({'name': name})
+
+            # new token
+            newToken = hashlib.sha512(name + str(fecha) + str(hora)).hexdigest()
+
+            if user['password'] == hashPass:
+                
+                mongo.db.users.find_one_and_update(
+                    {'_id': user['_id']},
+                    {'$set': {'token': newToken}}
+                )
+
+            return newToken
+        except:
+            return False
+
+
+    """ change password """
+    def UserChangePassword(self, token, old_pass, new_pass):
+
+        try:
+            user = mongo.db.users.find_one_or_404({'token': token})
+
+            oldHashPass = hashlib.sha512(old_pass).hexdigest()
+            newHashPass = hashlib.sha512(newHashPass).hexdigest()
+            newToken = hashlib.sha512(name + newHashPass).hexdigest()
+
+            if user['password'] == oldHashPass:
+                
+                mongo.db.users.find_one_and_update(
+                    {'_id': user['_id']},
+                    {'$set': {'password': newHashPass}}
+                )
+
+            return True
+        except:
+            return False
+
     """ User """
     def CheckToken(self, token):
 
@@ -391,3 +441,5 @@ class P3t4ControllerUsers:
             return True
         except:
             return False
+
+   

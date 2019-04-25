@@ -115,6 +115,17 @@ class P3t4ControllerChallenges:
                     tmpNames.append(item['name'])
 
                 if not username in tmpNames:
+                    
+                    # update user score
+                    mongo.db.users.update(
+                        {'name': username},
+                        {'$inc': {
+                            'puntos': challenge['puntos']}, 
+                            '$push': {
+                                'completado_challenges': challengeID
+                            }
+                        }
+                    )
 
                     # update user complete challenge
                     mongo.db.challenges.find_one_and_update(
@@ -128,30 +139,18 @@ class P3t4ControllerChallenges:
                     
                     try:
                         user = mongo.db.users.find_one_or_404({'name': username})
+                        team = mongo.db.teams.find_one_or_404({'_id': user['team_member']['id']})
                     except:
-                        pass
-                    
-                    if user['team_member']:
+                        return False
+
+                    if user['team_member'] and team['activate']:
                     
                         # update score user complete challenge
                         mongo.db.teams.find_one_and_update(
-                            {'_id': user['team_member']['id']},
+                            {'_id': team['_id']},
                             {'$inc': {'score': challenge['puntos']}}
                         )
-                    else:
-                        pass
-
-                    # update user score
-                    mongo.db.users.update(
-                        {'name': username},
-                        {'$inc': {
-                            'puntos': challenge['puntos']}, 
-                            '$push': {
-                                'completado_challenges': challengeID
-                            }
-                        }
-                    )
-                    
+                        
                 else:
                     print "[+] User exists"
                     return False

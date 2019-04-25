@@ -18,7 +18,48 @@
   </head>
 
   <body class="text-center mt50">
-  
+	
+	<div class="malert">
+		{% with messages  = get_flashed_messages(with_categories=true) %}
+			
+			{% if messages  %}
+
+				{%- for category, message in messages  %}
+					
+					{% if category == "user" %}
+						<div id="myAlert" class="alert alert-danger alert-dismissible fade show mt-5" role="alert">
+							{{ message }}
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					{% endif %}
+
+					{% if category == "pass" %}
+						<div id="myAlert" class="alert alert-danger alert-dismissible fade show mt-5" role="alert">
+							{{ message }}
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					{% endif %}
+					
+					{% if category == "error" %}
+						<div id="myAlert" class="alert alert-danger alert-dismissible fade show mt-5" role="alert">
+							{{ message }}
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					{% endif %}
+
+				{% endfor -%}
+
+			{% endif %}
+
+		{% endwith %}
+	</div>
+
     <form class="form-signin" method="POST">
     
       	<input type="text" name="username" maxlength="30" class="form-control br50 mt10" placeholder="Usuario" required autofocus>
@@ -30,7 +71,7 @@
 
       	<footer class="mastfoot mt-3">
         	<div class="inner">
-          		<p class="text-muted mfooter">© 2018-2019 P3t4-CTF</p>
+          		<p class="text-muted mfooter">&copy; 2018-2019 P3t4-CTF</p>
         	</div>
       	</footer>
       

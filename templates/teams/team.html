@@ -131,7 +131,7 @@
 
         	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
 				
-				{% if dataUser.activate %}
+				{% if dataUser.activate and team.activate %}
 
 					<nav class="mnav" aria-label="breadcrumb">
 						<ol class="breadcrumb">
@@ -263,24 +263,21 @@
 
 										<!-- borrar team -->
 										<a class=" mt-4" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Opciones de Equipo</a>
-										<div class="card text-center mt-3">
-
-											<div class="collapse" id="collapseExample">
+										
+										<div class="collapse" id="collapseExample">
+											<div class="card text-center mt-3">
 												<div class="card-body">
 													<h5 class="card-title">Borrar el equipo</h5>
-													<p class="card-text">Eliminaras todo el equipo y sus usuarios.</p>
+													<p class="card-text">Eliminaras el equipo y sus usuarios.</p>
 													<a href="/delete/team/{{team._id}}" class="btn btn-danger">Eliminar</a>
 												</div>
 											</div>
 
-										</div>
-
-										<!-- Nuevo Usuario -->
-										<div class="card text-center mt-3">
-											<div class="collapse" id="collapseExample">
+											<!-- Nuevo Usuario -->
+											<div class="card text-center mt-3">
 												<div class="card-body">
 													<h5 class="card-title">Nuevo usuario</h5>
-													<p class="card-text">Se puede añadir asta 10 usuarios por equipo.</p>
+													<p class="card-text">Se puede añadir asta 10 usuarios.</p>
 													<bottom id="btn-addUserTeam" class="btn btn-outline-primary">Añadir</bottom>
 												</div>
 											</div>

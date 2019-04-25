@@ -42,19 +42,42 @@ def service_login():
 
     if request.method == 'POST':
         
-        name = request.form['username']
-        password = request.form['password']
+        try:
+            name = request.form['username']
+            password = request.form['password']
+        except:
+            return redirect("/login")
+        
+        if len(name) > 30:
+            return redirect("/login")
 
-        token = hashlib.sha512(name + password).hexdigest()
+        if len(password) > 50:
+            return redirect("/login")
+
+        hashPass = hashlib.sha512(password).hexdigest()
         
         # expirate token
-        ts = datetime.datetime.utcnow() + datetime.timedelta(days=30)
-        
-        if p3t4ControllerUsers.LoginUser(name, password):
+        ts = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+
+        user = p3t4ControllerUsers.LoginUser(name, password)
+
+        if user == "done":
+
+            newToken = p3t4ControllerUsers.GenerateNewToken(name, hashPass)
+            if newToken == False:
+                return redirect("/login")
+
             resp = make_response(redirect('/challenges'))
-            resp.set_cookie('token', token, path='/', expires=ts)
-            return resp 
-        else:
+            resp.set_cookie('token', newToken, path='/', expires=ts)
+            return resp
+        elif user == "user":
+            flash("El usuario no existe", "user")
+            return redirect("/login")
+        elif user == "pass":
+            flash("El password no coincide", "pass")
+            return redirect("/login")
+        elif user == "error":
+            flash("Error", "error")
             return redirect("/login")
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -65,23 +88,25 @@ def service_register():
 
     if request.method == 'POST':
         
-        name = request.form['username']
-        password = request.form['password']
-        confirmPassword = request.form['confirm-password']
-        email = request.form['email']
-        code = request.form['code']
-
-        print password
-        print confirmPassword
-
+        try:
+            name = request.form['username']
+            password = request.form['password']
+            confirmPassword = request.form['confirm-password']
+            email = request.form['email']
+            code = request.form['code']
+        except:
+            return redirect('/register')
+        
+        # revisar
         if password != confirmPassword:
             salida = "Los passwords tienen que ser iguales.".encode('utf-8')
             flash(salida, "error")
             return redirect('/register')
         
-
+        #parseName
         parseName = name.lower()
 
+        # register user
         result = p3t4ControllerUsers.RegisterUser(parseName, password, email, code)
 
         if result == "error":
@@ -113,14 +138,18 @@ def service_chanllenges():
         resp = make_response(redirect('/'))
         resp.set_cookie('token', '', path='/', expires=0)
 
+        # token
         token = request.cookies.get('token')
 
+        # check token
         if p3t4ControllerUsers.CheckToken(token):
 
+            # data user
             dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
             if dataUser == False:
                 return resp
             
+            # data challenge
             dataChallenges = p3t4ControllerChallenges.GetAllChallenges()
             if dataChallenges == False:
                 return resp
@@ -132,24 +161,28 @@ def service_chanllenges():
 @app.route('/challenge/<challengeID>', methods=['GET', 'POST'])
 def service_challenge(challengeID):
 
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
 
+            # data user
             dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
             if dataUser == False:
                 return resp
             
+            # data challenge id
             dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
             if dataChallenge == False:
                 return resp
 
+            # all users complete challenge
             dataAllUsers = p3t4ControllerUsers.FindAllUsersCompleteChallenge(dataChallenge)
             if dataAllUsers == False:
                 return resp
@@ -160,9 +193,13 @@ def service_challenge(challengeID):
     
     if request.method == 'POST':
         
+        # token
         token = request.cookies.get('token')
         
-        flag = request.form['flag']
+        try:
+            flag = request.form['flag']
+        except:
+            return resp
         
         if p3t4ControllerUsers.CheckToken(token):
             
@@ -173,38 +210,35 @@ def service_challenge(challengeID):
                 dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
                 dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
                 dataAllUsers = p3t4ControllerUsers.FindAllUsersCompleteChallenge(dataChallenge)
-                #flash("Flag correcta, buen trabajo", "success")
                 return render_template('/challenges/challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
-            
-                #resp = make_response(render_template('challenges.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge))
-                #return resp
             else:
                 dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
                 dataChallenge = p3t4ControllerChallenges.GetChallengeByID(challengeID)
                 dataAllUsers = p3t4ControllerUsers.FindAllUsersCompleteChallenge(dataChallenge)
-                #flash("Flag incorrecta, siguen intentandolo", "danger")
-                return render_template('/challenges/challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge)
-                
+                return render_template('/challenges/challenge.html', dataUser=dataUser, dataAllUsers=dataAllUsers, dataChallenge=dataChallenge) 
         else:
-            return redirect('/')
+            return resp
 
 @app.route('/users')
 def service_usuarios():
 
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
 
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        # token 
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
 
+            #dataName
             dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
             if dataName == False:
                 return resp
             
+            # all user top 100
             dataAll = p3t4ControllerUsers.FindUsersTopLimit100()
             if dataAll == False:
                 return resp
@@ -215,13 +249,14 @@ def service_usuarios():
 
 @app.route('/profile/<name>', methods=['GET', 'POST'])
 def service_dashboard(name):
-  
+    
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        # token 
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
@@ -236,29 +271,40 @@ def service_dashboard(name):
                 return render_template('/profile/profile.html', dataUser=dataUser)
             else:
                 
-                # view user
+                # dataUser
                 dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
                 if dataUser == False:
                     return resp
 
+                # view user
                 viewUser = p3t4ControllerUsers.FindUserByNameReturnData(name)
                 if viewUser == False:
                     return resp
 
                 return render_template('/profile/userView.html', dataUser=dataUser, viewUser=viewUser)
-        
         else:
             return resp
 
     if request.method == 'POST':
-
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
         
+        # token
         token = request.cookies.get('token')
         
+        # revisar
+        try:
+            oldPassword = request.form['old-password']
+            newPassword = request.form['new-password']
+            confirmPassword = request.form['confirm-password']
 
+            if len(oldPassword) > 50 or len(newPassword) > 50 or len(confirmPassword) > 50:
+                return "error length"
+            
+            if newPassword != confirmPassword:
+                return "error confim"
+        except:
+            return resp
+    
+        # check user
         if p3t4ControllerUsers.CheckToken(token):
     
             if p3t4ControllerUsers.CheckTokenByName(name, token):
@@ -267,21 +313,12 @@ def service_dashboard(name):
                 dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
                 if dataUser == False:
                     return resp
-
+                
+                changePass = p3t4ControllerUsers.UserChangePassword(token, name, oldPassword, newPassword)
+            
                 return render_template('/profile/profile.html', dataUser=dataUser)
             else:
-                
-                # view user
-                dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
-                if dataUser == False:
-                    return resp
-
-                viewUser = p3t4ControllerUsers.FindUserByNameReturnData(name)
-                if viewUser == False:
-                    return resp
-
-                return render_template('/profile/userView.html', dataUser=dataUser, viewUser=viewUser)
-        
+                return resp
         else:
             return resp
 
@@ -289,21 +326,25 @@ def service_dashboard(name):
 @app.route('/admin')
 def service_admin():
 
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
         
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
-
+                
+                # dataName
                 dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
                 if dataName == False:
                     return resp
 
+                # all users
                 dataAll = p3t4ControllerUsers.FindAllUsersSort()
                 if dataAll == False:
                     return resp
@@ -319,6 +360,7 @@ def service_editUser(userID):
     
     if request.method == 'GET':
         
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckTokenAdmin(token):
@@ -345,14 +387,18 @@ def service_editUser(userID):
     
     if request.method == 'POST':
 
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckTokenAdmin(token):
-
-            editUserName = request.form['mod-name']
-            editUserScore = request.form['mod-score']
-            editUserActivate = request.form['mod-activate']
-            editUserAdmin = request.form['mod-admin']
+            
+            try:
+                editUserName = request.form['mod-name']
+                editUserScore = request.form['mod-score']
+                editUserActivate = request.form['mod-activate']
+                editUserAdmin = request.form['mod-admin']
+            except:
+                return "error"
             
             # check activate
             if editUserActivate == "false" or editUserActivate == "False":
@@ -372,6 +418,7 @@ def service_editUser(userID):
 
             if p3t4ControllerUsers.CheckToken(token):
                 
+                # user Result
                 userResult = p3t4ControllerUsers.FindUserIdEditUser(userID, editUserScore, editUserActivate, editUserAdmin)
                 if userResult == False:
                     return "error"
@@ -424,11 +471,11 @@ def service_deleteUser(userID):
 @app.route('/admin/challenges')
 def service_adminChallenges():
 
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
-        
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
         
         token = request.cookies.get('token')
         
@@ -436,10 +483,12 @@ def service_adminChallenges():
 
             if p3t4ControllerUsers.CheckToken(token):
                 
+                # dataUser 
                 dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
                 if dataName == False:
                     return resp
                 
+                # dataAll
                 dataAll = p3t4ControllerChallenges.GetAllChallenges()
                 if dataAll == False:
                     return resp
@@ -448,14 +497,14 @@ def service_adminChallenges():
             else:
                 return resp
         else:
-            print "Admin Require"
             return resp
 
 @app.route('/admin/challenges/edit/<challengeID>',  methods=['GET', 'POST'])
 def service_adminChallengesEdit(challengeID):
 
     if request.method == 'GET':
-            
+
+        # token 
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckTokenAdmin(token):
@@ -480,15 +529,19 @@ def service_adminChallengesEdit(challengeID):
             return "Admin Require"
     
     if request.method == 'POST':
-    
+        
+        # token
         token = request.cookies.get('token')
     
         if p3t4ControllerUsers.CheckTokenAdmin(token):
-    
-            editChallengeID = request.form['mod-challengeID']
-            editUserScore = request.form['mod-score']
-            editUserValidate = request.form['mod-validate']
-            editUserCreator = request.form['mod-creator']
+            
+            try:
+                editChallengeID = request.form['mod-challengeID']
+                editUserScore = request.form['mod-score']
+                editUserValidate = request.form['mod-validate']
+                editUserCreator = request.form['mod-creator']
+            except:
+                return "error"
             
             # check activate
             if editUserValidate == "false" or editUserValidate == "False":
@@ -518,6 +571,7 @@ def service_adminDelegeChallenge(challengeID):
 
     if request.method == 'GET':
         
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckTokenAdmin(token):
@@ -541,6 +595,7 @@ def service_adminDelegeChallenge(challengeID):
     
     if request.method == 'POST':
         
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckTokenAdmin(token):
@@ -560,25 +615,23 @@ def service_adminDelegeChallenge(challengeID):
 @app.route('/teams', methods=['GET'])
 def service_teams():
 
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
-    
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
 
+            # dataName
             dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
             if dataName == False:
                 return resp
             
-            #if p3t4ControllerTeams.CreateTeam("paco", "CLS"):
-            #    print "Add Team"
-            #else:
-            #    print "Error Create Team"
-
+            # all teams
             teamsAll = p3t4ControllerTeams.FindTeamsTopLimit100()
             if teamsAll == False:
                 return resp
@@ -591,22 +644,25 @@ def service_teams():
 @app.route('/admin/teams')
 def service_adminTeams():
 
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        #token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckTokenAdmin(token):
 
             if p3t4ControllerUsers.CheckToken(token):
                 
+                # dataName
                 dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
                 if dataName == False:
                     return resp
                 
+                # dataAll
                 dataAll = p3t4ControllerTeams.FindAllTeams()
                 if dataAll == False:
                     return resp
@@ -622,7 +678,8 @@ def service_adminTeams():
 def service_adminTeamEdit(teamID):
     
     if request.method == 'GET':
-            
+        
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckTokenAdmin(token):
@@ -648,14 +705,19 @@ def service_adminTeamEdit(teamID):
     
     if request.method == 'POST':
         
+        # token
         token = request.cookies.get('token')
     
         if p3t4ControllerUsers.CheckTokenAdmin(token):
-    
-            editTeamID = request.form['mod-teamID']
-            editTeamScore = request.form['mod-score']
-            editTeamValidate = request.form['mod-validate']
-            editTeamCreator = request.form['mod-creator']
+            
+            # revisar
+            try:
+                editTeamID = request.form['mod-teamID']
+                editTeamScore = request.form['mod-score']
+                editTeamValidate = request.form['mod-validate']
+                editTeamCreator = request.form['mod-creator']
+            except:
+                return "error"
             
             # check activate
             if editTeamValidate == "false" or editTeamValidate == "False":
@@ -670,6 +732,7 @@ def service_adminTeamEdit(teamID):
     
             if p3t4ControllerUsers.CheckToken(token):
                 
+                # challenge edit result
                 challengeResult = p3t4ControllerTeams.AdminTeamEdit(editTeamID, editTeamScore, editTeamValidate, editTeamCreator)
                 if challengeResult == False:
                     return "error"
@@ -685,6 +748,7 @@ def service_adminTeamDelete(teamID):
     
     if request.method == 'GET':
         
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckTokenAdmin(token):
@@ -708,6 +772,7 @@ def service_adminTeamDelete(teamID):
     
     if request.method == 'POST':
         
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckTokenAdmin(token):
@@ -728,28 +793,31 @@ def service_adminTeamDelete(teamID):
 @app.route('/team/<teamID>', methods=['GET'])
 def service_team(teamID):
     
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
 
+            # dataUser
             dataUser = p3t4ControllerUsers.CheckTokenReturnData(token)
             if dataUser == False:
                 return resp
 
+            # team
             team = p3t4ControllerTeams.FindTeamID(teamID)
             if team == False:
                 return resp
 
+            # members in Team
             membersTeam = p3t4ControllerTeams.FindTeamMembers(team['members'])
             if membersTeam == False:
-                return "Error"
-
+                return resp
 
             return render_template('/teams/team.html', team=team, teamMembers=membersTeam, dataUser=dataUser)
         else:
@@ -760,10 +828,7 @@ def service_createTeam(name):
     
     if request.method == 'POST':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
@@ -786,10 +851,7 @@ def service_userLeaveTeam(teamID):
     
     if request.method == 'POST':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        #token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
@@ -808,13 +870,17 @@ def service_ownerRemoveTeam():
     
     if request.method == 'POST':
         
-        teamID = request.form['mod-teamID']
-        username = request.form['mod-username']
+        # token
+        token = request.cookies.get('token')
         
-        if len(username) > 30:
+        try:
+            teamID = request.form['mod-teamID']
+            username = request.form['mod-username']
+        except:
             return "error"
 
-        token = request.cookies.get('token')
+        if len(username) > 30:
+            return "error"
         
         if p3t4ControllerUsers.CheckToken(token):
 
@@ -832,6 +898,7 @@ def service_ownerTeamRemoveUser(userID):
     
     if request.method == 'POST':
         
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
@@ -851,10 +918,7 @@ def service_follow(name):
     
     if request.method == 'POST':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
@@ -871,10 +935,7 @@ def service_unfollow(name):
     
     if request.method == 'POST':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
@@ -893,10 +954,7 @@ def service_followTeam(teamID):
     
     if request.method == 'POST':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
@@ -913,10 +971,7 @@ def service_unfollowTeam(teamID):
     
     if request.method == 'POST':
         
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-        
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
@@ -933,16 +988,18 @@ def service_unfollowTeam(teamID):
 @app.route('/public/challenge', methods=['GET', 'POST'])
 def service_subchallenge():
 
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
 
-        # error response
-        resp = make_response(redirect('/'))
-        resp.set_cookie('token', '', path='/', expires=0)
-
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
             
+            # data
             data = p3t4ControllerUsers.CheckTokenReturnData(token)
             if data == False:
                 return resp
@@ -957,7 +1014,10 @@ def service_subchallenge():
             flash('Archivo no valido.', "danger")
             return redirect('/public/challenge')
         
-        file = request.files['file']
+        try:
+            file = request.files['file']
+        except:
+            return resp
 
         if file.content_type != "application/x-zip-compressed":
             flash('Archivo no valido.', "danger")
@@ -967,10 +1027,14 @@ def service_subchallenge():
             flash('Archivo no valido.', "danger")
             return redirect('/public/challenge')
         
-        titulo = request.form['titulo']
-        puntos = request.form['puntos']
-        flag = request.form['flag']
-        descripcion = request.form['descripcion']
+        try:
+            titulo = request.form['titulo']
+            puntos = request.form['puntos']
+            flag = request.form['flag']
+            descripcion = request.form['descripcion']
+        except:
+            return resp
+        
 
         if titulo == '' or len(titulo) > 25:
             flash("Titulo no valido.", "danger")
@@ -988,25 +1052,29 @@ def service_subchallenge():
             flash("Descipcion no valida.", "danger")
             return redirect('/public/challenge')
 
+        # token
         token = request.cookies.get('token')
 
         if p3t4ControllerUsers.CheckToken(token):
             
-            #if file and allowed_file(file.filename):
+            # filename
             filename = secure_filename(file.filename)
             
             # datetime
             hora = time.strftime("%H-%M-%S")
             fecha = time.strftime("%d-%m-%y")
             
-            nameDate = fecha + "-" + hora + "_" + filename
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], nameDate))
-
+            try:
+                newName = fecha + "-" + hora + "_" + filename
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], newName))
+            except:
+                return resp
+            
             user = p3t4ControllerUsers.CheckTokenReturnData(token)
             if user == False:
                 return resp
 
-            if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, fecha, puntos, flag, nameDate, descripcion):
+            if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, fecha, puntos, flag, newName, descripcion):
                 flash("Publicado con exito, a la espera de que un administrador lo valide.", "success")
                 return redirect('/public/challenge')
             else:
@@ -1019,15 +1087,27 @@ def service_subchallenge():
 @app.route('/send/<name>', methods=['GET'])
 def service_send_file(name):
 
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
     if request.method == 'GET':
 
+        # token
         token = request.cookies.get('token')
         
         if p3t4ControllerUsers.CheckToken(token):
             path = app.config['UPLOAD_FOLDER'] + "\\" + name
-            return send_file(path, mimetype="application/x-zip-compressed")
+            
+            # check file
+            if os.path.isfile(path):
+                return send_file(path, mimetype="application/x-zip-compressed")
+            else:
+                print "File not found"
+                return redirect('/challenges')
         else:
-            return "Token Required"
+            print "Token Required"
+            return resp
 
 
 
