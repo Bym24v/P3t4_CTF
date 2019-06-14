@@ -163,6 +163,13 @@
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item"><span class="subico" data-feather="award"></span> {{team.score}}</li>
 									<li class="list-group-item"><span class="subico" data-feather="users"></span> {{team.members|length}}</li>
+
+									{% set userFlagsCount = namespace(index=0) %}
+									{% for userFlags in teamMembers %}
+										{% set userFlagsCount.index = userFlagsCount.index + userFlags.flags|length %}
+									{% endfor %}
+
+									<li class="list-group-item"><span class="subico" data-feather="flag"></span> {{userFlagsCount.index}}</li>
 									<li class="list-group-item"><span class="subico" data-feather="heart"></span> {{team.followers|length}}</li>
 								</ul>
 								
@@ -355,7 +362,7 @@
 											
 											<div class="card-body">
 												<h5 class="card-title">Abandonar equipo</h5>
-												<p class="card-text">¿ Estas seguro que quieres abandonar el equipo ?</p>
+												<p class="card-text">¿ Estas seguro que quieres abandonar ?</p>
 												<button id="btn-userLeave" class="btn btn-danger">Abandonar</button>
 											</div>
 									

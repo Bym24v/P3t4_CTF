@@ -314,8 +314,10 @@ def service_dashboard(name):
                 if dataUser == False:
                     return resp
                 
-                changePass = p3t4ControllerUsers.UserChangePassword(token, name, oldPassword, newPassword)
-            
+                changePass = p3t4ControllerUsers.UserChangePassword(token, oldPassword, newPassword)
+                #if changePass == False:
+                #    return resp
+
                 return render_template('/profile/profile.html', dataUser=dataUser)
             else:
                 return resp

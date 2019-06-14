@@ -44,9 +44,10 @@ class P3t4ControllerUsers:
         hora = time.strftime("%H-%M-%S")
         fecha = time.strftime("%d-%m-%y")
 
-        token = hashlib.sha512(name + str(fecha) + str(hora)).hexdigest()
-        parseID = hashlib.sha256(name).hexdigest()
-        parsePassword = hashlib.sha512(password).hexdigest()
+        parsePassword = hashlib.sha512(str(password)).hexdigest()
+        token = hashlib.sha512(str(name) + str(parsePassword) + str(fecha) + str(hora)).hexdigest()
+        parseID = hashlib.sha256(str(name)).hexdigest()
+        
 
 
         if code == "28" and len(code) <= 10:
@@ -98,7 +99,7 @@ class P3t4ControllerUsers:
             user = mongo.db.users.find_one_or_404({'name': name})
 
             # new token
-            newToken = hashlib.sha512(name + str(fecha) + str(hora)).hexdigest()
+            newToken = hashlib.sha512(str(name) + str(hashPass) + str(fecha) + str(hora)).hexdigest()
 
             if user['password'] == hashPass:
                 
@@ -116,19 +117,20 @@ class P3t4ControllerUsers:
     def UserChangePassword(self, token, old_pass, new_pass):
 
         try:
-            user = mongo.db.users.find_one_or_404({'token': token})
+            result = mongo.db.users.find_one_or_404({"token": token})
 
-            oldHashPass = hashlib.sha512(old_pass).hexdigest()
-            newHashPass = hashlib.sha512(newHashPass).hexdigest()
-            newToken = hashlib.sha512(name + newHashPass).hexdigest()
+            oldHashPass = hashlib.sha512(str(old_pass)).hexdigest()
+            newHashPass = hashlib.sha512(str(new_pass)).hexdigest()
 
             if user['password'] == oldHashPass:
                 
+                print "pass Good"
                 mongo.db.users.find_one_and_update(
                     {'_id': user['_id']},
                     {'$set': {'password': newHashPass}}
                 )
 
+                print "change"
             return True
         except:
             return False
@@ -213,15 +215,73 @@ class P3t4ControllerUsers:
     
         try:
 
-            user = mongo.db.users.find_one_or_404({'_id': userID})
+            # user
+            result = mongo.db.users.find_one_or_404({'_id': userID})
 
-            for challenge in user['completado_challenges']:
+            # delete user > team
+            if len(result['team_create']) == 2:
                 
-                #challengeID = mongo.db.challenges.find_one_or_404({'_id': challenge})
+                # find team
+                #team = mongo.db.teams.find_one_or_404({'_id': result['team_create']['id']})
+                #mongo.db.teams.delete_one({'_id': result['team_create']['id']})
+                #mongo.db.users.delete_one({'_id': userID})
+                # delete users refecense team
+                print "Delete Team Create"
+            
+            # delete references in user team
+            elif len(result['team_member']) == 2:
+                
+                print "entra"
+                
+                # find team
+                team = mongo.db.teams.find_one_or_404({'_id': result['team_member']['id']})
 
+                # members
+                for name in team['members']:
+                    
+                    if name == result['name']:
+                        
+                        mongo.db.teams.find_one_and_update(
+                            {"_id": team['_id']},
+                            {'$pull': {'members': result['name']}}
+                        )
+
+                for follower in team['followers']:
+                    
+                    if follower == result['name']:
+                        
+                        mongo.db.teams.find_one_and_update(
+                            {"_id": team['_id']},
+                            {'$pull': {'followers': result['name']}}
+                        )
+
+            # global reference followers 
+            allReferencesUsers = mongo.db.users.find({'followers': {'$regex': result['name']}})
+            
+            for refereUser in allReferencesUsers:
+                
+                #print refereUser
+                mongo.db.users.find_one_and_update(
+                    {"_id": refereUser['_id']},
+                    {'$pull': {'followers': result['name']}}
+                )
+            
+            # global reference followers 
+            allReferencesTeams = mongo.db.teams.find({'followers': {'$regex': result['name']}})
+
+            for refereTeam in allReferencesTeams:
+
+                mongo.db.teams.find_one_and_update(
+                    {"_id": refereTeam['_id']},
+                    {'$pull': {'followers': result['name']}}
+                )
+
+            # update solvers in challenges 
+            for challenge in result['completado_challenges']:
+                
                 mongo.db.challenges.find_one_and_update(
                     {"_id": challenge},
-                    {'$pull': {'completado_users': {'name': user['name']}}}
+                    {'$pull': {'completado_users': {'name': result['name']}}}
                 )
 
             mongo.db.users.delete_one({'_id': userID})

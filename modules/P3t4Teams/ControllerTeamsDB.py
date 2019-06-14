@@ -96,8 +96,8 @@ class P3t4ControllerTeams:
             
             tmpData = []
 
-            for user in members:
-                result = mongo.db.users.find_one_or_404({'name': user})
+            for player in members:
+                result = mongo.db.users.find_one_or_404({'name': player})
                 
                 packet = {
                     "id": result['_id'],
@@ -164,6 +164,7 @@ class P3t4ControllerTeams:
                 {'$set': {'team_member': {}}}
             )
 
+            # delete members in team
             for user in team['members']:
                 
                 mongo.db.users.find_one_and_update(
