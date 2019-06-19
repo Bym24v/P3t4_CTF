@@ -28,7 +28,7 @@
 
     	<div class="container-fluid">
 
-      		<div class="row">
+      		<div class="row"></div>
 
         	<!-- sidebar -->
         	<nav id="sidebar" class="col-md-2 sidebar-expanded d-none d-md-block sidebar" style="width: 200px;">
@@ -55,7 +55,7 @@
 						{% if dataUser and dataUser.activate%}
 						
 							<li class="nav-item">
-								<a class="nav-link text-muted"data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">
+								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1">
 								<span data-feather="user"></span> Menu</a>
 							</li>
 				
@@ -151,7 +151,7 @@
 											<h5 class="card-title">{{challenge.titulo}}</h5>
 											<!--<p class="card-text"><span data-feather="user"></span> <a class="text-muted" href="/profile/{{challenge.creador}}">{{challenge.creador}}</a></p>-->
 											<p><span data-feather="award"></span> {{challenge.puntos}} pts</p>
-											<p><span data-feather="clock"></span> {{challenge.fecha}}</p>
+											<p><span data-feather="calendar"></span> {{challenge.fecha}}</p>
 											<p><span data-feather="check-circle"></span> {{challenge.completado_users|length}}</p>
 											
 											
@@ -215,6 +215,6 @@
 		})
 
 		</script>
-  </body>
+  	</body>
 
 </html>

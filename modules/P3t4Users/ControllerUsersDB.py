@@ -327,7 +327,8 @@ class P3t4ControllerUsers:
     def FindUsersTopLimit100(self):
 
         try:
-            result = mongo.db.users.find().sort('puntos', -1).limit(100)
+            #.limit(100)
+            result = mongo.db.users.find().sort('puntos', -1) 
             return result
         except:
             return False

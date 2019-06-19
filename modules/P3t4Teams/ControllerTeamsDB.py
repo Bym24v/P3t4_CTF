@@ -289,7 +289,8 @@ class P3t4ControllerTeams:
     def FindTeamsTopLimit100(self):
     
         try:
-            result = mongo.db.teams.find().sort('score', -1).limit(100)
+            #.limit(100)
+            result = mongo.db.teams.find().sort('score', -1)
             return result
         except:
             return False
