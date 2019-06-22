@@ -274,19 +274,6 @@
 										
 										<div class="collapse" id="collapseExample">
 											
-											<!-- option admin -->
-											{% if dataUser.admin == true %}
-												
-												<div class="card text-center mt-3">
-													<div class="card-body">
-														<h5 class="card-title">Borrar el equipo</h5>
-														<p class="card-text">Eliminaras el equipo y sus usuarios.</p>
-														<a href="/delete/team/{{team._id}}" class="btn btn-danger">Eliminar</a>
-													</div>
-												</div>
-
-											{% endif %}
-
 											<!-- Nuevo Usuario -->
 											<div class="card text-center mt-3">
 												<div class="card-body">
@@ -362,17 +349,6 @@
 												</tbody>
 											</table>
 										</div> <!-- end table -->
-
-									{% elif dataUser.admin == true %}
-										
-										<!-- option admin -->
-										<div class="card text-center mt-3">
-											<div class="card-body">
-												<h5 class="card-title">Borrar el equipo</h5>
-												<p class="card-text">Eliminaras el equipo y sus usuarios.</p>
-												<a href="/delete/team/{{team._id}}" class="btn btn-danger">Eliminar</a>
-											</div>
-										</div>
 
 									{% else %}
 										<!-- opctiones user -->

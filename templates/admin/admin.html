@@ -68,56 +68,56 @@
 						<div class="collapse multi-collapse" id="multiCollapseExample1">
 
 							<li class="nav-item">
-								<a class="nav-link submenu text-muted" href="/public/challenge">
-								<span class="subico" data-feather="circle"></span>Publicar</a>
-							</li>
-
-							<li class="nav-item">
 								<a class="nav-link submenu text-muted" href="/profile/{{dataName.name}}">
 								<span class="subico" data-feather="circle"></span>Perfil</a>
 							</li>
 
-							<!--<li class="nav-item">
+							<li class="nav-item">
 								<a class="nav-link submenu text-muted" href="/logout">
 								<span class="subico" data-feather="circle"></span>Salir</a>
-							</li>-->
+							</li>
 
 						</div> <!-- end Collapse Menu User-->
 						
 					{% endif %}
 
 					<!-- Menu Admin -->
+					{% if dataName.admin %}
+						<li class="nav-item">
+							<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample1">
+							<span data-feather="shield"></span> Admin</a>
+						</li>
+					{% endif %}
+
+					
+					<!-- Collapse Menu Admin -->
+					<div class="collapse multi-collapse show" id="multiCollapseExample2">
+
 						{% if dataName.admin %}
+							
 							<li class="nav-item">
-								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample1">
-								<span data-feather="shield"></span> Admin</a>
+								<a class="nav-link submenu text-muted" href="/admin/teams">
+								<span class="subico" data-feather="circle"></span>Equipos</a>
 							</li>
+							
+							<li class="nav-item">
+								<a class="nav-link submenu active" href="/admin">
+								<span  class="subico" data-feather="circle"></span>Usuarios</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/admin/challenges">
+								<span class="subico" data-feather="circle"></span>Challenges</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/public/challenge">
+								<span class="subico" data-feather="circle"></span>Publicar</a>
+							</li>
+
 						{% endif %}
 
-						
-						<!-- Collapse Menu Admin -->
-						<div class="collapse multi-collapse show" id="multiCollapseExample2">
-
-							{% if dataName.admin %}
-								
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin/teams">
-									<span class="subico" data-feather="circle"></span>Equipos</a>
-								</li>
-								
-								<li class="nav-item">
-									<a class="nav-link submenu active" href="/admin">
-									<span  class="subico" data-feather="circle"></span>Usuarios</a>
-								</li>
-
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin/challenges">
-									<span class="subico" data-feather="circle"></span>Challenges</a>
-								</li>
-
-							{% endif %}
-
-						</div><!-- end collapse 2 -->
+					</div><!-- end collapse 2 -->
 
 					</ul>
 
