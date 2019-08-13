@@ -29,7 +29,7 @@ for (let i = 0; i < matches.length; i++) {
             ajax.addEventListener("abort", abortHandler, false);*/
             ajaxEdit.open("GET", "/admin/edit/" + tmpID); 
             ajaxEdit.send(null)
-
+          
             ajaxEdit.onreadystatechange = function () {
 
                 if (ajaxEdit.readyState == 4) {
@@ -44,8 +44,8 @@ for (let i = 0; i < matches.length; i++) {
                             
                             modName.value = parseJson.name
                             modScore.value = parseJson.puntos
-                            modActivate.value = parseJson.activate
-                            modAdmin.value = parseJson.admin
+                            modActivate.checked = parseJson.activate
+                            modAdmin.checked = parseJson.admin
 
                             // show modal
                             $('#editModal').modal('show')
@@ -118,8 +118,9 @@ modBtnEdit.addEventListener('click', function(){
     var formdata = new FormData();
     formdata.append("mod-name", modName);
     formdata.append("mod-score", modScore.value);
-    formdata.append("mod-activate", modActivate.value);
-    formdata.append("mod-admin", modAdmin.value);
+    formdata.append("mod-activate", modActivate.checked);
+    formdata.append("mod-admin", modAdmin.checked);
+
 
     ajaxDelete.send(formdata)
 
