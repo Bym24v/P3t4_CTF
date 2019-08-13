@@ -104,8 +104,8 @@ class P3t4ControllerChallenges:
             hashFlag = hashlib.sha256(flag).hexdigest()
 
             # datetime
-            hora = time.strftime("%H-%M-%S")
-            fecha = time.strftime("%d-%m-%y")
+            hora = time.strftime("%H:%M:%S")
+            fecha = time.strftime("%Y-%m-%d")
             
             tmpNames = []
 

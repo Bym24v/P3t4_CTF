@@ -502,5 +502,31 @@ class P3t4ControllerUsers:
             return True
         except:
             return False
+    
+    """ Get User Activity """ 
+    def GetChartActivity(self, name):
+        
+        try:
 
-   
+            user = mongo.db.users.find_one_or_404({'name': name})
+            tmp = []
+
+            for challengeID in user['completado_challenges']:
+                
+                challenge = mongo.db.challenges.find_one_or_404({'_id': challengeID})
+
+                for completeUser in challenge['completado_users']:
+                    
+                    if completeUser['name'] == name:
+                        
+                        newPacket = {
+                            "fecha": completeUser['fecha'],
+                            "hora": completeUser['hora'],
+                            "puntos": challenge['puntos']
+                        }
+                        
+                        tmp.append(newPacket)
+
+            return tmp
+        except:
+            return False

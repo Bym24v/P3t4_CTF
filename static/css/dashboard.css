@@ -210,3 +210,27 @@ input:checked + .slider:before {
 }
 
 /* End Buttons Modal */
+
+/* Notify*/
+
+.notify{
+  width: 12px;
+  height: 11px;
+  position: absolute;
+  background-color: red;
+  bottom: 11px;
+  left: 48px;
+  border-radius: 50px;
+  visibility: visible;
+}
+
+.counter-notify{
+  position: absolute;
+  color: white;
+  font-size: 9px;
+  margin-left: 3px;
+}
+
+
+
+/* End Notify*/

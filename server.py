@@ -324,6 +324,31 @@ def service_dashboard(name):
         else:
             return resp
 
+@app.route('/profile/activity/<name>')
+def service_profileActivity(name):
+
+    
+
+    if request.method == "GET":
+
+        # error response
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', path='/', expires=0)
+
+        # token
+        token = request.cookies.get('token')
+
+        # check user
+        if p3t4ControllerUsers.CheckToken(token):
+    
+            data = p3t4ControllerUsers.GetChartActivity(name)
+            if data == False:
+                return "Error"
+
+            return jsonify(data)
+        else:
+            return resp
+
 """ Admin """
 @app.route('/admin')
 def service_admin():
