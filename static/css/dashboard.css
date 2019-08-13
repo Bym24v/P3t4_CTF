@@ -91,8 +91,6 @@ body {
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
 }
 
-
-
 .navbar .form-control {
   padding: .75rem 1rem;
   border-width: 0;
@@ -150,6 +148,7 @@ ul{
   right: 15px;
 }
 
+/* Buttons Modal */
 .switch {
   position: relative;
   display: inline-block;
@@ -209,3 +208,5 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+/* End Buttons Modal */
