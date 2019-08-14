@@ -8,19 +8,18 @@ window.chartColors = {
 	grey: 'rgb(201, 203, 207)'
 };
 
+// Chart.js
 var color = Chart.helpers.color;
 var config = {
 	type: 'line',
 		data: {
+			labels: [],
 			datasets: [{
                 label: 'Flag',
                 backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
                 borderColor: window.chartColors.blue,
                 fill: false,
-                data: [/*{
-                    x: "2019-12-30 12:24:56",
-					y: 100
-				}*/] // end data
+                data: [] // end data
             
 			}] // end datasets
 			
@@ -30,7 +29,7 @@ var config = {
 				title: {
 					display: false,
 					text: 'Chart.js Time Point Data'
-				},
+				}, /*,
 				scales: {
 					xAxes: [{
 						type: 'time',
@@ -53,7 +52,7 @@ var config = {
 							labelString: 'value'
 						}
 					}]
-				},
+				},*/
 				legend: false
 			}
 		};
@@ -63,7 +62,7 @@ var config = {
 			var ctx = document.getElementById('canvas').getContext('2d');
 			window.myLine = new Chart(ctx, config);
 			
-			loadChart();
+			//loadChart();
 
 			//var reScale = document.getElementById('canvas');
 			//reScale.style = "width: 100%; height: 250px; margin-top: 10px;";
