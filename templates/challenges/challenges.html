@@ -159,11 +159,10 @@
 
 										<div class="card-body">
 											<h5 class="card-title">{{challenge.titulo}}</h5>
-											<!--<p class="card-text"><span data-feather="user"></span> <a class="text-muted" href="/profile/{{challenge.creador}}">{{challenge.creador}}</a></p>-->
-											<p><span data-feather="award"></span> {{challenge.puntos}} pts</p>
+											<p><span data-feather="copy"></span> <span class="badge badge-light">Exploiting</span></p>
 											<p><span data-feather="calendar"></span> {{challenge.fecha}}</p>
+											<p><span data-feather="award"></span> {{challenge.puntos}} pts</p>
 											<p><span data-feather="check-circle"></span> {{challenge.completado_users|length}}</p>
-											
 											
 											{% set logic = namespace(activate=false) %}
 											{% for user_completado in challenge.completado_users %}
@@ -189,6 +188,7 @@
 										<div class="card-footer" style="font-size: 19px;">
 											<small class="text-muted"><span class="author">Author: </span> <a class="text-muted" href="/profile/{{challenge.creador}}">{{challenge.creador}}</a></small>
 										</div>
+
 									</div>
 
 								</div> <!-- end card 1 -->

@@ -48,7 +48,7 @@ def service_login():
         except:
             return redirect("/login")
         
-        if len(name) > 30:
+        if len(name) > 20:
             return redirect("/login")
 
         if len(password) > 50:

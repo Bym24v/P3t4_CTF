@@ -17,7 +17,7 @@ class P3t4ControllerUsers:
         
         try:
 
-            if len(name) > 30:
+            if len(name) > 20:
                 print "[+] Name require length"
                 return "error"
         
@@ -52,7 +52,7 @@ class P3t4ControllerUsers:
 
         if code == "28" and len(code) <= 10:
 
-            if len(name) <= 30 and len(email) <= 50 and len(password) <= 50:
+            if len(name) <= 20 and len(email) <= 50 and len(password) <= 50:
             
                 try:
                     
