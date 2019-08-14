@@ -228,9 +228,14 @@
 
 									<!-- Found Create Team -->
 									{% set team_create.found = true %}
-									<div class="col-md-12 mb-3">
+									<div class="col-md-6 mb-3">
 										<label for="owner">Propietario</label>
 										<input type="text" class="form-control" maxlength="30" id="owner" placeholder="Titulo" value="{{dataUser.team_create.name}}" disabled>
+									</div>
+
+									<div class="col-md-6 mb-3">
+											<label for="owner">Token de Equipo</label>
+											<input type="text" class="form-control" maxlength="30" id="owner" placeholder="Token" value="23423-234234-234234-3423434" disabled>
 									</div>
 
 								{% else %}
