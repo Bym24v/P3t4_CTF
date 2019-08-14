@@ -42,7 +42,7 @@ for (let i = 0; i < matches.length; i++) {
                             
                             modChallengeID.value = parseJson.id
                             modScore.value = parseJson.puntos
-                            modValidate.value = parseJson.validado
+                            modValidate.checked = parseJson.validado
                             modCreator.value = parseJson.creador
 
                             // show modal
@@ -122,7 +122,7 @@ modBtnEdit.addEventListener('click', function(){
     var formdata = new FormData();
     formdata.append("mod-challengeID", modChallengeID.value);
     formdata.append("mod-score", modScore.value);
-    formdata.append("mod-validate", modValidate.value);
+    formdata.append("mod-validate", modValidate.checked);
     formdata.append("mod-creator", modCreator.value);
 
     ajaxDelete.send(formdata)
