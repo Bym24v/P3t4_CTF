@@ -324,6 +324,102 @@ def service_dashboard(name):
         else:
             return resp
 
+@app.route('/profile/change/password', methods=['GET'])
+def service_preChangePassword():
+
+    # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
+    if request.method == 'GET':
+
+        # token 
+        token = request.cookies.get('token')
+
+        tokenPassword = request.cookies.get('token-password')
+
+        if p3t4ControllerUsers.CheckToken(token):
+
+            #dataName
+            dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
+            if dataName == False:
+                return resp
+            
+            if tokenPassword:
+
+                return redirect('/profile/change/password/' + tokenPassword)
+            else:
+                
+                # expirate token
+                ts = datetime.datetime.utcnow() + datetime.timedelta(minutes=1)
+
+                tokenPass = hashlib.sha512(str(ts)).hexdigest()
+
+                if p3t4ControllerUsers.SaveTokenPassword(token, tokenPass):
+                    resp3 = make_response(redirect('/profile/change/password/' + tokenPass))
+                    resp3.set_cookie('token-password', tokenPass, path='/profile/change/password', expires=ts)
+                    return resp3
+                else:
+                    return resp
+            
+        else:
+            return resp
+
+@app.route('/profile/change/password/<tokenPass>', methods=['GET', 'POST'])
+def service_changePassword(tokenPass):
+
+     # error response
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', path='/', expires=0)
+
+    if request.method == 'GET':
+
+        # token 
+        token = request.cookies.get('token')
+        
+        tokenPassword = request.cookies.get('token-password')
+
+        if p3t4ControllerUsers.CheckToken(token):
+
+            #dataName
+            dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
+            if dataName == False:
+                return resp
+
+            if(tokenPass == tokenPassword):
+                return render_template('/profile/changePassword.html', dataUser=dataName)
+            else:
+                return redirect('/profile/' + dataName['name'])
+        else:
+            return resp
+    
+    if request.method == 'POST':
+
+        # token 
+        token = request.cookies.get('token')
+
+        if p3t4ControllerUsers.CheckToken(token):
+            
+            try:
+                actualPassword = request.form['actualPassword']
+                newPassword = request.form['newPassword']
+                confirmNewPassword = request.form['confirmNewPassword']
+            except:
+                return resp
+            
+            print actualPassword
+            print newPassword
+            print confirmNewPassword
+
+            #dataName
+            dataName = p3t4ControllerUsers.CheckTokenReturnData(token)
+            if dataName == False:
+                return resp
+            
+            return render_template('/profile/changePassword.html', dataUser=dataName)
+        else:
+            return resp
+
 @app.route('/profile/activity/<name>')
 def service_profileActivity(name):
 

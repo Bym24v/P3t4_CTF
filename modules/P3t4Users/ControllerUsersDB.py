@@ -71,7 +71,9 @@ class P3t4ControllerUsers:
                             "followers": [],
                             "team_create": {},
                             "team_member": {},
-                            "register_date": fecha
+                            "register_date": fecha,
+                            "notificaciones": [],
+                            "token_password": ""
                         }
                     )
 
@@ -170,6 +172,44 @@ class P3t4ControllerUsers:
 
     def CheckTokenByName(self, name, token):
     
+        try:
+            result = mongo.db.users.find_one_or_404({"name": name})
+            
+            if result['token'] == token:
+                print "[+] Token ByName Found!"
+                return True
+            else:
+                print "[+] Token ByName no Found"
+                return False
+        except:
+            print "[+] Token ByName no Found"
+            return False
+
+    def SaveTokenPassword(self, token, tokenPassword):
+
+        try:
+            result = mongo.db.users.find_one_or_404({"token": token})
+            
+            if result['token'] == token:
+                
+                try:
+                    mongo.db.users.find_one_and_update(
+                        {'_id': result['_id']},
+                        {'$set': {'token-password': tokenPassword}}
+                    )
+                    print "[+] Save Token password"
+                    return True
+                except :
+                    return False
+            else:
+                print "[+] Error Save Token password"
+                return False
+        except:
+            print "[+] Error Save Token password"
+            return False
+
+    def CheckTokenPassword(self, token):
+
         try:
             result = mongo.db.users.find_one_or_404({"name": name})
             
