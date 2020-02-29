@@ -1,114 +1,116 @@
-
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="@Bym24v">
-    <!--<link rel="icon" href="../../../../favicon.ico">-->
 
-    <title>P3t4 - CTF | Profile</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="@Bym24v">
+	<!--<link rel="icon" href="../../../../favicon.ico">-->
 
-    <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<title>P3t4 - CTF | Profile</title>
 
-    <!-- Custom styles for this template -->
-    <link href="/static/css/dashboard.css" rel="stylesheet">
-    <link href="/static/css/challenge.css" rel="stylesheet">
-  </head>
+	<!-- Bootstrap core CSS -->
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
 
-  <body>
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a id="toggle-logo" class="navbar-brand col-sm-12 col-md-12 mr-0" href="#">P3t4 - CTF</a>
-	  	{% if dataUser %}
-        <div class="score"><span data-feather="award"></span> {{dataUser.puntos}}</div>
-      {% endif %}
-    </nav>
+	<!-- Custom styles for this template -->
+	<link href="/static/css/dashboard.css" rel="stylesheet">
+	<link href="/static/css/challenge.css" rel="stylesheet">
+</head>
 
-    <div class="container-fluid">
+<body>
+	<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+		<a id="toggle-logo" class="navbar-brand col-sm-12 col-md-12 mr-0" href="#">P3t4 - CTF</a>
+		{% if dataUser %}
+		<div class="score"><span data-feather="award"></span> {{dataUser.puntos}}</div>
+		{% endif %}
+	</nav>
 
-      	<div class="row">
+	<div class="container-fluid">
+
+		<div class="row">
 
 			<!-- sidebar -->
 			<nav id="sidebar" class="col-md-2 sidebar-expanded d-none d-md-block sidebar" style="width: 200px;">
-				
+
 				<!-- sidebar -->
 				<div class="sidebar-sticky sideColor">
 
 					<ul class="nav flex-column">
-				
+
 						<li class="nav-item">
 							<a class="nav-link text-muted" href="/challenges">
-							<span data-feather="coffee"></span> Challenges</a>
+								<span data-feather="coffee"></span> Challenges</a>
 						</li>
 
 						<li class="nav-item">
 							<a class="nav-link text-muted" href="/users">
-							<span data-feather="users"></span> Usuarios</a>
+								<span data-feather="users"></span> Usuarios</a>
 						</li>
-						
+
 						<li class="nav-item">
 							<a class="nav-link text-muted" href="/teams">
-							<span data-feather="trending-up"></span> Equipos</a>
+								<span data-feather="trending-up"></span> Equipos</a>
 						</li>
 
 						{% if dataUser and dataUser.activate %}
-						
-								<li class="nav-item">
-									<a class="nav-link text-muted"data-toggle="collapse" href="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
-									<span data-feather="user"></span> Menu</a>
-								</li>
 
-							<!-- Collapse Menu User -->
-							<div class="collapse multi-collapse show" id="multiCollapseExample1">
+						<li class="nav-item">
+							<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample1"
+								aria-expanded="true" aria-controls="multiCollapseExample1">
+								<span data-feather="user"></span> Menu</a>
+						</li>
 
-								<li class="nav-item">	
-									<a class="nav-link submenu active" href="/profile/{{dataUser.name}}">
+						<!-- Collapse Menu User -->
+						<div class="collapse multi-collapse show" id="multiCollapseExample1">
+
+							<li class="nav-item">
+								<a class="nav-link submenu active" href="/profile/{{dataUser.name}}">
 									<span class="subico" data-feather="circle"></span>Perfil</a>
-								</li>
+							</li>
 
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/logout">
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/logout">
 									<span class="subico" data-feather="circle"></span>Salir</a>
-								</li>
+							</li>
 
-							</div><!-- end Collapse Menu user -->
+						</div><!-- end Collapse Menu user -->
 
 						{% endif %}
 
 						<!-- Menu Admin -->
 						{% if dataUser.admin %}
-							<li class="nav-item">
-								<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample1">
+						<li class="nav-item">
+							<a class="nav-link text-muted" data-toggle="collapse" href="#multiCollapseExample2"
+								aria-expanded="false" aria-controls="multiCollapseExample1">
 								<span data-feather="shield"></span> Admin</a>
-							</li>
+						</li>
 						{% endif %}
 
 						<!-- Collapse Menu Admin -->
 						<div class="collapse multi-collapse" id="multiCollapseExample2">
 
 							{% if dataUser.admin %}
-								
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin/teams">
+
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/admin/teams">
 									<span class="subico" data-feather="circle"></span>Equipos</a>
-								</li>
-								
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin">
-									<span  class="subico" data-feather="circle"></span>Usuarios</a>
-								</li>
+							</li>
 
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/admin/challenges">
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/admin">
+									<span class="subico" data-feather="circle"></span>Usuarios</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/admin/challenges">
 									<span class="subico" data-feather="circle"></span>Challenges</a>
-								</li>
+							</li>
 
-								<li class="nav-item">
-									<a class="nav-link submenu text-muted" href="/public/challenge">
+							<li class="nav-item">
+								<a class="nav-link submenu text-muted" href="/public/challenge">
 									<span class="subico" data-feather="circle"></span>Publicar</a>
-								</li>
+							</li>
 
 							{% endif %}
 
@@ -122,44 +124,44 @@
 
 					<!-- Help -->
 					<a class="text-muted" href="/faq">
-					<span data-feather="help-circle"></span></a>
-					
+						<span data-feather="help-circle"></span></a>
+
 					<!-- Notify -->
 					<a class="text-muted" href="#">
-					<span data-feather="bell"></span></a>
-					
+						<span data-feather="bell"></span></a>
+
 					<!-- Logout -->
 					<a class="text-muted" href="/logout" style="position: absolute; right: 15px;">
-					<span data-feather="log-out"></span></a>
-	
-				</div>
-        	</nav>
+						<span data-feather="log-out"></span></a>
 
-        	<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
+				</div>
+			</nav>
+
+			<main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-4">
 
 				{% if dataUser.activate %}
 
-					<nav class="mnav" aria-label="breadcrumb">
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
-							<li class="breadcrumb-item active" aria-current="page">Perfil</li>
-						</ol>
-					</nav>
+				<nav class="mnav" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/challenges">Challenges</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Perfil</li>
+					</ol>
+				</nav>
 
-					<!-- rows -->
-					<div class="row">
+				<!-- rows -->
+				<div class="row">
 
-						<div class="py-5 col-md-12 text-center">
-							<!-- img -->
-							<!--<img class="d-block mx-auto mb-4" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" alt="" width="72" height="72" style="border-radius: 50px;">-->
-							
-							<h2>Perfil de Usuario</h2>
-							<p class="lead">Aquí podrás cambiar los datos de usuario.</p>
-						</div>
+					<div class="py-5 col-md-12 text-center">
+						<!-- img -->
+						<!--<img class="d-block mx-auto mb-4" src="https://cactusthemes.com/blog/wp-content/uploads/2018/01/tt_avatar_small.jpg" alt="" width="72" height="72" style="border-radius: 50px;">-->
+
+						<h2>Perfil de Usuario</h2>
+						<p class="lead">Aquí podrás cambiar los datos de usuario.</p>
 					</div>
+				</div>
 
-					<!-- rows -->
-					<div class="row">
+				<!-- rows -->
+				<!--<div class="row">
 					
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -169,7 +171,6 @@
 								<label for="username">Usuario</label>
 								<input type="text" class="form-control" id="username" maxlength="30" placeholder="Username" value="{{dataUser.name}}" disabled>
 								<div class="invalid-feedback" style="width: 100%;">Nombre de usuario requerido.</div>
-								<!--<small id="username" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 							</div>
 							
 							<div class="mb-3">
@@ -180,7 +181,7 @@
 							
 							<hr class="mb-4 mt-4 mb-3">
 
-							<!-- form profile -->
+							
 							<form class="needs-validation" method="POST">
 								<h4 class="mb-4 mt-4">Nueva contraseña</h4>
 
@@ -199,7 +200,7 @@
 									<input type="text" name="confirm-password" class="form-control" id="address" maxlength="50" required>
 								</div>
 								
-								<!-- separate -->
+								
 								<hr class="mb-4 mt-4 mb-3">
 
 								<div class="row">
@@ -210,13 +211,13 @@
 									
 								</div>
 								
-								<!-- separate -->
+								
 								<hr class="mb-4 mt-4 mb-3">
 
-							</form><!-- end form profile -->
+							</form>
 					
 
-							<!-- form create team -->
+							
 							<h4 class="mb-4 mt-4">Datos de Equipo</h4>
 
 							<div class="form-row">
@@ -226,7 +227,7 @@
 
 								{% if dataUser.team_create|length > 0%}
 
-									<!-- Found Create Team -->
+									
 									{% set team_create.found = true %}
 									<div class="col-md-6 mb-3">
 										<label for="owner">Propietario</label>
@@ -235,7 +236,7 @@
 
 									<div class="col-md-6 mb-3">
 											<label for="owner">Token de Equipo</label>
-											<input type="text" class="form-control" maxlength="30" id="owner" placeholder="Token" value="23423-234234-234234-3423434" disabled>
+											<input type="text" class="form-control" maxlength="30" id="owner" placeholder="Token" value="{{dataUser.team_create.id}}" disabled>
 									</div>
 
 								{% else %}
@@ -246,7 +247,7 @@
 
 										{% set team_member.found = true %}
 
-										<!-- Found in Team -->
+										
 										<div class="col-md-12 mb-3">
 											<label for="member">Miembro</label>
 											<input type="text" class="form-control" maxlength="30" id="member" placeholder="Titulo" value="{{dataUser.team_member.name}}" disabled>
@@ -254,7 +255,7 @@
 									{% else %}
 										{% set team_member.found = false %}
 
-										<!-- Create Team -->
+										
 										<div class="col-md-12 mb-3">
 											<label for="title-team">Equipo</label>
 											<input type="text" class="form-control" maxlength="30" id="title-team" placeholder="Titulo" required>
@@ -269,18 +270,18 @@
 							
 							<hr class="mb-4 mt-4 mb-3">
 
-							<!-- btns create - delete - team -->
+							
 							<div class="row">
 								
 								{% if team_create.found %}
-									<!-- team create -->
+									
 								{% else %}
 
 									{% if team_member.found %}
-										<!-- in team -->
+										
 									{% else %}
 
-										<!-- create team btn -->
+										
 										<div class="col-lg-2">
 											<button id="create-team" class="btn btn-outline-primary mb-5">Crear equipo</button>
 										</div>
@@ -291,34 +292,150 @@
 							</div>
 
 						</div>
-					</div> <!-- end main -->
-				{% endif %}
-				
-       		 </main>
-      	</div>
-    </div>
+					</div>-->
 
-    <!-- Bootstrap core JavaScript
+
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+							aria-controls="profile" aria-selected="true">Perfil</a>
+					</li>
+
+				</ul>
+
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+						<form class="mt-4">
+							<h4 class="mb-4">Datos de usuario</h4>
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="inputUserName">Usuario</label>
+									<input type="email" class="form-control" id="inputUserName" value="{{dataUser.name}}" disabled>
+								</div>
+								<div class="form-group col-md-6">
+									<label for="inputEmail">Email</label>
+									<input type="email" class="form-control" id="inputEmail" value="{{dataUser.email}}" disabled>
+								</div>
+							</div>
+
+							<h4 class="mb-4 mt-4">Datos de Equipo</h4>
+
+							<div class="form-row">
+
+								{% set team_create = namespace(found=false) %}
+								{% set team_member = namespace(found=false) %}
+
+								{% if dataUser.team_create|length > 0%}
+
+
+									{% set team_create.found = true %}
+									<div class="col-md-6 mb-3">
+										<label for="owner">Propietario</label>
+										<input type="text" class="form-control" maxlength="30" id="owner"
+											placeholder="Titulo" value="{{dataUser.team_create.name}}" disabled>
+									</div>
+
+									<div class="col-md-6 mb-3">
+										<label for="owner">Token</label>
+										<input type="text" class="form-control" maxlength="30" id="owner"
+											placeholder="Token" value="{{dataUser.team_create.id}}" disabled>
+									</div>
+
+								{% else %}
+
+									{% set team_create.found = false %}
+
+									{% if dataUser.team_member|length > 0 %}
+
+										{% set team_member.found = true %}
+
+
+										<div class="col-md-6 mb-3">
+											<label for="member">Miembro</label>
+											<input type="text" class="form-control" maxlength="30" id="member" value="{{dataUser.team_member.name}}" disabled>
+										</div>
+
+										<div class="col-md-6 mb-3">
+											<label for="memberToken">Token</label>
+											<input type="text" class="form-control" maxlength="30" id="memberToken" value="{{dataUser.team_member.id}}" disabled>
+										</div>
+
+									{% else %}
+
+										{% set team_member.found = false %}
+
+										<div class="col-md-12 mb-3">
+											<label for="title-team">Equipo</label>
+											<input type="text" class="form-control" maxlength="30" id="title-team" placeholder="Titulo" aria-describedby="passwordHelpBlock" required>
+											<small id="passwordHelpBlock" class="form-text text-muted">
+												El titulo no puede tener mas de 30 caracteres.
+											</small>
+										</div>
+
+									{% endif %}
+
+								{% endif %}
+
+
+							</div>
+
+							<hr class="mb-4 mt-4 mb-3">
+
+
+							<div class="row">
+
+								{% if team_create.found %}
+
+									{% else %}
+
+									{% if team_member.found %}
+
+									{% else %}
+										<div class="col-lg-2">
+											<button id="create-team" class="btn btn-outline-primary mb-5" style="width: 220px; padding: 13px;">Crear equipo</button>
+										</div>
+									{% endif %}
+
+								{% endif %}
+
+							</div>
+						</form>
+
+						<h4 class="mb-4 mt-4">Cambiar Contraseña</h4>
+						<button class="btn btn-outline-secondary mb-3" style="padding: 13px; width: 220px;">Solicitar Cambio</button>
+
+					</div>
+				</div>
+				
+				<!-- end main -->
+				{% endif %}
+			</main>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/static/js/jquery-slim.min.js"></script>
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="/static/js/jquery-slim.min.js"></script>
 	<script src="/static/js/bootstrap.min.js"></script>
 	<script src="/static/js/popper.min.js"></script>
 	<script src="/static/js/dashboard.js"></script>
 	<script src="/static/js/profile.js"></script>
-	
-    <!-- Icons -->
-    <script src="/static/feather/feather.min.js"></script>
-    <script>
-      feather.replace()
-    </script>
 
-    <script>
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-      })
+	<!-- Icons -->
+	<script src="/static/feather/feather.min.js"></script>
+	<script>
+		feather.replace()
+	</script>
 
-    </script>
-    
-  </body>
+	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip()
+		})
+
+	</script>
+
+</body>
+
 </html>

@@ -291,18 +291,18 @@ def service_dashboard(name):
         token = request.cookies.get('token')
         
         # revisar
-        try:
-            oldPassword = request.form['old-password']
-            newPassword = request.form['new-password']
-            confirmPassword = request.form['confirm-password']
-
-            if len(oldPassword) > 50 or len(newPassword) > 50 or len(confirmPassword) > 50:
-                return "error length"
-            
-            if newPassword != confirmPassword:
-                return "error confim"
-        except:
-            return resp
+        #try:
+        #    oldPassword = request.form['old-password']
+        #    newPassword = request.form['new-password']
+        #    confirmPassword = request.form['confirm-password']
+        #
+        #    if len(oldPassword) > 50 or len(newPassword) > 50 or len(confirmPassword) > 50:
+        #        return "error length"
+        #    
+        #    if newPassword != confirmPassword:
+        #        return "error confim"
+        #except:
+        #    return resp
     
         # check user
         if p3t4ControllerUsers.CheckToken(token):
@@ -1056,6 +1056,8 @@ def service_subchallenge():
         
         try:
             titulo = request.form['titulo']
+            categoria = request.form['categoria']
+            plataforma = request.form['plataforma']
             puntos = request.form['puntos']
             flag = request.form['flag']
             descripcion = request.form['descripcion']
@@ -1067,6 +1069,10 @@ def service_subchallenge():
             flash("Titulo no valido.", "danger")
             return redirect('/public/challenge')
         
+        if categoria == '' or len(categoria) > 10:
+            flash("Puntos no validos.", "danger")
+            return redirect('/public/challenge')
+
         if puntos == '' or len(puntos) > 2:
             flash("Puntos no validos.", "danger")
             return redirect('/public/challenge')
@@ -1078,7 +1084,7 @@ def service_subchallenge():
         if descripcion == '' or len(descripcion) > 60:
             flash("Descipcion no valida.", "danger")
             return redirect('/public/challenge')
-
+        
         # token
         token = request.cookies.get('token')
 
@@ -1101,7 +1107,7 @@ def service_subchallenge():
             if user == False:
                 return resp
 
-            if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, fecha, puntos, flag, newName, descripcion):
+            if p3t4ControllerChallenges.SaveChallenge(user['name'], titulo, fecha, categoria, plataforma, puntos, flag, newName, descripcion):
                 flash("Publicado con exito, a la espera de que un administrador lo valide.", "success")
                 return redirect('/public/challenge')
             else:

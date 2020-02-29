@@ -37,3 +37,28 @@ if (inputBtn != null && nameShow != null){
         
     })
 }
+
+
+var notifyBtn = document.getElementById('notify-btn');
+var notifyMenu = document.getElementById('menu-notify');
+var notifyActive = document.getElementById('notify-active');
+var toggleMenu = false;
+
+if(notifyBtn != null){
+
+    notifyBtn.addEventListener('click', function(e){
+        
+        if(toggleMenu){
+            notifyMenu.style = "visibility: hidden;";
+            toggleMenu = false;
+        }else{
+            notifyMenu.style = "visibility: visible;";
+            toggleMenu = true;
+
+            notifyActive.style = "visibility: hidden;";
+        }
+        
+    })
+    
+
+}

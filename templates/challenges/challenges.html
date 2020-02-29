@@ -123,7 +123,7 @@
 					<a class="text-muted" href="/faq">
 					<span data-feather="help-circle"></span></a>
 					
-					<div class="menu-notify">
+					<div class="menu-notify" id="menu-notify">
 						
 						<div class="menu-head">
 							<p>4 Notificaciones</p>
@@ -133,7 +133,7 @@
 							
 							
 							<div class="notify-follow">
-								<p>El usuario: @pepe se siguio.</p>
+								<p>New Follower: @pepe</p>
 							</div>
 
 							<div class="notify-team">
@@ -148,21 +148,27 @@
 							</div>
 
 							<div class="notify-follow">
-								<p>El usuario: @pepe se siguio.</p>
+								<p>New Follower: @pepe</p>
 							</div>
 
-							
+							<div class="notify-follow">
+								<p>New Follower: @pepe</p>
+							</div>
+
+							<div class="notify-follow">
+								<p>New Follower: @pepe</p>
+							</div>
 						</div>
 
 						<div class="menu-indicator"></div>
 
 					</div>
 
-					<div class="notify"></div>
+					<div class="notify" id="notify-active"></div>
 					
 
 					<!-- Notify -->
-					<a class="text-muted" href="#">
+					<a class="text-muted" id="notify-btn" style="user-select: none;">
 					<span data-feather="bell"></span></a>
 					
 					<!-- Logout -->
@@ -189,10 +195,11 @@
 										<!--<div class="progress mprogress">
 											<div class="progress-bar bg-{{challenge.challenge_type}}" role="progressbar" style="width: {{challenge.puntos}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 										</div>-->
-
+										
 										<div class="card-body">
 											<h5 class="card-title">{{challenge.titulo}}</h5>
-											<p><span data-feather="copy"></span> <span class="badge badge-light">Exploiting</span></p>
+											<p><span data-feather="copy"></span> {{challenge.categoria}}</p>
+											<p><span data-feather="file"></span> {{challenge.plataforma}}</p>
 											<p><span data-feather="calendar"></span> {{challenge.fecha}}</p>
 											<p><span data-feather="award"></span> {{challenge.puntos}} pts</p>
 											<p><span data-feather="check-circle"></span> {{challenge.completado_users|length}}</p>
@@ -207,9 +214,9 @@
 											{% endfor %}
 											
 											{% if logic.activate %}
-												<a href="/challenge/{{challenge._id}}" class="btn btn-success mt-3" style="border-radius:25px;">Completado</a>
+												<a href="/challenge/{{challenge._id}}" class="btn btn-success mt-3" style="border-radius:25px; width: 100%">Completado</a>
 											{% else %}
-												<a href="/challenge/{{challenge._id}}" class="btn btn-outline-primary mt-3" style="border-radius:25px;">Challenge</a>
+												<a href="/challenge/{{challenge._id}}" class="btn btn-outline-primary mt-3" style="border-radius:25px; width: 100%;">Challenge</a>
 											{% endif %}
 								
 										</div>

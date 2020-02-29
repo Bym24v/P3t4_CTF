@@ -16,7 +16,7 @@ class P3t4ControllerChallenges:
         except:
             return False
     
-    def SaveChallenge(self, creador, titulo, fecha, puntos, flag, nameZip, resumen):
+    def SaveChallenge(self, creador, titulo, fecha, categotia, plataforma, puntos, flag, nameZip, resumen):
   
         try:
             
@@ -36,13 +36,15 @@ class P3t4ControllerChallenges:
             
             if parse > 80 and parse <= 100:
                 progressType = "danger"
-                
+
             mongo.db.challenges.insert({
 
                 "_id": hashlib.sha256(titulo).hexdigest(),
                 "creador": creador,
                 "titulo": titulo,
                 "fecha": fecha,
+                "categoria": categotia,
+                "plataforma": plataforma,
                 "puntos": parse,
                 "challenge_type": progressType,
                 "flag": hashFlag,
